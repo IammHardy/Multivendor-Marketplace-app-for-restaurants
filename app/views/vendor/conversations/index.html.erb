@@ -1,0 +1,24 @@
+<h1 class="text-2xl font-bold text-red-600 mb-6">Conversations</h1>
+
+<% if @conversations.any? %>
+  <ul class="space-y-2">
+    <% @conversations.each do |conv| %>
+      <% last_msg = conv.messages.order(created_at: :desc).first %>
+      <% unread_count = conv.messages.where(sender_type: "User", read: false).count %>
+
+      <li>
+        <%= link_to vendor_conversation_path(conv), class: "block p-4 bg-white rounded shadow hover:bg-gray-100 flex justify-between items-center" do %>
+          <div>
+            <p class="font-semibold"><%= conv.user.name || conv.user.email %></p>
+            <p class="text-gray-500 text-sm truncate max-w-md"><%= last_msg&.body || "No messages yet" %></p>
+          </div>
+          <% if unread_count.positive? %>
+            <span class="bg-red-600 text-white text-xs px-2 py-1 rounded-full"><%= unread_count %></span>
+          <% end %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p class="text-gray-500">No conversations yet.</p>
+<% end %>

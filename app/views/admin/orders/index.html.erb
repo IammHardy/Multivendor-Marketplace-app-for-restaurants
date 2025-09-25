@@ -1,4 +1,4 @@
-<div class="max-w-6xl mx-auto mt-8">
+<div class="max-w-7xl mx-auto mt-8 px-4">
   <h1 class="text-3xl font-bold text-red-600 mb-6">Admin Dashboard</h1>
 
   <!-- Summary Cards -->
@@ -16,12 +16,12 @@
       <p class="text-xl font-bold text-green-600"><%= @paid_orders %></p>
     </div>
     <div class="bg-white p-4 rounded shadow text-center">
-      <p class="text-gray-500">Total Revenue</p>
-      <p class="text-xl font-bold text-red-600">₦<%= number_to_currency(@total_revenue, unit: "", precision: 2) %></p>
+      <p class="text-gray-500">Completed Orders</p>
+      <p class="text-xl font-bold text-gray-700"><%= @completed_orders %></p>
     </div>
     <div class="bg-white p-4 rounded shadow text-center">
-      <p class="text-gray-500">New Orders Today</p>
-      <p class="text-xl font-bold text-red-600"><%= @new_orders_today %></p>
+      <p class="text-gray-500">Total Revenue</p>
+      <p class="text-xl font-bold text-red-600">₦<%= number_to_currency(@total_revenue, unit: "", precision: 2) %></p>
     </div>
   </div>
 
@@ -31,7 +31,8 @@
       <thead class="bg-red-600 text-white">
         <tr>
           <th class="px-4 py-2 text-left text-sm font-semibold">ID</th>
-          <th class="px-4 py-2 text-left text-sm font-semibold">Name</th>
+          <th class="px-4 py-2 text-left text-sm font-semibold">Customer</th>
+          <th class="px-4 py-2 text-left text-sm font-semibold">Vendors</th>
           <th class="px-4 py-2 text-left text-sm font-semibold">Status</th>
           <th class="px-4 py-2 text-left text-sm font-semibold">Total</th>
           <th class="px-4 py-2 text-left text-sm font-semibold">Ordered At</th>
@@ -40,23 +41,33 @@
       </thead>
       <tbody class="divide-y divide-gray-200">
         <% @orders.each do |order| %>
-          <tr class="hover:bg-gray-50">
+          <tr class="hover:bg-gray-50 <%= 'bg-yellow-50' if order.status == 'pending' %>">
             <td class="px-4 py-2"><%= order.id %></td>
             <td class="px-4 py-2"><%= order.name %></td>
+            <td class="px-4 py-2">
+              <%= order.order_items.map { |i| i.vendor.name }.uniq.join(", ") %>
+            </td>
             <td class="px-4 py-2 font-semibold">
-              <% case order.status.downcase %>
+              <% case order.status %>
               <% when "pending" %>
                 <span class="text-orange-500">Pending</span>
               <% when "processing" %>
+                <span class="text-blue-600">Processing</span>
+              <% when "paid" %>
                 <span class="text-green-600">Paid</span>
-              <% else %>
-                <span><%= order.status.capitalize %></span>
+              <% when "completed" %>
+                <span class="text-gray-700">Completed</span>
+              <% when "cancelled" %>
+                <span class="text-red-600">Cancelled</span>
               <% end %>
             </td>
             <td class="px-4 py-2">₦<%= number_to_currency(order.total_price, unit: "", precision: 2) %></td>
             <td class="px-4 py-2"><%= order.created_at.strftime("%b %d, %Y %I:%M %p") %></td>
-            <td class="px-4 py-2">
+            <td class="px-4 py-2 flex gap-2">
               <%= link_to "View", admin_order_path(order), class: "bg-red-600 text-white px-3 py-1 rounded hover:bg-red-500 transition text-sm" %>
+              <% if order.status == "pending" %>
+                <%= link_to "Mark Paid", mark_as_paid_admin_order_path(order), method: :post, class: "bg-green-600 text-white px-3 py-1 rounded hover:bg-green-500 transition text-sm" %>
+              <% end %>
             </td>
           </tr>
         <% end %>
@@ -66,8 +77,6 @@
 
   <!-- Pagination -->
   <div class="mt-4">
-  <%= paginate @orders %>
-</div>
-
-
+    <%= paginate @orders %>
+  </div>
 </div>

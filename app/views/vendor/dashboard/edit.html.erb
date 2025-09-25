@@ -1,0 +1,20 @@
+<h1>Edit Vendor Profile</h1>
+
+<%= form_with model: @vendor, url: vendor_path(@vendor), method: :patch, local: true do |f| %>
+  <div>
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+
+  <div>
+    <%= f.label :profile_image %><br>
+    <%= f.file_field :profile_image %>
+  </div>
+
+  <div>
+    <%= f.label :description %><br>
+    <%= f.text_area :description %>
+  </div>
+
+  <%= f.submit "Update Profile" %>
+<% end %>

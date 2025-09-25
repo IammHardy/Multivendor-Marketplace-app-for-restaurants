@@ -1,75 +1,65 @@
-<!-- app/views/admin/dashboard/index.html.erb -->
+<div class="min-h-screen bg-gray-100 p-6">
 
-<div class="max-w-7xl mx-auto p-6" data-controller="dashboard">
-  <h1 class="text-3xl font-bold text-red-600 mb-6">Admin Dashboard</h1>
+  <!-- Dashboard Header -->
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-3xl font-bold text-gray-700">Admin Dashboard</h1>
+  </div>
 
-  <!-- New Orders -->
-  <div class="mb-8">
-    <h2 class="text-2xl font-semibold text-gray-800 mb-4">New Orders</h2>
-    <% if @unread_notifications.any? %>
-      <ul class="space-y-2">
-        <% @unread_notifications.each do |note| %>
-          <li class="bg-white p-4 rounded shadow flex justify-between items-center hover:bg-gray-50 transition">
-            <%= link_to "Order ##{note.order.id}", admin_order_path(note.order), class: "font-semibold text-red-600 hover:underline" %>
-            <span class="text-gray-500 text-sm"><%= time_ago_in_words(note.created_at) %> ago</span>
-          </li>
+  <!-- Top Summary Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-6">
+    <div class="bg-white shadow rounded-lg p-6">
+      <h2 class="text-gray-500 font-medium">Total Vendors</h2>
+      <p class="text-2xl font-bold text-red-600 mt-2"><%= @total_vendors %></p>
+    </div>
+
+    <div class="bg-white shadow rounded-lg p-6">
+      <h2 class="text-gray-500 font-medium">Active Vendors</h2>
+      <p class="text-2xl font-bold text-red-600 mt-2"><%= @active_vendors %></p>
+    </div>
+
+    <div class="bg-white shadow rounded-lg p-6">
+      <h2 class="text-gray-500 font-medium">Pending Approval</h2>
+      <p class="text-2xl font-bold text-red-600 mt-2"><%= @pending_vendors %></p>
+    </div>
+
+    <div class="bg-white shadow rounded-lg p-6">
+      <h2 class="text-gray-500 font-medium">Total Orders</h2>
+      <p class="text-2xl font-bold text-red-600 mt-2"><%= @total_orders %></p>
+    </div>
+
+    <div class="bg-white shadow rounded-lg p-6">
+      <h2 class="text-gray-500 font-medium">Total Commission</h2>
+      <p class="text-2xl font-bold text-red-600 mt-2">₦<%= number_with_precision(@total_platform_commission, precision: 2) %></p>
+    </div>
+  </div>
+
+  <!-- Vendors Table -->
+  <div class="bg-white shadow rounded-lg p-6">
+    <h3 class="text-xl font-bold text-gray-700 mb-4">Vendor Earnings & Commission</h3>
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead>
+        <tr class="bg-gray-50">
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Vendor</th>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Total Orders</th>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Vendor Earnings</th>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Admin Commission</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <% @vendor_stats.each do |stat| %>
+          <tr>
+            <td class="px-4 py-2 flex items-center gap-3">
+
+  <span class="font-medium text-gray-700"><%= stat[:vendor].name %></span>
+</td>
+
+            <td class="px-4 py-2"><%= stat[:total_orders] %></td>
+            <td class="px-4 py-2">₦<%= number_with_precision(stat[:total_earning], precision: 2) %></td>
+            <td class="px-4 py-2">₦<%= number_with_precision(stat[:total_commission], precision: 2) %></td>
+          </tr>
         <% end %>
-      </ul>
-    <% else %>
-      <p class="text-gray-500">No new orders.</p>
-    <% end %>
+      </tbody>
+    </table>
   </div>
 
-  <!-- Dashboard Stats Cards -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-    <div class="bg-red-600 text-white p-4 rounded shadow">
-      <p class="text-sm font-semibold">Total Orders</p>
-      <p class="text-2xl font-bold"><%= @total_orders %></p>
-    </div>
-    <div class="bg-yellow-500 text-white p-4 rounded shadow">
-      <p class="text-sm font-semibold">Pending Orders</p>
-      <p class="text-2xl font-bold"><%= @pending_orders %></p>
-    </div>
-    <div class="bg-blue-600 text-white p-4 rounded shadow">
-      <p class="text-sm font-semibold">Processing Orders</p>
-      <p class="text-2xl font-bold"><%= @paid_orders %></p>
-    </div>
-    <div class="bg-green-600 text-white p-4 rounded shadow">
-      <p class="text-sm font-semibold">Paid Orders</p>
-      <p class="text-2xl font-bold"><%= @paid_orders %></p>
-    </div>
-    <div class="bg-purple-600 text-white p-4 rounded shadow">
-      <p class="text-sm font-semibold">Total Revenue</p>
-      <p class="text-2xl font-bold">₦<%= number_with_delimiter(@total_revenue, delimiter: ",") %></p>
-    </div>
-    <div class="bg-indigo-500 text-white p-4 rounded shadow">
-      <p class="text-sm font-semibold">New Orders Today</p>
-      <p class="text-2xl font-bold"><%= @new_orders_today %></p>
-    </div>
-  </div>
-
-  <!-- Daily Sales -->
-  <div class="mb-10">
-    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Daily Sales</h2>
-    <div class="bg-white p-4 rounded shadow">
-<h2>Daily Sales</h2>
-<canvas id="daily-sales-chart" width="400" height="200"></canvas>
-
-<h2>Monthly Sales</h2>
-<canvas id="monthly-sales-chart" width="400" height="200"></canvas>
-
-
-
-  </div>
-
-  <!-- Monthly Sales -->
-  <div>
-    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Monthly Sales</h2>
-    <div class="bg-white p-4 rounded shadow">
-      <canvas data-dashboard-target="monthlyChart" 
-        data-sales="<%= @monthly_sales.to_json %>" 
-        height="300"></canvas>
-
-    </div>
-  </div>
 </div>

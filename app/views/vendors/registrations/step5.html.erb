@@ -1,0 +1,48 @@
+<h2>Step 5: Registration Complete</h2>
+
+<p>Thank you for registering! Here’s a summary of your information:</p>
+
+<h3>Account Information</h3>
+<ul>
+  <li><strong>Name:</strong> <%= @vendor.name %></li>
+  <li><strong>Email:</strong> <%= @vendor.email %></li>
+  <li><strong>Phone:</strong> <%= @vendor.phone %></li>
+</ul>
+
+<h3>Business Details</h3>
+<ul>
+  <li><strong>Business Type:</strong> <%= @vendor.business_type %></li>
+  <li><strong>Contact Person:</strong> <%= @vendor.contact_person %></li>
+  <li><strong>Address:</strong> <%= @vendor.address %></li>
+  <li><strong>City:</strong> <%= @vendor.city %></li>
+  <li><strong>State:</strong> <%= @vendor.state %></li>
+  <li><strong>Opening Hours:</strong> <%= @vendor.opening_hours %></li>
+</ul>
+
+<h3>Compliance & Verification</h3>
+<ul>
+  <li><strong>CAC Number:</strong> <%= @vendor.cac_number %></li>
+  <li><strong>Bio:</strong> <%= @vendor.bio %></li>
+  <li><strong>WhatsApp:</strong> <%= @vendor.whatsapp %></li>
+  <% if @vendor.id_card.attached? %>
+    <li><strong>ID Card:</strong> <%= image_tag(@vendor.id_card, width: 200) %></li>
+  <% end %>
+</ul>
+
+<h3>Payment Information</h3>
+<ul>
+  <li><strong>Bank Name:</strong> <%= @vendor.bank_name %></li>
+  <li><strong>Account Name:</strong> <%= @vendor.account_name %></li>
+  <li><strong>Account Number:</strong> <%= @vendor.account_number %></li>
+  <li><strong>Payout Method:</strong> <%= @vendor.payout_method %></li>
+  <% if @vendor.profile_image.attached? %>
+    <li><strong>Profile Image:</strong> <%= image_tag(@vendor.profile_image, width: 150) %></li>
+  <% end %>
+  <% if @vendor.banner_image.attached? %>
+    <li><strong>Banner Image:</strong> <%= image_tag(@vendor.banner_image, width: 300) %></li>
+  <% end %>
+</ul>
+
+<p>Your registration is pending approval. You will receive an email once your account is approved.</p>
+
+<%= link_to "Go to Dashboard", vendor_dashboard_path, class: "btn btn-primary" %>

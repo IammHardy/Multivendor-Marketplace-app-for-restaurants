@@ -14,12 +14,13 @@ class CheckoutsController < ApplicationController
     current_cart.cart_items.each do |item|
       @order.order_items.create(
         food: item.food,
+        vendor: item.food.vendor,  # ✅ FIX: Copy vendor_id from food
         quantity: item.quantity,
         price: item.food.price || 0
       )
     end
 
-    # 🔥 IMPORTANT: Update total_price AFTER creating order_items
+    # 🔥 Recalculate total AFTER order_items are created
     total = @order.order_items.sum { |i| i.quantity * i.price }
     @order.update(total_price: total)
 

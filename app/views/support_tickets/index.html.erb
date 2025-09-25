@@ -1,0 +1,17 @@
+<h1>Your Support Tickets</h1>
+
+<%= link_to "Create New Ticket", new_support_ticket_path, class: "btn btn-primary mb-3" %>
+
+<% if @tickets.any? %>
+  <ul>
+    <% @tickets.each do |ticket| %>
+      <li>
+        <%= link_to ticket.subject, support_ticket_path(ticket) %>
+        - Status: <%= ticket.status %>
+        - Created at: <%= ticket.created_at.strftime("%b %d, %Y") %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You have no support tickets yet.</p>
+<% end %>

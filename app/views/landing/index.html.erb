@@ -1,328 +1,238 @@
-
-
 <main class="bg-brand-white">
 
-<!-- Hero Section -->
-<!-- Hero Section -->
-<section class="relative min-h-[500px] sm:min-h-[600px] lg:h-[700px] xl:h-[900px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-red-400 via-red-300 to-yellow-200">
+  <!-- Hero Section -->
+  <section class="relative min-h-[500px] sm:min-h-[600px] lg:h-[700px] xl:h-[900px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-red-400 via-red-300 to-yellow-200">
 
+    <!-- Slider Background -->
+    <div class="absolute inset-0 w-full h-full overflow-hidden z-0">
+      <% @slider_images = ["food7-removebg-preview.png", "chicken-removebg-preview.png", "Nigerian-Hausa-Masa_9jafoodie-removebg-preview.png", "white-rice-and-designer-stew-removebg-preview.png"] %>
 
-  <!-- Background Images (Slider) -->
-  <div class="absolute inset-0 w-full h-full overflow-hidden z-0">
-    <% @slider_images = [
-      "food7-removebg-preview.png",
-      "chicken-removebg-preview.png",
-      "Nigerian-Hausa-Masa_9jafoodie-removebg-preview.png",
-      "white-rice-and-designer-stew-removebg-preview.png"
-    ] %>
-
-    <% @slider_images.each_with_index do |img, i| %>
-      <div class="slide absolute inset-0 <%= i == 0 ? 'opacity-100' : 'opacity-0' %> transition-opacity duration-700 ease-in-out flex items-center justify-center">
-        <%= image_tag img, class: "max-w-[1000px] max-h-[600px] object-contain object-center" %>
-      </div>
-    <% end %>
-
-    <!-- Softer Overlay -->
-    <div class="absolute inset-0 bg-gradient-to-br from-black/40 via-black/20 to-transparent"></div>
-
-    <!-- Slider Controls -->
-    <button id="prev" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/40 text-white p-3 rounded-full hover:bg-black/70 z-20">&#10094;</button>
-    <button id="next" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/40 text-white p-3 rounded-full hover:bg-black/70 z-20">&#10095;</button>
-
-    <!-- Dots -->
-    <div class="absolute bottom-6 w-full flex justify-center space-x-3 z-20">
-      <% @slider_images.each do |img| %>
-        <span class="dot w-3 h-3 rounded-full bg-white opacity-70 cursor-pointer"></span>
+      <% @slider_images.each_with_index do |img, i| %>
+        <div class="slide absolute inset-0 <%= i.zero? ? 'opacity-100' : 'opacity-0' %> transition-opacity duration-700 ease-in-out flex items-center justify-center">
+          <%= image_tag img, class: "max-w-[1000px] max-h-[600px] object-contain object-center" %>
+        </div>
       <% end %>
-    </div>
-  </div>
 
-  <!-- Hero Text -->
-  <div class="relative z-30 text-center px-6 max-w-3xl mx-auto">
-    <div class="bg-black/50 rounded-2xl p-6 sm:p-8 shadow-2xl backdrop-blur-sm">
-      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 text-white drop-shadow-lg">
-        Your Delicious Nigerian Meal is Here 🍲
-      </h1>
-      <p class="text-lg sm:text-xl md:text-2xl mb-8 font-medium text-gray-100 drop-shadow">
-        Experience authentic flavors delivered right to your doorstep.
-      </p>
+      <div class="absolute inset-0 bg-gradient-to-br from-black/40 via-black/20 to-transparent"></div>
 
-      <!-- Buttons -->
-      <div class="flex flex-col md:flex-row gap-6 md:gap-4 justify-center">
-        <% if user_signed_in? %>
-          <%= link_to "Browse Menu", foods_path, class: "bg-yellow-400 text-red-700 py-3 px-8 rounded-full text-lg font-bold shadow-lg hover:bg-yellow-300 transition duration-300 w-full md:w-auto text-center" %>
-          <%= link_to "View Cart", cart_path, class: "bg-white text-red-600 py-3 px-8 rounded-full text-lg font-bold shadow-lg hover:bg-gray-100 transition duration-300 w-full md:w-auto text-center" %>
-        <% else %>
-          <%= link_to "Sign Up", new_user_registration_path, class: "bg-yellow-400 text-red-700 py-3 px-8 rounded-full text-lg font-bold shadow-lg hover:bg-yellow-300 transition duration-300 w-full md:w-auto text-center" %>
-          <%= link_to "Browse Menu", foods_path, class: "bg-white text-red-600 py-3 px-8 rounded-full text-lg font-bold shadow-lg hover:bg-gray-100 transition duration-300 w-full md:w-auto text-center" %>
+      <!-- Slider Controls -->
+      <button id="prev" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/40 text-white p-3 rounded-full hover:bg-black/70 z-20">&#10094;</button>
+      <button id="next" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/40 text-white p-3 rounded-full hover:bg-black/70 z-20">&#10095;</button>
+
+      <!-- Dots -->
+      <div class="absolute bottom-6 w-full flex justify-center space-x-3 z-20">
+        <% @slider_images.each do |img| %>
+          <span class="dot w-3 h-3 rounded-full bg-white opacity-70 cursor-pointer"></span>
         <% end %>
       </div>
+    </div>
+
+    <!-- Hero Text -->
+    <div class="relative z-30 text-center px-6 max-w-3xl mx-auto">
+      <div class="bg-black/50 rounded-2xl p-6 sm:p-8 shadow-2xl backdrop-blur-sm">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 text-white drop-shadow-lg">
+          Discover the Best Nigerian Meals 🍲
+        </h1>
+        <p class="text-lg sm:text-xl md:text-2xl mb-8 font-medium text-gray-100 drop-shadow">
+          Explore top vendors and get your favorite foods delivered fast.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col md:flex-row gap-6 md:gap-4 justify-center">
+          <%= link_to "Browse Vendors", vendors_path, class: "bg-yellow-400 text-red-700 py-3 px-8 rounded-full text-lg font-bold shadow-lg hover:bg-yellow-300 transition duration-300 w-full md:w-auto text-center" %>
+          <%= link_to "Browse Foods", foods_path, class: "bg-white text-red-600 py-3 px-8 rounded-full text-lg font-bold shadow-lg hover:bg-gray-100 transition duration-300 w-full md:w-auto text-center" %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const slides = document.querySelectorAll(".slide");
+      const dots = document.querySelectorAll(".dot");
+      let current = 0;
+
+      function showSlide(index) {
+        slides.forEach((s, i) => s.style.opacity = i === index ? "1" : "0");
+        dots.forEach((d, i) => d.classList.toggle("bg-yellow-400", i === index));
+        current = index;
+      }
+
+      document.getElementById("prev").addEventListener("click", () => {
+        showSlide((current - 1 + slides.length) % slides.length);
+      });
+
+      document.getElementById("next").addEventListener("click", () => {
+        showSlide((current + 1) % slides.length);
+      });
+
+      dots.forEach((dot, i) => {
+        dot.addEventListener("click", () => showSlide(i));
+      });
+
+      setInterval(() => {
+        showSlide((current + 1) % slides.length);
+      }, 5000);
+    });
+  </script>
+
+ <!-- Top Vendors Section -->
+<!-- Top Vendors Section -->
+<section class="py-16 bg-gray-50" id="top-vendors">
+  <div class="max-w-7xl mx-auto px-6">
+    <h2 class="text-3xl font-bold text-red-600 mb-12 text-center">Top Vendors in Your Area</h2>
+
+    <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      <% @top_vendors = Vendor.active.limit(8) %>
+      <% @top_vendors.each do |vendor| %>
+        <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden cursor-pointer"
+             onclick="window.location='<%= vendor_path(vendor) %>'">
+
+          <%# Vendor Banner Image or Default %>
+          <% if vendor.banner_image.attached? %>
+            <%= image_tag vendor.banner_image, class: "w-full h-48 object-cover mb-4 rounded-t-xl" %>
+          <% else %>
+            <%= image_tag "/images/default-vendor.jpg", class: "w-full h-48 object-cover mb-4 rounded-t-xl" %>
+
+          <% end %>
+
+          <div class="p-6 text-center">
+            <h3 class="text-xl font-bold text-red-600 mb-2"><%= vendor.name.presence || "Unnamed Vendor" %></h3>
+            <p class="text-gray-700 mb-4">
+              <%= truncate(vendor.bio.presence || "Delicious meals from #{vendor.name.presence || 'our vendor'}", length: 80) %>
+            </p>
+
+            <%= link_to "View Menu", vendor_path(vendor), class: "bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-300", onclick: "event.stopPropagation();" %>
+          </div>
+        </div>
+      <% end %>
+
+      <%# Fallback if no vendors %>
+      <% if @top_vendors.blank? %>
+        <p class="text-center text-gray-500 col-span-full">No vendors available at the moment. Please check back later!</p>
+      <% end %>
     </div>
   </div>
 </section>
 
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const slides = document.querySelectorAll(".slide");
-    const dots = document.querySelectorAll(".dot");
-    let current = 0;
-
-    function showSlide(index) {
-      slides.forEach((s, i) => s.style.opacity = i === index ? "1" : "0");
-      dots.forEach((d, i) => d.classList.toggle("bg-yellow-400", i === index));
-      current = index;
-    }
-
-    document.getElementById("prev").addEventListener("click", () => {
-      showSlide((current - 1 + slides.length) % slides.length);
-    });
-
-    document.getElementById("next").addEventListener("click", () => {
-      showSlide((current + 1) % slides.length);
-    });
-
-    dots.forEach((dot, i) => {
-      dot.addEventListener("click", () => showSlide(i));
-    });
-
-    setInterval(() => {
-      showSlide((current + 1) % slides.length);
-    }, 5000);
-  });
-</script>
-
-  <!-- Menu Categories -->
-  <section class="py-16 bg-gray-50 w-full" id="menu-categories">
-    <div class="max-w-6xl mx-auto text-center">
-      <h2 class="text-3xl font-bold mb-10">Menu Categories</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- Food -->
-        <div class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition">
-          <h3 class="text-xl font-semibold mb-3">Food</h3>
-          <p class="text-gray-600 mb-4">Meals to satisfy every craving</p>
-          <%= link_to "Browse Meals", foods_path(category_id: "meals"), class: "text-red-600 font-bold hover:underline" %>
-        </div>
-        <!-- Drinks -->
-        <div class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition">
-          <h3 class="text-xl font-semibold mb-3">Drinks</h3>
-          <p class="text-gray-600 mb-4">Hydration, Soft Drinks, and Yoghurts</p>
-         <%= link_to "Browse Drinks", foods_path(category_id: "drinks"), class: "text-red-600 font-bold hover:underline" %>
-        </div>
-        <!-- Small Chops -->
-        <div class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition">
-          <h3 class="text-xl font-semibold mb-3">Small Chops & Sides</h3>
-          <p class="text-gray-600 mb-4">Perfect bites for any occasion</p>
-         <%= link_to "Browse Small Chops & Sides", foods_path(category_id: "small-chops-sides"), class: "text-red-600 font-bold hover:underline" %>
-        </div>
-        <div class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition">
-          <h3 class="text-xl font-semibold mb-3">Small Chops & Sides</h3>
-          <p class="text-gray-600 mb-4">Perfect bites for any occasion</p>
-         <%= link_to "Browse Desserts", foods_path(category_id: "desserts"), class: "text-red-600 font-bold hover:underline" %>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Special Offers -->
-  <section class="py-16 bg-white w-full" id="special-offers">
-    <div class="max-w-6xl mx-auto text-center">
-      <h2 class="text-3xl font-bold mb-10">Special Offers</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div class="bg-yellow-50 p-6 rounded-2xl shadow hover:shadow-lg transition">
-          <h3 class="text-xl font-semibold mb-3">🥤 20% Off All Drinks</h3>
-          <p class="text-gray-700">Stay refreshed for less, today only!</p>
-        </div>
-        <div class="bg-yellow-50 p-6 rounded-2xl shadow hover:shadow-lg transition">
-          <h3 class="text-xl font-semibold mb-3">🍗 Buy 2 Small Chops, Get 1 Free</h3>
-          <p class="text-gray-700">Perfect for sharing with friends.</p>
-        </div>
-        <div class="bg-yellow-50 p-6 rounded-2xl shadow hover:shadow-lg transition">
-          <h3 class="text-xl font-semibold mb-3">🍲 Free Delivery Over ₦5000</h3>
-          <p class="text-gray-700">Order big, save on delivery.</p>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- Featured Foods -->
-  <section class="w-full bg-red-50 py-16">
-    <div class="max-w-7xl mx-auto px-6 text-center">
-      <h2 class="text-3xl font-bold text-red-600 mb-12">Customer Favorites</h2>
-      <div class="grid md:grid-cols-3 gap-8">
-        <% @featured_foods = Food.limit(3) %>
-        <% @featured_foods.each do |food| %>
-          <div onclick="window.location='<%= food_path(food) %>'" class="cursor-pointer bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-200">
-            <% if food.image.attached? %>
-              <%= image_tag food.image, alt: food.name, class: "w-full h-48 object-cover" %>
-            <% else %>
-              <img src="/images/default-food.jpg" alt="<%= food.name %>" class="w-full h-48 object-cover">
-            <% end %>
-            <div class="p-6">
-              <h3 class="text-xl font-bold text-red-600 mb-2"><%= food.name %></h3>
-              <p class="text-gray-700 mb-4"><%= truncate(food.description, length: 80) %></p>
-              <%= link_to "Order Now", food_path(food), class: "bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700", onclick: "event.stopPropagation();" %>
-            </div>
-          </div>
-        <% end %>
-      </div>
-    </div>
-  </section>
+<!-- Featured Foods / Customer Favorites -->
+<section class="w-full bg-red-50 py-16">
+  <div class="max-w-7xl mx-auto px-6 text-center">
+    <h2 class="text-3xl font-bold text-red-600 mb-12">Customer Favorites</h2>
 
-<!-- How It Works -->
-<section class="py-16 bg-gray-50" id="how-it-works">
-  <div class="max-w-6xl mx-auto text-center">
-    <h2 class="text-3xl font-bold mb-12">How It Works</h2>
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-      <div class="flex flex-col items-center">
-        <div class="bg-red-100 text-red-600 p-6 rounded-full mb-4 text-2xl">🍴</div>
-        <h3 class="font-semibold">1. Browse Menu</h3>
-      </div>
-      <div class="flex flex-col items-center">
-        <div class="bg-red-100 text-red-600 p-6 rounded-full mb-4 text-2xl">🛒</div>
-        <h3 class="font-semibold">2. Add to Cart</h3>
-      </div>
-      <div class="flex flex-col items-center">
-        <div class="bg-red-100 text-red-600 p-6 rounded-full mb-4 text-2xl">💳</div>
-        <h3 class="font-semibold">3. Checkout & Pay</h3>
-      </div>
-      <div class="flex flex-col items-center">
-        <div class="bg-red-100 text-red-600 p-6 rounded-full mb-4 text-2xl">🚚</div>
-        <h3 class="font-semibold">4. Enjoy Delivery</h3>
-      </div>
-    </div>
-  </div>
-</section>
+    <div class="grid sm:grid-cols-1 md:grid-cols-3 gap-8">
+      <% @featured_foods = Food.with_attached_image.limit(3) %>
+      <% @featured_foods.each do |food| %>
+        <div onclick="window.location='<%= food_path(food) %>'" class="cursor-pointer bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-200">
+          
+          <% if food.image.attached? %>
+            <%= image_tag food.image, alt: food.name, class: "w-full h-48 object-cover rounded-t-xl" %>
+          <% else %>
+            <%= image_tag "/images/default-vendor.jpg", class: "w-full h-48 object-cover mb-4 rounded-t-xl" %>
 
-<!-- FAQ -->
-<section class="py-16 bg-white" id="faq">
-  <div class="max-w-4xl mx-auto">
-    <h2 class="text-3xl font-bold text-center mb-10">Frequently Asked Questions</h2>
-    <div class="space-y-6">
-      <details class="bg-gray-50 p-6 rounded-xl shadow">
-        <summary class="cursor-pointer font-semibold">Which areas do you deliver to?</summary>
-        <p class="mt-3 text-gray-600">We deliver across Abuja and surrounding areas. Enter your location at checkout to confirm availability.</p>
-      </details>
+          <% end %>
 
-      <details class="bg-gray-50 p-6 rounded-xl shadow">
-        <summary class="cursor-pointer font-semibold">What payment methods do you accept?</summary>
-        <p class="mt-3 text-gray-600">We accept Paystack, debit/credit cards, and bank transfers.</p>
-      </details>
-
-      <details class="bg-gray-50 p-6 rounded-xl shadow">
-        <summary class="cursor-pointer font-semibold">Can I track my order?</summary>
-        <p class="mt-3 text-gray-600">Yes, after placing your order, you’ll receive live updates until your food arrives.</p>
-      </details>
-
-      <details class="bg-gray-50 p-6 rounded-xl shadow">
-        <summary class="cursor-pointer font-semibold">Do you offer refunds?</summary>
-        <p class="mt-3 text-gray-600">Yes, if your order is incorrect or unsatisfactory, contact us within 24 hours.</p>
-      </details>
-    </div>
-  </div>
-</section>
-
-
-
-<!-- Testimonials / Customer Reviews Section -->
-<!-- Testimonials / Customer Reviews Section -->
-<section class="w-full py-12 bg-red-50">
-  <div class="max-w-7xl mx-auto px-4">
-    <h2 class="text-2xl md:text-3xl font-bold text-red-600 mb-8 text-center">What Our Customers Say</h2>
-    <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-      <% @testimonials = Testimonial.limit(3) %>
-      <% @testimonials.each do |testimonial| %>
-        <div class="bg-white p-4 rounded-xl shadow-md flex flex-col items-center max-w-xs mx-auto">
-         <% if testimonial.image.attached? %>
-  <%= image_tag testimonial.image.variant(resize_to_fill: [80, 80]).processed, class: "rounded-full mb-2 w-20 h-20" %>
-
-<% end %>
-
-          <p class="text-gray-700 text-sm text-center mb-2"><%= truncate(testimonial.comment, length: 80) %></p>
-          <p class="text-red-600 font-semibold text-sm text-center mb-1"><%= testimonial.name %></p>
-
-          <!-- Rating stars -->
-          <div class="flex space-x-1">
-            <% (1..5).each do |i| %>
-              <% if i <= testimonial.rating.to_i %>
-                <i class="fas fa-star text-yellow-400 text-sm"></i>
-              <% else %>
-                <i class="far fa-star text-yellow-400 text-sm"></i>
-              <% end %>
-            <% end %>
+          <div class="p-6 text-center">
+            <h3 class="text-xl font-bold text-red-600 mb-2"><%= food.name.presence || "Unnamed Food" %></h3>
+            <p class="text-gray-700 mb-4"><%= truncate(food.description.presence || "Delicious meal from our vendors.", length: 80) %></p>
+            
+            <%= link_to "Add to Cart", cart_path(food_id: food.id), method: :post, class: "bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-300", onclick: "event.stopPropagation();" %>
           </div>
         </div>
+      <% end %>
+
+      <% if @featured_foods.blank? %>
+        <p class="text-center text-gray-500 col-span-full">No featured foods available at the moment.</p>
       <% end %>
     </div>
   </div>
 </section>
 
 
-
-
-
-
-
-<!-- Call-to-Action Section -->
-<section class="w-full bg-red-600 py-16 text-center text-white">
-  <h2 class="text-3xl font-bold mb-6">Ready to Order Your Favorite Meal?</h2>
-  <%= link_to "Browse Foods", foods_path, class: "bg-yellow-400 text-red-700 px-8 py-3 rounded-full font-bold mr-4 hover:bg-yellow-300 transition duration-300" %>
-  <%= link_to "Sign Up", new_user_registration_path, class: "bg-white text-red-600 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition duration-300" %>
-</section>
-
-<!-- Footer Section -->
-<footer class="bg-black text-white py-16">
-  <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row md:justify-between md:items-start gap-10">
-
-    <!-- Company Info -->
-    <div class="flex-1">
-      <h3 class="font-bold text-2xl mb-4 text-yellow-400">Food App</h3>
-      <p class="text-gray-400 text-sm leading-relaxed">
-        Delivering authentic Nigerian meals to your doorstep with love and care.
-      </p>
-    </div>
-
-    <!-- Quick Links -->
-    <div class="flex-1">
-      <h4 class="font-semibold mb-4 text-lg">Quick Links</h4>
-      <ul class="space-y-2">
-        <li><%= link_to "Home", root_path, class: "text-gray-400 hover:text-yellow-400 transition duration-300" %></li>
-        <li><%= link_to "Foods", foods_path, class: "text-gray-400 hover:text-yellow-400 transition duration-300" %></li>
-        <li><%= link_to "Drinks", foods_path(category_id: Category.find_by(name: "Drinks")&.id), class: "text-gray-400 hover:text-yellow-400 transition duration-300" %></li>
-        <li><%= link_to "Small Chops", foods_path(category_id: Category.find_by(name: "Small Chops")&.id), class: "text-gray-400 hover:text-yellow-400 transition duration-300" %></li>
-        <li><%= link_to "Contact", "#", class: "text-gray-400 hover:text-yellow-400 transition duration-300" %></li>
-      </ul>
-    </div>
-
-    <!-- Social Media -->
-    <div class="flex-1">
-      <h4 class="font-semibold mb-4 text-lg">Follow Us</h4>
-      <div class="flex space-x-4">
-        <a href="#" class="text-gray-400 hover:text-yellow-400 transition duration-300"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" class="text-gray-400 hover:text-yellow-400 transition duration-300"><i class="fab fa-twitter"></i></a>
-        <a href="#" class="text-gray-400 hover:text-yellow-400 transition duration-300"><i class="fab fa-instagram"></i></a>
+  <!-- How It Works -->
+  <section class="py-16 bg-gray-50" id="how-it-works">
+    <div class="max-w-6xl mx-auto text-center">
+      <h2 class="text-3xl font-bold mb-12">How It Works</h2>
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
+        <div class="flex flex-col items-center">
+          <div class="bg-red-100 text-red-600 p-6 rounded-full mb-4 text-2xl">🏪</div>
+          <h3 class="font-semibold">1. Browse Vendors</h3>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="bg-red-100 text-red-600 p-6 rounded-full mb-4 text-2xl">🍲</div>
+          <h3 class="font-semibold">2. Browse Menu</h3>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="bg-red-100 text-red-600 p-6 rounded-full mb-4 text-2xl">🛒</div>
+          <h3 class="font-semibold">3. Add to Cart</h3>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="bg-red-100 text-red-600 p-6 rounded-full mb-4 text-2xl">💳</div>
+          <h3 class="font-semibold">4. Checkout & Pay</h3>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="bg-red-100 text-red-600 p-6 rounded-full mb-4 text-2xl">🚚</div>
+          <h3 class="font-semibold">5. Enjoy Delivery</h3>
+        </div>
       </div>
     </div>
+  </section>
 
-    <!-- Contact Info -->
-    <div class="flex-1">
-      <h4 class="font-semibold mb-4 text-lg">Contact</h4>
-      <p class="text-gray-400 text-sm mb-1">Email: <a href="mailto:support@foodapp.com" class="hover:text-yellow-400 transition duration-300">support@foodapp.com</a></p>
-      <p class="text-gray-400 text-sm mb-1">Phone: <a href="tel:+2348000000000" class="hover:text-yellow-400 transition duration-300">+234 800 000 0000</a></p>
-      <p class="text-gray-400 text-sm">Address: Abuja, Nigeria</p>
+  <!-- Call-to-Action -->
+  <section class="w-full bg-red-600 py-16 text-center text-white">
+    <h2 class="text-3xl font-bold mb-6">Ready to Explore Delicious Meals?</h2>
+    <%= link_to "Browse Vendors", vendors_path, class: "bg-yellow-400 text-red-700 px-8 py-3 rounded-full font-bold mr-4 hover:bg-yellow-300 transition duration-300" %>
+    <%= link_to "Browse Foods", foods_path, class: "bg-white text-red-600 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition duration-300" %>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-black text-white py-16">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row md:justify-between md:items-start gap-10">
+
+      <!-- Company Info -->
+      <div class="flex-1">
+        <h3 class="font-bold text-2xl mb-4 text-yellow-400">Food App</h3>
+        <p class="text-gray-400 text-sm leading-relaxed">
+          Connecting you with the best Nigerian vendors delivering quality meals.
+        </p>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="flex-1">
+        <h4 class="font-semibold mb-4 text-lg">Quick Links</h4>
+        <ul class="space-y-2">
+          <li><%= link_to "Home", root_path, class: "text-gray-400 hover:text-yellow-400 transition duration-300" %></li>
+          <li><%= link_to "Vendors", vendors_path, class: "text-gray-400 hover:text-yellow-400 transition duration-300" %></li>
+          <li><%= link_to "Foods", foods_path, class: "text-gray-400 hover:text-yellow-400 transition duration-300" %></li>
+        </ul>
+      </div>
+
+      <!-- Social Media -->
+      <div class="flex-1">
+        <h4 class="font-semibold mb-4 text-lg">Follow Us</h4>
+        <div class="flex space-x-4">
+          <a href="#" class="text-gray-400 hover:text-yellow-400 transition duration-300"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="text-gray-400 hover:text-yellow-400 transition duration-300"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="text-gray-400 hover:text-yellow-400 transition duration-300"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="flex-1">
+        <h4 class="font-semibold mb-4 text-lg">Contact</h4>
+        <p class="text-gray-400 text-sm mb-1">Email: <a href="mailto:support@foodapp.com" class="hover:text-yellow-400 transition duration-300">support@foodapp.com</a></p>
+        <p class="text-gray-400 text-sm mb-1">Phone: <a href="tel:+2348000000000" class="hover:text-yellow-400 transition duration-300">+234 800 000 0000</a></p>
+        <p class="text-gray-400 text-sm">Address: Abuja, Nigeria</p>
+      </div>
+
     </div>
 
-  </div>
-
-  <div class="text-center mt-12 text-gray-500 text-sm border-t border-gray-800 pt-6">
-    © 2025 Food App. All rights reserved.
-  </div>
-</footer>
-
-
-
-
-  
+    <div class="text-center mt-12 text-gray-500 text-sm border-t border-gray-800 pt-6">
+      © 2025 Food App. All rights reserved.
+    </div>
+  </footer>
 
 </main>
-

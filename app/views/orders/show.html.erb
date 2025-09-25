@@ -5,12 +5,14 @@
   <!-- Order Info -->
   <div class="space-y-3 mb-8 text-gray-700">
     <p><span class="font-semibold text-gray-900">Total:</span> ₦<%= number_with_precision(@order.total_price || 0, precision: 0) %></p>
-    <p><span class="font-semibold text-gray-900">Status:</span> <span class="capitalize px-2 py-1 rounded-md 
-        <%= @order.pending? ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700' %>">
+    <p>
+      <span class="font-semibold text-gray-900">Status:</span>
+      <span class="capitalize px-2 py-1 rounded-md 
+        <%= @order.status_pending? ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700' %>">
         <%= @order.status %>
       </span>
     </p>
-    <p><span class="font-semibold text-gray-900">Name:</span> <%= @order.name.present? ? @order.name : (@order.user&.email || "Name not provided") %></p>
+    <p><span class="font-semibold text-gray-900">Name:</span> <%= @order.name.presence || @order.user&.email || "Name not provided" %></p>
     <p><span class="font-semibold text-gray-900">Address:</span> <%= @order.address %></p>
     <p><span class="font-semibold text-gray-900">Phone:</span> <%= @order.phone %></p>
   </div>
@@ -32,10 +34,10 @@
 
   <!-- Actions -->
   <div class="flex flex-col sm:flex-row sm:justify-center sm:space-x-4 space-y-3 sm:space-y-0 mb-8">
-    <% if @order.pending? %>
+    <% if @order.status_pending? %>
       <%= button_to "Proceed to Payment", paystack_checkout_path(order_id: @order.id), method: :post, data: { turbo: false }, 
         class: "bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-semibold shadow-md transition" %>
-    <% elsif @order.processing? %>
+    <% elsif @order.status_paid? %>
       <div class="text-center sm:text-left">
         <p class="text-green-600 font-semibold mb-2">✅ Payment Verified! Your order is now being processed.</p>
         <%= link_to "Message Admin", message_admin_order_path(@order), 
@@ -43,12 +45,26 @@
           target: "_blank" %>
       </div>
     <% end %>
+
+    <% if @order.status_paid? && @order.vendor.present? %>
+      <div class="flex flex-col sm:flex-row sm:justify-center sm:space-x-4 space-y-3 sm:space-y-0">
+        <%= button_to "Message Vendor",
+              start_users_conversations_path(vendor_id: @order.vendor.id),
+              method: :post,
+              class: "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" %>
+
+
+        <!-- WhatsApp chat button -->
+        <% if @order.vendor.phone.present? %>
+          <%= link_to "WhatsApp Vendor", "https://wa.me/#{@order.vendor.phone}", target: "_blank", 
+              class: "bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-semibold shadow-md transition" %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <!-- Download Summary -->
     <%= link_to 'Download Summary', download_summary_order_path(@order, reference: @order.payment_reference), 
-    class: 'bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-xl font-semibold shadow-md transition text-center' %>
-
-
-
-
+        class: 'bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-xl font-semibold shadow-md transition text-center' %>
   </div>
 
   <!-- Back -->

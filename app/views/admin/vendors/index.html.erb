@@ -1,0 +1,30 @@
+<h1 class="text-2xl font-bold mb-6">Vendors</h1>
+
+<table class="min-w-full bg-white shadow rounded-lg overflow-hidden">
+  <thead class="bg-gray-100">
+    <tr>
+      <th class="px-4 py-2 text-left">Business Name</th>
+      <th class="px-4 py-2 text-left">Email</th>
+      <th class="px-4 py-2 text-left">Phone</th>
+      <th class="px-4 py-2 text-left">Status</th>
+      <th class="px-4 py-2 text-left">Joined</th>
+      <th class="px-4 py-2 text-center">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @vendors.each do |vendor| %>
+      <tr class="border-b hover:bg-gray-50">
+        <td class="px-4 py-2"><%= vendor.name %></td>
+        <td class="px-4 py-2"><%= vendor.email %></td>
+        <td class="px-4 py-2"><%= vendor.phone %></td>
+        <td class="px-4 py-2"><%= vendor.status %></td>
+        <td class="px-4 py-2"><%= vendor.created_at.strftime("%b %d, %Y") %></td>
+        <td class="px-4 py-2 text-center">
+          <%= link_to "View", admin_vendor_path(vendor), class: "text-blue-600 hover:underline" %> |
+          <%= link_to "Edit", edit_admin_vendor_path(vendor), class: "text-yellow-600 hover:underline" %> |
+          <%= link_to "Delete", admin_vendor_path(vendor), method: :delete, data: { confirm: "Are you sure?" }, class: "text-red-600 hover:underline" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

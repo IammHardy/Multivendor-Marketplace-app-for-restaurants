@@ -1,0 +1,40 @@
+<h2 class="text-2xl font-bold mb-4">Edit Vendor</h2>
+
+<%= form_with(model: [:admin, @vendor], local: true, html: { multipart: true }) do |f| %>
+  <div class="mb-4">
+    <%= f.label :name %>
+    <%= f.text_field :name, class: "border rounded w-full p-2" %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :email %>
+    <%= f.email_field :email, class: "border rounded w-full p-2" %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :phone %>
+    <%= f.text_field :phone, class: "border rounded w-full p-2" %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :status %>
+    <%= f.select :status, Vendor.statuses.keys.map { |s| [s.titleize, s] }, class: "border rounded w-full p-2" %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :bio %>
+    <%= f.text_area :bio, class: "border rounded w-full p-2" %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :profile_image %>
+    <%= f.file_field :profile_image %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :banner_image %>
+    <%= f.file_field :banner_image %>
+  </div>
+
+  <%= f.submit "Update Vendor", class: "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" %>
+<% end %>

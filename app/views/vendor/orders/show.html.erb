@@ -1,0 +1,48 @@
+<h1 class="text-xl font-bold mb-4">Order #<%= @order.id %></h1>
+
+<div class="bg-white rounded-lg shadow p-6 mb-6">
+  <p><strong>Customer:</strong> <%= @order.user&.email %></p>
+  <p><strong>Order Date:</strong> <%= @order.created_at.strftime("%B %d, %Y %I:%M %p") %></p>
+  <p><strong>Status:</strong> <%= @order.status %></p>
+</div>
+
+<h2 class="text-lg font-semibold mb-2">Your Items in this Order</h2>
+
+<table class="min-w-full bg-white border rounded-lg shadow">
+  <thead>
+    <tr class="bg-gray-100">
+      <th class="px-4 py-2 text-left">Food</th>
+      <th class="px-4 py-2 text-left">Quantity</th>
+      <th class="px-4 py-2 text-left">Price</th>
+      <th class="px-4 py-2 text-left">Subtotal</th>
+      <th class="px-4 py-2 text-left">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @vendor_items.each do |item| %>
+      <tr class="border-t">
+        <td class="px-4 py-2"><%= item.food.name %></td>
+        <td class="px-4 py-2"><%= item.quantity %></td>
+        <td class="px-4 py-2">₦<%= item.price %></td>
+        <td class="px-4 py-2">₦<%= item.quantity * item.price %></td>
+        <td class="px-4 py-2"><%= @order.status %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="mt-4 p-4 bg-gray-100 rounded-lg">
+  <p class="text-lg font-bold">
+    Total Earnings (Your Items): ₦<%= @vendor_total %>
+  </p>
+</div>
+
+<div class="mt-6 flex gap-4">
+  <%= link_to "Back to Orders", vendor_orders_path, class: "bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-500 transition" %>
+
+  <% if @order.status != "shipped" %>
+    <%= button_to "Mark as Shipped", mark_as_shipped_vendor_order_path(@order),
+                  method: :patch,
+                  class: "bg-green-600 text-white px-4 py-2 rounded hover:bg-green-500 transition" %>
+  <% end %>
+</div>

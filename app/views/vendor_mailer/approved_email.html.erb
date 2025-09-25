@@ -1,0 +1,12 @@
+<!-- app/views/vendor_mailer/approved_email.html.erb -->
+<h1>Hello <%= @vendor.name %>,</h1>
+
+<p>Congratulations! Your vendor account has been approved by the admin.</p>
+
+<p>You can now log in and start managing your store:</p>
+
+<p>
+  <%= link_to "Go to Dashboard", vendor_dashboard_url %>
+</p>
+
+<p>Thank you for joining us!</p>

@@ -36,10 +36,10 @@ Devise.setup do |config|
   config.mailer_sender = 'please-change-me-at-config-initializers-devise@example.com'
   config.mailer = 'UserMailer'
   # Force Devise to use your ngrok host in emails
-   #config.mailer.default_url_options = { host: "6ef3fa28d2ea.ngrok-free.app", protocol: "https" }
+   
 
   # Configure the class responsible to send e-mails.
-  # config.mailer = 'Devise::Mailer'
+  #  config.mailer = 'Devise::Mailer'
 
   # Configure the parent class responsible to send e-mails.
   # config.parent_mailer = 'ActionMailer::Base'

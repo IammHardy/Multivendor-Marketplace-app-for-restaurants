@@ -19,7 +19,7 @@ config.active_storage.service = :local
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
- config.action_mailer.default_url_options = { host: "5cd6dc90539c.ngrok-free.app", protocol: "https" }
+ config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
   
 
   config.action_mailer.smtp_settings = {
@@ -70,7 +70,7 @@ config.active_storage.service = :local
   # Raise on undefined before_action
   config.action_controller.raise_on_missing_callback_actions = true
 
-  
+  config.active_job.queue_adapter = :async
 
   config.hosts << /[a-z0-9\-]+\.ngrok-free\.app/
 

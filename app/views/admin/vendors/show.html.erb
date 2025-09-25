@@ -1,0 +1,37 @@
+<h2 class="text-2xl font-bold mb-4">Vendor Details</h2>
+
+<div class="bg-white shadow rounded-lg p-6">
+  <p><strong>Business Name:</strong> <%= @vendor.name %></p>
+  <p><strong>Email:</strong> <%= @vendor.email %></p>
+  <p><strong>Phone:</strong> <%= @vendor.phone %></p>
+  <p><strong>Status:</strong> <%= @vendor.status %></p>
+  <p><strong>Joined:</strong> <%= @vendor.created_at.strftime("%b %d, %Y") %></p>
+
+  <% if @vendor.profile_image.attached? %>
+    <p><strong>Profile Image:</strong></p>
+    <%= image_tag @vendor.profile_image.variant(resize_to_limit: [150, 150]), class: "rounded-md border" %>
+  <% end %>
+
+  <% if @vendor.banner_image.attached? %>
+    <p><strong>Banner Image:</strong></p>
+    <%= image_tag @vendor.banner_image.variant(resize_to_limit: [300, 100]), class: "rounded-md border" %>
+  <% end %>
+
+  <p><strong>Bio:</strong> <%= @vendor.bio %></p>
+
+  <div class="mt-4 flex gap-2">
+  <% if @vendor.pending_approval? %>
+    <%= form_with url: approve_admin_vendor_path(@vendor), method: :patch, local: true do |f| %>
+      <%= f.submit "Approve", class: "px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700" %>
+    <% end %>
+
+    <%= form_with url: reject_admin_vendor_path(@vendor), method: :patch, local: true do |f| %>
+      <%= f.submit "Reject", class: "px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700" %>
+    <% end %>
+  <% end %>
+
+  <%= link_to "Back to Vendors", admin_vendors_path, class: "ml-2 px-4 py-2 bg-gray-300 rounded hover:bg-gray-400" %>
+</div>
+
+
+</div>

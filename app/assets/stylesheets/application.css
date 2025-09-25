@@ -10,16 +10,23 @@
 }
 
 .flash-message.notice {
-  background-color: #d4edda; /* soft green */
-  color: #155724;
+  background-color: #d4edda !important; /* soft green */
+  color: #155724 !important;
 }
 
 .flash-message.alert {
-  background-color: #f8d7da; /* soft red */
-  color: #721c24;
+  background-color: #f8d7da !important; /* soft red */
+  color: #721c24 !important;
 }
 
 .flash-message.error {
-  background-color: #fff3cd; /* soft yellow */
-  color: #856404;
+  background-color: #fff3cd !important; /* soft yellow */
+  color: #856404 !important;
+}
+
+/* optional: add to application.css */
+img {
+  display: block;
+  max-width: 100%;
+  object-fit: cover;
 }

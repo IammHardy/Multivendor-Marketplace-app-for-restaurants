@@ -1,0 +1,130 @@
+<!-- app/views/vendor/profiles/edit.html.erb -->
+
+<div class="max-w-4xl mx-auto mt-8 bg-white shadow-md rounded-lg p-6">
+
+  <!-- Back button -->
+  <div class="mb-6">
+    <%= link_to "← Back to Dashboard", vendor_dashboard_path, class: "text-red-600 hover:underline font-medium" %>
+  </div>
+
+  <h1 class="text-2xl font-bold text-red-600 mb-6">Profile & Settings</h1>
+
+  <%= form_with(model: @vendor, url: vendor_profile_path, local: true, html: { multipart: true }) do |f| %>
+
+    <!-- Basic Info -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <%= f.label :name, "Business Name", class: "block font-medium" %>
+        <%= f.text_field :name, class: "w-full border p-2 rounded focus:ring-2 focus:ring-red-400" %>
+      </div>
+
+      <div>
+        <%= f.label :email, "Email", class: "block font-medium" %>
+        <%= f.email_field :email, class: "w-full border p-2 rounded focus:ring-2 focus:ring-red-400", disabled: true %>
+      </div>
+
+      <div>
+        <%= f.label :phone, "Phone Number", class: "block font-medium" %>
+        <%= f.telephone_field :phone, class: "w-full border p-2 rounded focus:ring-2 focus:ring-red-400" %>
+      </div>
+
+      <div>
+        <%= f.label :address, "Address", class: "block font-medium" %>
+        <%= f.text_field :address, class: "w-full border p-2 rounded focus:ring-2 focus:ring-red-400" %>
+      </div>
+    </div>
+
+    <!-- Business Bio -->
+    <div class="mt-6">
+      <%= f.label :bio, "About Your Business", class: "block font-medium mb-2" %>
+      <%= f.text_area :bio, rows: 5, class: "w-full border p-3 rounded focus:ring-2 focus:ring-red-400" %>
+    </div>
+
+    <!-- Images Upload -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+      <!-- Profile Image -->
+      <div>
+        <%= f.label :profile_image, "Profile Image", class: "block font-medium mb-2" %>
+        <% if @vendor.profile_image.attached? %>
+          <div class="mb-2">
+            <%= image_tag @vendor.profile_image.variant(resize_to_limit: [150, 150]), class: "rounded-full border" %>
+          </div>
+        <% else %>
+          <%= image_tag "default_profile.png", class: "rounded-full border mb-2" %>
+        <% end %>
+        <%= f.file_field :profile_image, class: "w-full" %>
+      </div>
+
+      <!-- Banner Image -->
+      <div>
+        <%= f.label :banner_image, "Banner Image", class: "block font-medium mb-2" %>
+        <% if @vendor.banner_image.attached? %>
+          <div class="mb-2">
+            <%= image_tag @vendor.banner_image.variant(resize_to_limit: [1200, 300]), class: "w-full h-72 object-cover rounded-lg" %>
+          </div>
+        <% else %>
+          <%= image_tag "default_banner.png", class: "w-full h-72 object-cover rounded-lg mb-2" %>
+        <% end %>
+        <%= f.file_field :banner_image, class: "w-full" %>
+      </div>
+    </div>
+
+    <!-- ID Upload -->
+    <div class="mt-6">
+      <%= f.label :id_card, "Upload ID", class: "block font-medium mb-2" %>
+      <% if @vendor.id_card.attached? %>
+        <div class="mb-2">
+          <%= link_to "View Current ID", rails_blob_path(@vendor.id_card, disposition: "attachment"), class: "text-blue-600 underline" %>
+        </div>
+      <% end %>
+      <%= f.file_field :id_card, class: "w-full" %>
+    </div>
+
+    <!-- Payment Info -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+      <div>
+        <%= f.label :bank_name, "Bank Name", class: "block font-medium" %>
+        <%= f.text_field :bank_name, class: "w-full border p-2 rounded focus:ring-2 focus:ring-red-400" %>
+      </div>
+
+      <div>
+        <%= f.label :account_name, "Account Name", class: "block font-medium" %>
+        <%= f.text_field :account_name, class: "w-full border p-2 rounded focus:ring-2 focus:ring-red-400" %>
+      </div>
+
+      <div>
+        <%= f.label :account_number, "Account Number", class: "block font-medium" %>
+        <%= f.text_field :account_number, class: "w-full border p-2 rounded focus:ring-2 focus:ring-red-400" %>
+      </div>
+    </div>
+
+    <!-- Other Info -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+      <div>
+        <%= f.label :city, "City", class: "block font-medium" %>
+        <%= f.text_field :city, class: "w-full border p-2 rounded focus:ring-2 focus:ring-red-400" %>
+      </div>
+
+      <div>
+        <%= f.label :state, "State", class: "block font-medium" %>
+        <%= f.text_field :state, class: "w-full border p-2 rounded focus:ring-2 focus:ring-red-400" %>
+      </div>
+
+      <div>
+        <%= f.label :business_type, "Business Type", class: "block font-medium" %>
+        <%= f.text_field :business_type, class: "w-full border p-2 rounded focus:ring-2 focus:ring-red-400" %>
+      </div>
+
+      <div>
+        <%= f.label :opening_hours, "Opening Hours", class: "block font-medium" %>
+        <%= f.text_field :opening_hours, class: "w-full border p-2 rounded focus:ring-2 focus:ring-red-400" %>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="mt-6 flex justify-end">
+      <%= f.submit "Update Profile", class: "bg-red-600 text-white px-6 py-2 rounded hover:bg-red-500 transition font-medium" %>
+    </div>
+
+  <% end %>
+</div>

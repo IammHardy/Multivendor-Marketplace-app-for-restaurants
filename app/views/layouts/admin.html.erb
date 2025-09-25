@@ -25,13 +25,15 @@
 
         <!-- Desktop Menu -->
         <nav class="hidden lg:flex gap-6 items-center">
-          <%= link_to "Dashboard", admin_dashboard_path, class: "hover:text-yellow-400 font-medium" %>
-          <%= link_to "Manage Foods", admin_foods_path, class: "hover:text-yellow-400 font-medium" %>
-          <%= link_to "Manage Categories", admin_categories_path, class: "hover:text-yellow-400 font-medium" %>
-          <%= link_to "Orders", admin_orders_path, class: "hover:text-yellow-400 font-medium" %>
-          <%= link_to "Users", admin_users_path, class: "hover:text-yellow-400 font-medium" %>
-          <%= button_to "Logout", destroy_user_session_path, method: :delete, form_class: "inline", class: "hover:text-yellow-400 font-medium" %>
-        </nav>
+  <%= link_to "Dashboard", admin_dashboard_path, class: "hover:text-yellow-400 font-medium" %>
+  <%= link_to "Manage Foods", admin_foods_path, class: "hover:text-yellow-400 font-medium" %>
+  <%= link_to "Manage Categories", admin_categories_path, class: "hover:text-yellow-400 font-medium" %>
+  <%= link_to "Orders", admin_orders_path, class: "hover:text-yellow-400 font-medium" %>
+  <%= link_to "Users", admin_users_path, class: "hover:text-yellow-400 font-medium" %>
+  <%= link_to "Vendors", admin_vendors_path, class: "hover:text-yellow-400 font-medium" %>
+  <%= link_to "Reports", admin_reports_path, class: "hover:text-yellow-400 font-medium" %>
+  <%= button_to "Logout", destroy_user_session_path, method: :delete, form_class: "inline", class: "hover:text-yellow-400 font-medium" %>
+</nav>
 
         <!-- Hamburger Menu (mobile) -->
         <button id="admin-hamburger-btn"
@@ -41,14 +43,16 @@
 
         <!-- Mobile Menu -->
         <nav id="admin-mobile-nav"
-             class="hidden absolute top-full right-0 left-0 bg-white shadow-lg z-50 flex flex-col gap-2 p-4 rounded-b-lg transition-all duration-300 transform -translate-y-5 opacity-0">
-          <%= link_to "Dashboard", admin_dashboard_path, class: "block px-4 py-2 text-red-600 hover:bg-red-100 rounded font-medium" %>
-          <%= link_to "Manage Foods", admin_foods_path, class: "block px-4 py-2 text-red-600 hover:bg-red-100 rounded font-medium" %>
-          <%= link_to "Manage Categories", admin_categories_path, class: "block px-4 py-2 text-red-600 hover:bg-red-100 rounded font-medium" %>
-          <%= link_to "Orders", admin_orders_path, class: "block px-4 py-2 text-red-600 hover:bg-red-100 rounded font-medium" %>
-          <%= link_to "Users", admin_users_path, class: "block px-4 py-2 text-red-600 hover:bg-red-100 rounded font-medium" %>
-          <%= button_to "Logout", destroy_user_session_path, method: :delete, form_class: "inline", class: "block px-4 py-2 text-red-600 hover:bg-red-100 rounded font-medium" %>
-        </nav>
+     class="hidden absolute top-full right-0 left-0 bg-white shadow-lg z-50 flex flex-col gap-2 p-4 rounded-b-lg transition-all duration-300 transform -translate-y-5 opacity-0">
+  <%= link_to "Dashboard", admin_dashboard_path, class: "block px-4 py-2 text-red-600 hover:bg-red-100 rounded font-medium" %>
+  <%= link_to "Manage Foods", admin_foods_path, class: "block px-4 py-2 text-red-600 hover:bg-red-100 rounded font-medium" %>
+  <%= link_to "Manage Categories", admin_categories_path, class: "block px-4 py-2 text-red-600 hover:bg-red-100 rounded font-medium" %>
+  <%= link_to "Orders", admin_orders_path, class: "block px-4 py-2 text-red-600 hover:bg-red-100 rounded font-medium" %>
+  <%= link_to "Users", admin_users_path, class: "block px-4 py-2 text-red-600 hover:bg-red-100 rounded font-medium" %>
+  <%= link_to "Vendors", admin_vendors_path, class: "block px-4 py-2 text-red-600 hover:bg-red-100 rounded font-medium" %>
+  <%= link_to "Reports", admin_reports_path, class: "block px-4 py-2 text-red-600 hover:bg-red-100 rounded font-medium" %>
+      <%= button_to "Logout", destroy_user_session_path, method: :delete, form_class: "inline", class: "block px-4 py-2 text-red-600 hover:bg-red-100 rounded font-medium" %>
+     </nav>
       </div>
     </header>
 

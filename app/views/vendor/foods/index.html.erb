@@ -1,0 +1,51 @@
+<!-- app/views/vendor/foods/index.html.erb -->
+
+<div class="min-h-screen bg-gray-100 p-6">
+
+  <!-- Back Button -->
+  <div class="mb-6">
+    <%= link_to "← Back to Dashboard", vendor_dashboard_path, class: "text-red-600 hover:underline font-medium" %>
+  </div>
+
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-red-600">Your Foods</h1>
+    <%= link_to "Add New Food", new_vendor_food_path, class: "bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500 transition font-medium" %>
+  </div>
+
+  <!-- Foods Table -->
+  <div class="bg-white shadow rounded-lg overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created At</th>
+          <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <% @foods.each do |food| %>
+          <tr>
+            <td class="px-6 py-4 whitespace-nowrap"><%= food.name %></td>
+            <td class="px-6 py-4 whitespace-nowrap">₦<%= food.price %></td>
+            <td class="px-6 py-4 whitespace-nowrap"><%= food.categories.map(&:name).join(", ") if food.respond_to?(:categories) %></td>
+            <td class="px-6 py-4 whitespace-nowrap"><%= food.created_at.strftime("%b %d, %Y") %></td>
+            <td class="px-6 py-4 whitespace-nowrap text-center space-x-2">
+              <%= link_to "Edit", edit_vendor_food_path(food), class: "text-blue-600 hover:underline" %>
+              <%= link_to "Delete", vendor_food_path(food), method: :delete, data: { confirm: "Are you sure?" }, class: "text-red-600 hover:underline" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="mt-4">
+   <%= paginate @foods %>
+
+
+  </div>
+
+</div>

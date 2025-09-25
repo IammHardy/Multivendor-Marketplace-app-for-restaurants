@@ -1,0 +1,52 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-lg w-full bg-white shadow-lg rounded-lg p-8 space-y-6">
+
+    <!-- Progress Bar -->
+    <%= render "progress_bar", step: 3 %>
+
+    <h2 class="text-2xl font-bold text-gray-700 text-center mb-4">Step 3: Compliance & Verification</h2>
+
+    <%= form_with(model: @vendor, url: update_step3_vendor_registration_path, method: :post, local: true, html: { multipart: true, class: "space-y-6" }) do |f| %>
+
+      <!-- CAC Number -->
+      <div>
+        <%= f.label :cac_number, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.text_field :cac_number, required: true,
+              class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
+      </div>
+
+      <!-- Bio -->
+      <div>
+        <%= f.label :bio, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.text_area :bio, maxlength: 500,
+              class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
+      </div>
+
+      <!-- WhatsApp -->
+      <div>
+        <%= f.label :whatsapp, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.text_field :whatsapp,
+              class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
+      </div>
+
+      <!-- ID Card Upload -->
+      <div>
+        <%= f.label :id_card, "Upload ID Card", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.file_field :id_card, accept: 'image/png,image/jpg,image/jpeg',
+              class: "mt-1 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100" %>
+
+        <% if @vendor.id_card.attached? %>
+          <p class="mt-2 text-gray-500 text-sm">Currently uploaded: <%= @vendor.id_card.filename %></p>
+          <%= image_tag @vendor.id_card.variant(resize_to_limit: [200, 200]), class: "mt-2 rounded-md border" %>
+        <% end %>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="flex justify-between items-center">
+        <%= link_to "Back", step2_vendor_registration_path, class: "px-4 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50" %>
+        <%= f.submit "Next", class: "px-6 py-2 rounded-md bg-red-600 text-white font-medium hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2" %>
+      </div>
+
+    <% end %>
+  </div>
+</div>

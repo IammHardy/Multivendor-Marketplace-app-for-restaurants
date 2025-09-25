@@ -1,0 +1,29 @@
+<h1>Create a New Support Ticket</h1>
+
+<%= form_with model: @ticket, local: true do |f| %>
+  <div>
+    <%= f.label :subject %>
+    <%= f.text_field :subject, class: "form-control" %>
+  </div>
+
+  <div>
+    <%= f.label :priority %>
+    <%= f.select :priority, ["Low", "Medium", "High"], {}, class: "form-control" %>
+  </div>
+
+  <div>
+    <%= f.label :order_id, "Related Order (optional)" %>
+    <%= f.collection_select :order_id, current_user.orders, :id, :order_number, include_blank: true, class: "form-control" %>
+  </div>
+
+  <div>
+    <%= f.label :description %>
+    <%= f.text_area :description, rows: 5, class: "form-control" %>
+  </div>
+
+  <div class="mt-2">
+    <%= f.submit "Create Ticket", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<%= link_to "Back to Tickets", support_tickets_path, class: "btn btn-link mt-3" %>

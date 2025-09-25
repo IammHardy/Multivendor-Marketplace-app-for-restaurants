@@ -1,0 +1,26 @@
+<h1 class="text-xl font-bold mb-4"><%= @conversation.name || "Conversation" %></h1>
+
+<div class="space-y-2">
+  <% @conversation.messages.each do |message| %>
+  <div class="bg-gray-50 p-3 rounded shadow-sm">
+    <strong>
+      <% if message.sender.present? %>
+        <%= message.sender.is_a?(Vendor) ? "You" : message.sender.try(:name) %>:
+      <% else %>
+        System:
+      <% end %>
+    </strong>
+    <%= message.body %>
+  </div>
+<% end %>
+
+<% end %>
+
+</div>
+
+<%= form_with model: [@conversation, @new_message], url: vendor_conversation_messages_path(@conversation), local: true do |f| %>
+  <div class="mt-4 flex space-x-2">
+    <%= f.text_field :body, placeholder: "Type a message...", class: "flex-1 border rounded px-4 py-2" %>
+    <%= f.submit "Send", class: "bg-blue-500 text-white px-4 py-2 rounded" %>
+  </div>
+<% end %>

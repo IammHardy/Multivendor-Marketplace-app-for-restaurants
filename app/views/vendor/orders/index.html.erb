@@ -1,0 +1,60 @@
+<div class="min-h-screen bg-gray-100 p-6">
+
+  <!-- Back Button -->
+  <div class="mb-4">
+    <%= link_to "← Back to Dashboard", vendor_dashboard_path, class: "text-red-600 hover:underline font-medium" %>
+  </div>
+
+  <h1 class="text-2xl font-bold text-red-600 mb-6">My Orders</h1>
+
+  <div class="bg-white shadow rounded-lg p-6">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead>
+        <tr class="bg-gray-50">
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Order #</th>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Customer</th>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Total</th>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Your Earnings</th>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Platform Commission</th>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Status</th>
+          <th class="px-4 py-2 text-center text-sm font-medium text-gray-500">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <% @orders.each do |order| %>
+          <% vendor_items = order.order_items.where(vendor_id: current_vendor.id) %>
+          <tr>
+            <td class="px-4 py-2"><%= order.id %></td>
+            <td class="px-4 py-2"><%= order.user.name %></td>
+            <td class="px-4 py-2">₦<%= order.total_price %></td>
+            <td class="px-4 py-2 text-green-600 font-bold">₦<%= vendor_items.sum(:vendor_earnings) %></td>
+            <td class="px-4 py-2 text-yellow-600 font-bold">₦<%= vendor_items.sum(:platform_commission) %></td>
+            <td class="px-4 py-2">
+              <% status_class = case order.status
+                                when "pending" then "bg-yellow-100 text-yellow-800"
+                                when "completed" then "bg-green-100 text-green-800"
+                                when "cancelled" then "bg-red-100 text-red-800"
+                                else "bg-gray-100 text-gray-800"
+                                end %>
+              <span class="px-2 py-1 rounded-full text-xs font-semibold <%= status_class %>">
+                <%= order.status.capitalize %>
+              </span>
+            </td>
+            <td class="px-4 py-2 text-center space-x-2">
+              <%= link_to "View", vendor_order_path(order), class: "text-red-600 hover:underline" %>
+              <% if order.status == "pending" %>
+                <%= button_to "Mark Completed", mark_completed_vendor_order_path(order), method: :patch, class: "bg-green-600 text-white px-2 py-1 rounded hover:bg-green-500 text-xs" %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="mt-4">
+      <%= paginate @orders %>
+    </div>
+  </div>
+
+</div>

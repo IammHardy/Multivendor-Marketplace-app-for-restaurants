@@ -1,0 +1,41 @@
+<%= form_with model: [:vendor, @food], local: true do |f| %>
+  <div class="mb-4">
+    <%= f.label :name, class: "block font-medium" %>
+    <%= f.text_field :name, class: "w-full border rounded p-2" %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :description, class: "block font-medium" %>
+    <%= f.text_area :description, class: "w-full border rounded p-2" %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :price, class: "block font-medium" %>
+    <%= f.number_field :price, class: "w-full border rounded p-2", step: 0.01 %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :categories, class: "block font-medium" %>
+    <%= f.collection_check_boxes :category_ids, @categories, :id, :name do |cb| %>
+      <div class="flex items-center space-x-2">
+        <%= cb.check_box %>
+        <%= cb.text %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :image, class: "block font-medium" %>
+    <%= f.file_field :image, class: "w-full border rounded p-2" %>
+    <% if @food.persisted? && @food.image.attached? %>
+  <div class="mt-2">
+    <%= image_tag @food.image.variant(resize_to_limit: [200, 200]) %>
+  </div>
+<% end %>
+
+  </div>
+
+  <div>
+    <%= f.submit class: "bg-green-600 text-white px-4 py-2 rounded" %>
+  </div>
+<% end %>

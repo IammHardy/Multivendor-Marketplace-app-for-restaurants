@@ -1,0 +1,2 @@
+module Vendor::FoodsHelper
+end

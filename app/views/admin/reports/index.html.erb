@@ -1,0 +1,46 @@
+<h1 class="text-2xl font-bold mb-6">Reports & Analytics</h1>
+
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+  <div class="p-4 bg-white rounded-xl shadow text-center">
+    <p class="text-gray-500">Users</p>
+    <p class="text-2xl font-bold"><%= @total_users %></p>
+  </div>
+  <div class="p-4 bg-white rounded-xl shadow text-center">
+    <p class="text-gray-500">Vendors</p>
+    <p class="text-2xl font-bold"><%= @total_vendors %></p>
+  </div>
+  <div class="p-4 bg-white rounded-xl shadow text-center">
+    <p class="text-gray-500">Orders</p>
+    <p class="text-2xl font-bold"><%= @total_orders %></p>
+  </div>
+  <div class="p-4 bg-white rounded-xl shadow text-center">
+    <p class="text-gray-500">Revenue</p>
+    <p class="text-2xl font-bold">₦<%= @revenue %></p>
+  </div>
+</div>
+
+<h2 class="text-xl font-bold mb-4">Recent Orders</h2>
+<table class="min-w-full bg-white shadow rounded-lg overflow-hidden">
+  <thead class="bg-gray-100">
+    <tr>
+      <th class="px-4 py-2 text-left">Order ID</th>
+      <th class="px-4 py-2 text-left">User</th>
+      <th class="px-4 py-2 text-left">Vendor</th>
+      <th class="px-4 py-2 text-left">Total</th>
+      <th class="px-4 py-2 text-left">Status</th>
+      <th class="px-4 py-2 text-left">Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @recent_orders.each do |order| %>
+      <tr class="border-b hover:bg-gray-50">
+        <td class="px-4 py-2">#<%= order.id %></td>
+        <td class="px-4 py-2"><%= order.user&.name || order.user&.email %></td>
+        <td class="px-4 py-2"><%= order.vendor&.business_name %></td>
+        <td class="px-4 py-2">₦<%= order.total_price %></td>
+        <td class="px-4 py-2"><%= order.status.capitalize %></td>
+        <td class="px-4 py-2"><%= order.created_at.strftime("%b %d, %Y") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

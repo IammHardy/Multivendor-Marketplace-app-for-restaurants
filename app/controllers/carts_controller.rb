@@ -1,16 +1,23 @@
 class CartsController < ApplicationController
    before_action :authenticate_user!, only: [:checkout, :add_item, :remove_item]
-  def create
-    @cart = current_cart
-    food = Food.find(params[:food_id])
-    quantity = params[:quantity].to_i
+ def create
+  @cart = current_cart
+  food = Food.find(params[:food_id])
+  quantity = params[:quantity].to_i
 
-    cart_item = @cart.cart_items.find_or_initialize_by(food: food)
-    cart_item.quantity += quantity
-    cart_item.save
+  cart_item = @cart.cart_items.find_or_initialize_by(food: food)
+  cart_item.quantity += quantity
 
+  # ✅ Assign vendor automatically
+  cart_item.vendor_id ||= food.vendor_id
+
+  if cart_item.save
     redirect_to cart_path, notice: "Item added to cart"
+  else
+    redirect_to foods_path, alert: "Failed to add item: #{cart_item.errors.full_messages.join(', ')}"
   end
+end
+
 
 
 def index
@@ -24,20 +31,33 @@ end
 end
 
 
-  def add_item
+ def add_item
   @cart = current_cart
-  food = Food.friendly.find(params[:id])
+
+  # Safely find food
+  begin
+    food = Food.friendly.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to foods_path, alert: "Food not found" and return
+  end
+
   quantity = params[:quantity].to_i
   quantity = 1 if quantity <= 0
 
   cart_item = @cart.cart_items.find_or_initialize_by(food: food)
   cart_item.quantity = (cart_item.quantity || 0) + quantity
+
+  # ✅ Assign vendor automatically
+  cart_item.vendor_id ||= food.vendor_id
+
   if cart_item.save
     redirect_to cart_path, notice: "#{food.name} added to cart."
   else
-    redirect_to foods_path, alert: "Failed to add #{food.name} to cart."
+    redirect_to foods_path, alert: "Failed to add #{food.name}: #{cart_item.errors.full_messages.join(', ')}"
   end
 end
+
+
 
   def remove_item
     @cart = current_cart

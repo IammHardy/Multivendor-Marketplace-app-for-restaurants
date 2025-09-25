@@ -1,8 +1,15 @@
 import "@hotwired/turbo-rails"
-import "./controllers"
+import { Application } from "@hotwired/stimulus"
+import { definitionsFromContext } from "@hotwired/stimulus-loading"
 
-import Chartkick from "chartkick"
-import Chart from "chart.js"
+const application = Application.start()
+const context = require.context("./controllers", true, /\.js$/)
+application.load(definitionsFromContext(context))
+import "../vendor_image_preview"
+import "chartkick"
+import "chartkick/chart.js"
+// app/javascript/application.js
 
-window.Chartkick = Chartkick
-window.Chart = Chart
+
+
+import "./channels"

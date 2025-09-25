@@ -2,15 +2,14 @@ class LandingController < ApplicationController
   include Rails.application.routes.url_helpers
   
   def index
-    
-    @foods = Food.with_attached_image
+    # Fetch all main categories and their children
     @main_categories = Category.where(parent_id: nil).includes(:children)
 
-    # Remove the old Food-specific variables
-    # @food_category and @food_subcategories are no longer needed
-    # Use @main_categories and each category's children in the view instead
+    # Fetch top active vendors (limit to 8 for layout purposes)
+    @top_vendors = Vendor.active.limit(8)
 
-    @featured_foods = Food.limit(3)
-    @testimonials = Testimonial.limit(3)
+
+    # Fetch testimonials for the testimonial section
+    @testimonials = Testimonial.with_attached_image.limit(3)
   end
 end

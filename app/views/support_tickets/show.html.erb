@@ -1,0 +1,19 @@
+<h1><%= @ticket.subject %></h1>
+
+<p>
+  <strong>Status:</strong> <%= @ticket.status %><br>
+  <strong>Priority:</strong> <%= @ticket.priority %><br>
+  <strong>Order:</strong>
+  <% if @ticket.order %>
+    <%= link_to @ticket.order.order_number, order_path(@ticket.order) %>
+  <% else %>
+    N/A
+  <% end %>
+</p>
+
+<p>
+  <strong>Description:</strong><br>
+  <%= simple_format(@ticket.description) %>
+</p>
+
+<%= link_to "Back to Tickets", support_tickets_path, class: "btn btn-link mt-3" %>

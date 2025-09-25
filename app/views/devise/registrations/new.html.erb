@@ -23,7 +23,7 @@
       </div>
 
       <!-- Password Confirmation -->
-      <div class="mb-4">
+      <div class="mb-6">
         <%= f.label :password_confirmation, class: "block font-semibold mb-1 text-gray-700" %>
         <%= f.password_field :password_confirmation, autocomplete: "new-password",
               class: "w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-red-300 focus:outline-none" %>
@@ -35,21 +35,21 @@
       </div>
     <% end %>
 
+    <!-- Divider -->
     <div class="text-center mb-4 text-gray-500">Or sign up with</div>
 
     <!-- OAuth Buttons -->
-    <div class="flex flex-col gap-4 mt-6">
+    <div class="flex flex-col gap-4">
       <% if devise_mapping.omniauthable? %>
         <% resource_class.omniauth_providers.each do |provider| %>
-          <%= link_to omniauth_authorize_path(resource_name, provider),
-                      class: "flex items-center justify-center gap-2 py-3 rounded-lg font-semibold transition w-full #{provider}-btn" do %>
+          <%= link_to omniauth_authorize_path(resource_name, provider), class: "oauth-btn #{provider.to_s.gsub('_oauth2','')}-btn" do %>
             <% case provider %>
             <% when :google_oauth2 %>
-              <i class="fab fa-google"></i> Sign up with Google
+              <i class="fab fa-google mr-2"></i> Sign up with Google
             <% when :facebook %>
-              <i class="fab fa-facebook-f"></i> Sign up with Facebook
+              <i class="fab fa-facebook-f mr-2"></i> Sign up with Facebook
             <% when :tiktok %>
-              <i class="fab fa-tiktok"></i> Sign up with TikTok
+              <i class="fab fa-tiktok mr-2"></i> Sign up with TikTok
             <% end %>
           <% end %>
         <% end %>
@@ -62,17 +62,3 @@
     </div>
   </div>
 </div>
-
-<style>
-.google-btn {
-  @apply bg-blue-600 hover:bg-blue-700 text-white;
-}
-
-.facebook-btn {
-  @apply bg-blue-800 hover:bg-blue-900 text-white;
-}
-
-.tiktok-btn {
-  @apply bg-black hover:bg-gray-800 text-white;
-}
-</style>

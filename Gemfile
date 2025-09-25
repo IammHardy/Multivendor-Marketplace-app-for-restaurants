@@ -73,6 +73,9 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+  gem 'factory_bot_rails'
+   gem 'rspec-rails'
+     gem 'faker'
 end
 
 group :development do
@@ -100,6 +103,12 @@ gem 'omniauth-tiktok'
 gem 'omniauth-facebook'
 
 gem 'jwt', '~> 2.6'
+gem 'active_storage_validations'
+
+# Gemfile
+gem "chartkick"
+gem "groupdate"
+
 
 
 

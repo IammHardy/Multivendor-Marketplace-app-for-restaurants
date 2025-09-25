@@ -9,13 +9,12 @@
     <%= yield :head %>
 
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "application", type: "module" %>
-
-
+  
 
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="apple-touch-icon" href="/icon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <%= javascript_importmap_tags %>
   </head>
 
   <body class="bg-gray-50 text-gray-800 font-sans">
@@ -27,34 +26,45 @@
     <%= link_to root_path, class: "text-3xl font-extrabold tracking-wide text-white" do %>
       Sajuma
     <% end %>
-
     <!-- Desktop Menu -->
-    <nav class="hidden lg:flex gap-6 items-center">
-      <%= link_to "Home", (current_user&.admin? ? admin_dashboard_path : root_path),
-          class: "hover:text-yellow-400 font-medium" %>
-      <%= link_to "Browse Menu", foods_path, class: "hover:text-yellow-400 font-bold" %>
+   <nav class="hidden lg:flex gap-6 items-center">
+  <%= link_to "Home", (current_user&.admin? ? admin_dashboard_path : root_path),
+      class: "hover:text-yellow-400 font-medium" %>
+  <%= link_to "Browse Menu", foods_path, class: "hover:text-yellow-400 font-bold" %>
 
-      <% if user_signed_in? %>
-        <% unless current_user.admin? %>
-          <%= link_to "My Orders", orders_path, class: "hover:text-yellow-400 font-medium" %>
-        <% end %>
-        <%= button_to "Logout", destroy_user_session_path, method: :delete,
-              form_class: "inline",
-              class: "hover:text-yellow-400 font-medium" %>
-      <% else %>
-        <%= link_to "Login", new_user_session_path, class: "hover:text-yellow-400 font-medium" %>
-        <%= link_to "Sign Up", new_user_registration_path, class: "hover:text-yellow-400 font-medium" %>
-      <% end %>
+  <% if user_signed_in? %>
+    <% if current_user.is_a?(User) %>
+      <%= link_to "My Orders", orders_path, class: "hover:text-yellow-400 font-medium" %>
+      <%= link_to "My Conversations#{@unread_conversations_count.positive? ? " (#{@unread_conversations_count})" : ""}".html_safe,
+                  users_conversations_path, class: "hover:text-yellow-400 font-medium" %>
+      <%= link_to "Support Tickets#{@new_support_tickets_count.positive? ? " (#{@new_support_tickets_count})" : ""}".html_safe,
+                  support_tickets_path, class: "hover:text-yellow-400 font-medium" %>
 
-      <% if current_cart.present? && current_cart.cart_items.any? %>
-        <%= link_to cart_path, class: "relative hover:text-yellow-300" do %>
-          <i class="fas fa-shopping-cart text-lg"></i>
-          <span class="absolute -top-2 -right-3 bg-white text-red-600 text-xs font-bold rounded-full px-2 py-0.5">
-            <%= current_cart.cart_items.sum(:quantity) %>
-          </span>
-        <% end %>
-      <% end %>
-    </nav>
+    <% elsif current_user.is_a?(Vendor) %>
+      <%= link_to "Conversations#{@unread_conversations_count.positive? ? " (#{@unread_conversations_count})" : ""}".html_safe,
+                  vendor_conversations_path, class: "hover:text-yellow-400 font-medium" %>
+    <% elsif current_user.admin? %>
+      <%= link_to "Admin Dashboard", admin_dashboard_path, class: "hover:text-yellow-400 font-medium" %>
+    <% end %>
+
+    <%= button_to "Logout", destroy_user_session_path, method: :delete,
+          form_class: "inline", class: "hover:text-yellow-400 font-medium" %>
+
+  <% else %>
+    <%= link_to "Login", new_user_session_path, class: "hover:text-yellow-400 font-medium" %>
+    <%= link_to "Sign Up", new_user_registration_path, class: "hover:text-yellow-400 font-medium" %>
+  <% end %>
+
+  <% if current_cart.present? && current_cart.cart_items.any? %>
+    <%= link_to cart_path, class: "relative hover:text-yellow-300" do %>
+      <i class="fas fa-shopping-cart text-lg"></i>
+      <span class="absolute -top-2 -right-3 bg-white text-red-600 text-xs font-bold rounded-full px-2 py-0.5">
+        <%= current_cart.cart_items.sum(:quantity) %>
+      </span>
+    <% end %>
+  <% end %>
+</nav>
+
 
     <!-- Hamburger (mobile only) -->
     <button id="hamburger-btn" class="lg:hidden text-white text-2xl relative z-50">
@@ -67,24 +77,18 @@
           class: "block px-4 py-2 text-red-600 hover:bg-red-100 hover:text-yellow-400 font-medium rounded" %>
 
       <% if user_signed_in? %>
-        <span class="block px-4 py-2 text-gray-500 text-sm">
-          Logged in as <%= current_user.email %>
-        </span>
+  <span class="block px-4 py-2 text-gray-500 text-sm">
+    Logged in as <%= current_user.email %>
+  </span>
 
-        <% unless current_user.admin? %>
-          <%= link_to "My Orders", orders_path,
-              class: "block px-4 py-2 text-red-600 hover:bg-red-100 hover:text-yellow-400 font-medium rounded" %>
-        <% end %>
+  <% unless current_user.admin? %>
+    <%= link_to "My Orders", orders_path,
+        class: "block px-4 py-2 text-red-600 hover:bg-red-100 hover:text-yellow-400 font-medium rounded" %>
+  <% else %>
+    <%= link_to "Admin Dashboard", admin_dashboard_path,
+        class: "block px-4 py-2 text-red-600 hover:bg-red-100 hover:text-yellow-400 font-medium rounded" %>
+  <% end %>
 
-        <%= button_to "Logout", destroy_user_session_path, method: :delete,
-              form_class: "inline",
-              class: "block px-4 py-2 text-red-600 hover:bg-red-100 hover:text-yellow-400 font-medium rounded" %>
-      <% else %>
-        <%= link_to "Login", new_user_session_path,
-              class: "block px-4 py-2 text-red-600 hover:bg-red-100 hover:text-yellow-400 font-medium rounded" %>
-        <%= link_to "Sign Up", new_user_registration_path,
-              class: "block px-4 py-2 text-red-600 hover:bg-red-100 hover:text-yellow-400 font-medium rounded" %>
-      <% end %>
 
       <%= link_to "Browse Menu", foods_path,
             class: "block px-4 py-2 text-red-600 hover:bg-red-100 hover:text-yellow-400 font-bold rounded" %>
@@ -97,11 +101,44 @@
           </span>
         <% end %>
       <% end %>
+      <% end %>
     </nav>
 
   </div>
 </header>
+          <script>
+  const btn = document.getElementById('hamburger-btn');
+  const nav = document.getElementById('mobile-nav');
 
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation(); // prevent document click
+    const icon = btn.querySelector('i');
+    nav.classList.toggle('hidden');
+    if (!nav.classList.contains('hidden')) {
+      nav.classList.remove('-translate-y-5', 'opacity-0');
+      nav.classList.add('translate-y-0', 'opacity-100');
+      icon.classList.remove('fa-bars');
+      icon.classList.add('fa-times');
+    } else {
+      nav.classList.add('-translate-y-5', 'opacity-0');
+      nav.classList.remove('translate-y-0', 'opacity-100');
+      icon.classList.remove('fa-times');
+      icon.classList.add('fa-bars');
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!btn.contains(e.target) && !nav.contains(e.target)) {
+      if (!nav.classList.contains('hidden')) {
+        nav.classList.add('-translate-y-5', 'opacity-0');
+        nav.classList.remove('translate-y-0', 'opacity-100');
+        setTimeout(() => nav.classList.add('hidden'), 300);
+        btn.querySelector('i').classList.remove('fa-times');
+        btn.querySelector('i').classList.add('fa-bars');
+      }
+    }
+  });
+</script>
 
    
  <!-- FLASH -->
@@ -146,6 +183,7 @@
 
 
     <!-- MAIN CONTENT -->
+   
     <%= yield %>
 
    

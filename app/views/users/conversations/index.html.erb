@@ -1,0 +1,20 @@
+<h1 class="text-2xl font-bold mb-4">Conversations</h1>
+
+<% if @conversations.present? %>
+  <ul class="space-y-2">
+    <% @conversations.each do |conv| %>
+      <% last_msg = conv.messages.order(created_at: :desc).first %>
+      <li>
+        <%= link_to users_conversation_path(conv.id), class: "block p-4 bg-white rounded shadow hover:bg-gray-100" do %>
+          <p class="font-semibold"><%= conv.vendor.name %></p>
+          <p class="text-gray-500 text-sm truncate max-w-md"><%= last_msg&.body || "No messages yet" %></p>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p class="text-gray-500">No conversations yet.</p>
+  <% if @order&.vendor %>
+    <%= button_to "Message Vendor", start_users_conversations_path(vendor_id: @order.vendor.id), method: :post, class: "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" %>
+  <% end %>
+<% end %>

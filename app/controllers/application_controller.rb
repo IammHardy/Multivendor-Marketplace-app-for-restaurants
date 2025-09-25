@@ -1,17 +1,59 @@
 class ApplicationController < ActionController::Base
   helper_method :current_cart
 
-  # Store user location before actions (for redirect after login)
   before_action :store_user_location!, if: :storable_location?
   before_action :load_food_subcategories
   before_action :load_main_categories
+  before_action :set_unread_counts
 
-  # Devise redirect after sign in
+  before_action :update_last_seen
+
+def update_last_seen
+  if user_signed_in?
+    current_user.update_column(:last_seen_at, Time.current)
+  elsif vendor_signed_in?
+    current_vendor.update_column(:last_seen_at, Time.current)
+  end
+end
+
+  private
+
+  def set_unread_counts
+  if user_signed_in?
+    if current_user.is_a?(User)
+      # Unread messages for a customer
+      @unread_conversations_count = Conversation.joins(:messages)
+        .where(user_id: current_user.id, messages: { read: false })
+        .distinct.count
+
+      # New support tickets (only for Users, not vendors)
+@new_support_tickets_count = current_user.support_tickets.where(status: "new").count
+
+
+    elsif current_user.is_a?(Vendor)
+      # Unread messages for a vendor
+      @unread_conversations_count = Conversation.joins(:messages)
+        .where(vendor_id: current_user.id, messages: { read: false })
+        .distinct.count
+
+      # Vendors may not have support tickets; set to 0
+      @new_support_tickets_count = 0
+    end
+  else
+    @unread_conversations_count = 0
+    @new_support_tickets_count = 0
+  end
+end
+
+
+  # Devise: redirect after sign in
   def after_sign_in_path_for(resource)
-    merge_guest_cart_with(resource) if session[:cart_id]
+    merge_guest_cart_with(resource) if session[:cart_id] && resource.is_a?(User)
 
-    if resource.admin?
+    if resource.is_a?(User) && resource.admin?
       admin_dashboard_path
+    elsif resource.is_a?(Vendor)
+      vendor_dashboard_path # redirect Vendors to their dashboard
     else
       stored_location_for(resource) || root_path
     end
@@ -36,10 +78,10 @@ class ApplicationController < ActionController::Base
     @current_cart
   end
 
-  private
-
   # Merge guest cart items into signed-in user's cart
   def merge_guest_cart_with(user)
+    return unless user.is_a?(User)
+
     guest_cart = Cart.find_by(id: session[:cart_id])
     return unless guest_cart && guest_cart.user.nil?
 
@@ -47,8 +89,7 @@ class ApplicationController < ActionController::Base
       guest_cart.cart_items.each do |item|
         existing_item = user.cart.cart_items.find_by(food_id: item.food_id)
         if existing_item
-          existing_item.quantity += item.quantity
-          existing_item.save
+          existing_item.update(quantity: existing_item.quantity + item.quantity)
         else
           item.update(cart_id: user.cart.id)
         end

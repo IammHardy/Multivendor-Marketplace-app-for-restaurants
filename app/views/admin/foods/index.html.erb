@@ -1,23 +1,31 @@
-<div class="max-w-4xl mx-auto mt-8">
-  <h1 class="text-2xl font-bold text-red-600 mb-6">Manage Foods</h1>
+<h1 class="text-2xl font-bold text-red-600 mb-6">All Foods (by Vendors)</h1>
 
-  <div class="mb-6">
-    <%= link_to "➕ Add Food", new_admin_food_path, class: "bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500 transition" %>
-  </div>
-
-  <% if @foods.any? %>
-    <div class="flex flex-col gap-4">
-      <% @foods.each do |food| %>
-        <div class="flex justify-between items-center bg-white p-4 rounded shadow border border-gray-100">
-          <div class="font-semibold"><%= food.name %></div>
-          <div class="flex gap-2">
-            <%= link_to "Edit", edit_admin_food_path(food), class: "bg-gray-600 text-white px-3 py-1 rounded hover:bg-gray-500 transition text-sm" %>
-            <%= link_to "Delete", admin_food_path(food), method: :delete, data: { confirm: "Are you sure?" }, class: "bg-red-600 text-white px-3 py-1 rounded hover:bg-red-500 transition text-sm" %>
-          </div>
-        </div>
-      <% end %>
-    </div>
-  <% else %>
-    <p class="text-gray-500">No foods available yet.</p>
-  <% end %>
-</div>
+<table class="min-w-full bg-white shadow rounded-lg overflow-hidden">
+  <thead class="bg-gray-100">
+    <tr>
+      <th class="px-4 py-2 text-left">Food</th>
+      <th class="px-4 py-2 text-left">Vendor</th>
+      <th class="px-4 py-2 text-left">Price</th>
+      <th class="px-4 py-2 text-left">Category</th>
+      <th class="px-4 py-2 text-left">Created</th>
+      <th class="px-4 py-2 text-center">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @foods.each do |food| %>
+      <tr class="border-b hover:bg-gray-50">
+        <td class="px-4 py-2"><%= food.name %></td>
+        <td class="px-4 py-2"><%= food.vendor&.name %></td>
+        <td class="px-4 py-2">₦<%= food.price %></td>
+        <td class="px-4 py-2"><%= food.categories.map(&:name).join(", ") %></td>
+        <td class="px-4 py-2"><%= food.created_at.strftime("%b %d, %Y") %></td>
+        <td class="px-4 py-2 text-center">
+          <%= link_to "Delete", admin_food_path(food),
+              method: :delete,
+              data: { confirm: "Are you sure you want to remove this food?" },
+              class: "text-red-600 hover:underline" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

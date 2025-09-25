@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Vendor Portal</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-papyaYvZ4+sV4Jd+eEwKj6H0b5Xr+kT9Y+h0s6cFZKhX++M9PssD2f7a/vw1RLP9VwD8u8vT1Ce0HiXQ9S3Xw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  </head>
+
+  <body class="bg-gray-100 font-sans">
+
+    <div class="flex min-h-screen">
+      
+      <% if current_vendor %>
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-md md:block">
+          <!-- Vendor Profile -->
+          <div class="flex flex-col items-center mb-8">
+            <% if current_vendor.profile_image.attached? %>
+              <%= image_tag current_vendor.profile_image.variant(resize_to_limit: [100, 100]),
+                            class: "rounded-full border mb-2" %>
+            <% else %>
+              <%= image_tag "default_profile.png", class: "rounded-full border mb-2 w-24 h-24" %>
+            <% end %>
+            <h3 class="font-bold text-lg mt-1 text-gray-700"><%= current_vendor.name %></h3>
+          </div>
+
+          <ul class="space-y-4">
+            <li>
+              <%= link_to vendor_dashboard_path, class: "flex items-center gap-3 px-3 py-2 rounded hover:bg-red-50 font-medium" do %>
+                <i class="fas fa-tachometer-alt text-red-600"></i> Dashboard
+              <% end %>
+            </li>
+            <li>
+              <%= link_to vendor_foods_path, class: "flex items-center gap-3 px-3 py-2 rounded hover:bg-red-50 font-medium" do %>
+                <i class="fas fa-utensils text-red-600"></i> Foods
+              <% end %>
+            </li>
+            <li>
+              <%= link_to vendor_orders_path, class: "flex items-center gap-3 px-3 py-2 rounded hover:bg-red-50 font-medium" do %>
+                <i class="fas fa-receipt text-red-600"></i> Orders
+              <% end %>
+            </li>
+            <li>
+              <%= link_to vendor_notifications_path, class: "flex items-center gap-3 px-3 py-2 rounded hover:bg-red-50 font-medium" do %>
+                <i class="fas fa-bell text-red-600"></i> Notifications
+              <% end %>
+            </li>
+             <!-- ✅ Add Conversations link here -->
+  <li>
+    <%= link_to vendor_conversations_path, class: "flex items-center gap-3 px-3 py-2 rounded hover:bg-red-50 font-medium" do %>
+      <i class="fas fa-comments text-red-600"></i> Conversations
+    <% end %>
+  </li>
+            <li>
+              <%= button_to destroy_vendor_session_path, method: :delete, class: "w-full flex items-center gap-3 px-3 py-2 rounded hover:bg-red-50 font-medium text-left" do %>
+                <i class="fas fa-sign-out-alt text-red-600"></i> Logout
+              <% end %>
+            </li>
+          </ul>
+        </aside>
+      <% end %>
+
+      <!-- Main Content -->
+      <main class="flex-1 p-6">
+        <%= yield %>
+      </main>
+
+    </div>
+  </body>
+</html>
