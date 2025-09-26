@@ -1,130 +1,192 @@
-<!-- app/views/vendor/profiles/edit.html.erb -->
+<div class="max-w-5xl mx-auto mt-8 bg-white shadow-md rounded-xl p-8">
 
-<div class="max-w-4xl mx-auto mt-8 bg-white shadow-md rounded-lg p-6">
+ <% if notice %>
+  <div id="flash-notice" class="bg-green-100 border border-green-300 text-green-700 px-4 py-3 rounded mb-4">
+    <%= notice %>
+  </div>
+<% end %>
+
+<% if alert %>
+  <div id="flash-alert" class="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded mb-4">
+    <%= alert %>
+  </div>
+<% end %>
+
+<script>
+  setTimeout(() => {
+    document.querySelectorAll('#flash-notice, #flash-alert').forEach(el => el.remove());
+  }, 3000);
+</script>
+
 
   <!-- Back button -->
   <div class="mb-6">
     <%= link_to "← Back to Dashboard", vendor_dashboard_path, class: "text-red-600 hover:underline font-medium" %>
   </div>
 
-  <h1 class="text-2xl font-bold text-red-600 mb-6">Profile & Settings</h1>
+  <h1 class="text-3xl font-bold text-red-600 mb-8">Profile & Settings</h1>
 
   <%= form_with(model: @vendor, url: vendor_profile_path, local: true, html: { multipart: true }) do |f| %>
 
     <!-- Basic Info -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
-        <%= f.label :name, "Business Name", class: "block font-medium" %>
-        <%= f.text_field :name, class: "w-full border p-2 rounded focus:ring-2 focus:ring-red-400" %>
+        <%= f.label :name, "Business Name", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :name, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
       </div>
 
       <div>
-        <%= f.label :email, "Email", class: "block font-medium" %>
-        <%= f.email_field :email, class: "w-full border p-2 rounded focus:ring-2 focus:ring-red-400", disabled: true %>
+        <%= f.label :email, "Email", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.email_field :email,
+            class: "mt-1 block w-full rounded-md border-gray-200 bg-gray-100 text-gray-600 shadow-sm sm:text-sm cursor-not-allowed p-2",
+            disabled: true %>
+        <p class="text-xs text-gray-500 mt-1">Your email cannot be changed.</p>
       </div>
 
       <div>
-        <%= f.label :phone, "Phone Number", class: "block font-medium" %>
-        <%= f.telephone_field :phone, class: "w-full border p-2 rounded focus:ring-2 focus:ring-red-400" %>
+        <%= f.label :phone, "Phone Number", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.telephone_field :phone, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
       </div>
 
       <div>
-        <%= f.label :address, "Address", class: "block font-medium" %>
-        <%= f.text_field :address, class: "w-full border p-2 rounded focus:ring-2 focus:ring-red-400" %>
+        <%= f.label :address, "Address", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :address, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
       </div>
     </div>
 
     <!-- Business Bio -->
     <div class="mt-6">
-      <%= f.label :bio, "About Your Business", class: "block font-medium mb-2" %>
-      <%= f.text_area :bio, rows: 5, class: "w-full border p-3 rounded focus:ring-2 focus:ring-red-400" %>
+      <%= f.label :bio, "About Your Business", class: "block text-sm font-medium text-gray-700 mb-2" %>
+      <%= f.text_area :bio, rows: 5, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-3" %>
     </div>
 
     <!-- Images Upload -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
       <!-- Profile Image -->
       <div>
-        <%= f.label :profile_image, "Profile Image", class: "block font-medium mb-2" %>
+        <%= f.label :profile_image, "Profile Image", class: "block text-sm font-medium text-gray-700 mb-2" %>
         <% if @vendor.profile_image.attached? %>
-          <div class="mb-2">
-            <%= image_tag @vendor.profile_image.variant(resize_to_limit: [150, 150]), class: "rounded-full border" %>
+          <div class="mb-3">
+            <%= image_tag @vendor.profile_image.variant(resize_to_limit: [150, 150]), class: "rounded-full border shadow-sm" %>
           </div>
         <% else %>
-          <%= image_tag "default_profile.png", class: "rounded-full border mb-2" %>
+          <%= image_tag "default_profile.png", class: "rounded-full border mb-3 shadow-sm" %>
         <% end %>
-        <%= f.file_field :profile_image, class: "w-full" %>
+        <%= f.file_field :profile_image, class: "block w-full text-sm text-gray-700" %>
       </div>
 
       <!-- Banner Image -->
       <div>
-        <%= f.label :banner_image, "Banner Image", class: "block font-medium mb-2" %>
+        <%= f.label :banner_image, "Banner Image", class: "block text-sm font-medium text-gray-700 mb-2" %>
         <% if @vendor.banner_image.attached? %>
-          <div class="mb-2">
-            <%= image_tag @vendor.banner_image.variant(resize_to_limit: [1200, 300]), class: "w-full h-72 object-cover rounded-lg" %>
+          <div class="mb-3">
+            <%= image_tag @vendor.banner_image.variant(resize_to_limit: [1200, 300]), class: "w-full h-72 object-cover rounded-lg shadow" %>
           </div>
         <% else %>
-          <%= image_tag "default_banner.png", class: "w-full h-72 object-cover rounded-lg mb-2" %>
+          <%= image_tag "default_banner.png", class: "w-full h-72 object-cover rounded-lg mb-3 shadow" %>
         <% end %>
-        <%= f.file_field :banner_image, class: "w-full" %>
+        <%= f.file_field :banner_image, class: "block w-full text-sm text-gray-700" %>
       </div>
     </div>
 
     <!-- ID Upload -->
     <div class="mt-6">
-      <%= f.label :id_card, "Upload ID", class: "block font-medium mb-2" %>
+      <%= f.label :id_card, "Upload ID", class: "block text-sm font-medium text-gray-700 mb-2" %>
       <% if @vendor.id_card.attached? %>
         <div class="mb-2">
-          <%= link_to "View Current ID", rails_blob_path(@vendor.id_card, disposition: "attachment"), class: "text-blue-600 underline" %>
+          <%= link_to "View Current ID", rails_blob_path(@vendor.id_card, disposition: "attachment"), class: "text-blue-600 underline text-sm" %>
         </div>
       <% end %>
-      <%= f.file_field :id_card, class: "w-full" %>
+      <%= f.file_field :id_card, class: "block w-full text-sm text-gray-700" %>
     </div>
 
     <!-- Payment Info -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
       <div>
-        <%= f.label :bank_name, "Bank Name", class: "block font-medium" %>
-        <%= f.text_field :bank_name, class: "w-full border p-2 rounded focus:ring-2 focus:ring-red-400" %>
+        <%= f.label :bank_name, "Bank Name", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :bank_name, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
       </div>
 
       <div>
-        <%= f.label :account_name, "Account Name", class: "block font-medium" %>
-        <%= f.text_field :account_name, class: "w-full border p-2 rounded focus:ring-2 focus:ring-red-400" %>
+        <%= f.label :account_name, "Account Name", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :account_name, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
       </div>
 
       <div>
-        <%= f.label :account_number, "Account Number", class: "block font-medium" %>
-        <%= f.text_field :account_number, class: "w-full border p-2 rounded focus:ring-2 focus:ring-red-400" %>
+        <%= f.label :account_number, "Account Number", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :account_number, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
+      </div>
+
+      <div class="md:col-span-3">
+        <%= f.label :payout_method, "Payout Method", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.select :payout_method, options_for_select([['Bank Transfer', 'bank'], ['PayPal', 'paypal']], @vendor.payout_method),
+              { include_blank: 'Select Payout Method' },
+              class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
       </div>
     </div>
 
     <!-- Other Info -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
       <div>
-        <%= f.label :city, "City", class: "block font-medium" %>
-        <%= f.text_field :city, class: "w-full border p-2 rounded focus:ring-2 focus:ring-red-400" %>
+        <%= f.label :cac_number, "CAC Number", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :cac_number, required: true, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
       </div>
 
       <div>
-        <%= f.label :state, "State", class: "block font-medium" %>
-        <%= f.text_field :state, class: "w-full border p-2 rounded focus:ring-2 focus:ring-red-400" %>
+        <%= f.label :city, "City", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :city, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
       </div>
 
       <div>
-        <%= f.label :business_type, "Business Type", class: "block font-medium" %>
-        <%= f.text_field :business_type, class: "w-full border p-2 rounded focus:ring-2 focus:ring-red-400" %>
+        <%= f.label :state, "State", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :state, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
       </div>
 
       <div>
-        <%= f.label :opening_hours, "Opening Hours", class: "block font-medium" %>
-        <%= f.text_field :opening_hours, class: "w-full border p-2 rounded focus:ring-2 focus:ring-red-400" %>
+        <%= f.label :business_type, "Business Type", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :business_type, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
+      </div>
+
+      <div>
+        <%= f.label :opening_hours, "Opening Hours", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :opening_hours, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
       </div>
     </div>
 
     <!-- Submit -->
-    <div class="mt-6 flex justify-end">
-      <%= f.submit "Update Profile", class: "bg-red-600 text-white px-6 py-2 rounded hover:bg-red-500 transition font-medium" %>
+    <div class="mt-8 flex justify-end">
+      <%= f.submit "Update Profile", class: "bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-500 transition font-medium shadow-md" %>
     </div>
 
   <% end %>
+
+  <!-- Change Password Section -->
+  <div class="mt-12 max-w-2xl mx-auto bg-gray-50 shadow-inner rounded-lg p-6">
+    <h2 class="text-xl font-bold text-red-600 mb-4">Change Password</h2>
+
+    <%= form_with(model: current_vendor, url: update_password_vendor_profile_path, method: :put, local: true) do |f| %>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <%= f.label :current_password, "Current Password", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= f.password_field :current_password, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2", autocomplete: "current-password" %>
+        </div>
+
+        <div>
+          <%= f.label :password, "New Password", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= f.password_field :password, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2", autocomplete: "new-password" %>
+        </div>
+
+        <div>
+          <%= f.label :password_confirmation, "Confirm New Password", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= f.password_field :password_confirmation, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2", autocomplete: "new-password" %>
+        </div>
+      </div>
+
+      <div class="mt-6 flex justify-end">
+        <%= f.submit "Update Password", class: "bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-500 transition font-medium shadow-md" %>
+      </div>
+    <% end %>
+  </div>
+
 </div>

@@ -7,6 +7,8 @@ Rails.application.configure do
   # Do not eager load code on boot.
   config.eager_load = false
 
+
+
   # development.rb
 config.active_storage.service = :local
   # Show full error reports.

@@ -109,6 +109,10 @@ gem 'active_storage_validations'
 gem "chartkick"
 gem "groupdate"
 
+# Gemfile
+gem "cssbundling-rails"
+
+
 
 
 

@@ -8,7 +8,7 @@
     <%= javascript_importmap_tags %>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-papyaYvZ4+sV4Jd+eEwKj6H0b5Xr+kT9Y+h0s6cFZKhX++M9PssD2f7a/vw1RLP9VwD8u8vT1Ce0HiXQ9S3Xw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   </head>
-
+ 
   <body class="bg-gray-100 font-sans">
 
     <div class="flex min-h-screen">
@@ -54,6 +54,10 @@
       <i class="fas fa-comments text-red-600"></i> Conversations
     <% end %>
   </li>
+
+ <%= link_to "Settings", edit_vendor_profile_path, class: "block px-4 py-2 hover:bg-red-50 rounded" %>
+
+
             <li>
               <%= button_to destroy_vendor_session_path, method: :delete, class: "w-full flex items-center gap-3 px-3 py-2 rounded hover:bg-red-50 font-medium text-left" do %>
                 <i class="fas fa-sign-out-alt text-red-600"></i> Logout
@@ -62,6 +66,7 @@
           </ul>
         </aside>
       <% end %>
+                  
 
       <!-- Main Content -->
       <main class="flex-1 p-6">
@@ -69,5 +74,6 @@
       </main>
 
     </div>
+    
   </body>
 </html>

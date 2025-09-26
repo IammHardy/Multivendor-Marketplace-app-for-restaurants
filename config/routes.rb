@@ -67,7 +67,12 @@ end
   end
 
   resources :foods, except: [:show]
-  resource :profile, only: [:edit, :update]
+  resource :profile, only: [ :edit, :update] do
+    # patch :update_password, on: :member
+    put :update_password, on: :collection
+  end
+
+  
   resources :earnings, only: [:index]
   resource :settings, only: [:edit, :update]
   resources :notifications, only: [:index]
@@ -136,8 +141,9 @@ end
       resources :reviews, only: [:create]
     end
     resources :orders, only: [:index, :show, :update] do
-      member { patch :mark_paid }
+       patch :update_status, on: :member
     end
+      
   end
 
 resources :support_tickets, only: [:new, :create, :show, :index]

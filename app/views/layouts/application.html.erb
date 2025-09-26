@@ -8,7 +8,9 @@
 
     <%= yield :head %>
 
-    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+  
+    <%= stylesheet_link_tag "tailwind.css", "data-turbo-track": "reload" %>
+
   
 
     <link rel="icon" href="/icon.png" type="image/png">
@@ -141,44 +143,48 @@
 </script>
 
    
- <!-- FLASH -->
-    <div id="flash-container" class="fixed top-16 left-1/2 -translate-x-1/2 z-50 space-y-2">
-      <% flash.each do |type, message| %>
-        <% css_class = case type.to_sym
-                      when :notice then "bg-green-500"
-                      when :alert then "bg-red-500"
-                      else "bg-blue-500"
-                      end %>
-        <div class="p-4 rounded-md text-center font-bold text-white shadow-lg animate-fade-in-out">
-          <%= message %>
-        </div>
-      <% end %>
+<!-- FLASH -->
+<div id="flash-container" class="fixed top-16 left-1/2 -translate-x-1/2 z-50 space-y-2 w-full max-w-md">
+  <% flash.each do |type, message| %>
+    <% css_class = case type.to_sym
+                  when :notice then "bg-green-500"
+                  when :alert then "bg-red-500"
+                  when :error then "bg-red-600"
+                  when :warning then "bg-yellow-500"
+                  else "bg-blue-500"
+                  end %>
+    <div class="p-4 rounded-md text-center font-bold text-white shadow-lg animate-fade-in-out <%= css_class %>">
+      <%= message %>
     </div>
-                      <!-- FLASH SCRIPT -->
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const flashContainer = document.getElementById("flash-container");
-        if (flashContainer) {
-          setTimeout(() => {
-            flashContainer.style.transition = "opacity 0.5s";
-            flashContainer.style.opacity = "0";
-            setTimeout(() => flashContainer.remove(), 500);
-          }, 4000);
-        }
-      });
-    </script>
+  <% end %>
+</div>
 
-    <style>
-      @keyframes fade-in-out {
-        0% { opacity: 0; transform: translateY(-10px); }
-        10% { opacity: 1; transform: translateY(0); }
-        90% { opacity: 1; transform: translateY(0); }
-        100% { opacity: 0; transform: translateY(-10px); }
-      }
-      .animate-fade-in-out {
-        animation: fade-in-out 4s ease forwards;
-      }
-    </style>
+<!-- FLASH SCRIPT -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const flashContainer = document.getElementById("flash-container");
+    if (flashContainer) {
+      setTimeout(() => {
+        flashContainer.style.transition = "opacity 0.5s";
+        flashContainer.style.opacity = "0";
+        setTimeout(() => flashContainer.remove(), 500);
+      }, 4000);
+    }
+  });
+</script>
+
+<style>
+  @keyframes fade-in-out {
+    0% { opacity: 0; transform: translateY(-10px); }
+    10% { opacity: 1; transform: translateY(0); }
+    90% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-10px); }
+  }
+  .animate-fade-in-out {
+    animation: fade-in-out 4s ease forwards;
+  }
+</style>
+
 
 
 

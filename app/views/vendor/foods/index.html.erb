@@ -32,7 +32,8 @@
             <td class="px-6 py-4 whitespace-nowrap"><%= food.categories.map(&:name).join(", ") if food.respond_to?(:categories) %></td>
             <td class="px-6 py-4 whitespace-nowrap"><%= food.created_at.strftime("%b %d, %Y") %></td>
             <td class="px-6 py-4 whitespace-nowrap text-center space-x-2">
-              <%= link_to "Edit", edit_vendor_food_path(food), class: "text-blue-600 hover:underline" %>
+             <%= link_to "Edit", edit_vendor_food_path(food.id) %>  <!-- ✅ correct -->
+
               <%= link_to "Delete", vendor_food_path(food), method: :delete, data: { confirm: "Are you sure?" }, class: "text-red-600 hover:underline" %>
             </td>
           </tr>

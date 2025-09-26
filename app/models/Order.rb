@@ -1,6 +1,8 @@
 class Order < ApplicationRecord
   belongs_to :user
   belongs_to :cart, optional: true
+  belongs_to :food   # make sure this exists
+
   has_many :order_items, dependent: :destroy
   has_many :vendor_earnings, dependent: :destroy
    has_many :foods, through: :order_items  # ✅ Add this line
@@ -8,6 +10,7 @@ class Order < ApplicationRecord
   # Enum for status with prefix methods like status_pending?
   enum(:status, { pending: 0, processing: 1, paid: 2, completed: 3, cancelled: 4 }, prefix: true)
 
+  
   # Returns the first vendor associated with this order's foods
   def vendor
     foods.first&.vendor
@@ -36,6 +39,9 @@ end
       item.price || item.food.price * item.quantity
     end
     update!(total_price: total)
+  end
+  def vendors
+    order_items.includes(:vendor).map(&:vendor).uniq.compact
   end
 
   private
@@ -82,9 +88,7 @@ end
     update_column(:estimated_delivery_time, created_at + 45.minutes)
   end
 
-  def vendors
-    order_items.includes(:vendor).map(&:vendor).uniq.compact
-  end
+  
 
    
 end

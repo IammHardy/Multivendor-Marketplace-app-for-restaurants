@@ -10,6 +10,8 @@ class Admin::VendorsController < Admin::BaseController
 def approve
   @vendor = Vendor.find(params[:id])
   if @vendor.update(status: "active")  # or whatever attribute you use
+    # Send the approval email
+    VendorMailer.with(vendor: @vendor).approved_email.deliver_later
     redirect_to admin_vendor_path(@vendor), notice: "Vendor approved successfully."
   else
     redirect_to admin_vendor_path(@vendor), alert: "Failed to approve vendor."
