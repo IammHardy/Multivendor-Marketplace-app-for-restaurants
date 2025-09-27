@@ -1,9 +1,9 @@
 # app/mailers/vendor_mailer.rb
 class VendorMailer < ApplicationMailer
-    default from: 'no-reply@yourapp.com'
-    # Sent immediately after vendor registers
+    default from: "no-reply@yourapp.com"
+  # Sent immediately after vendor registers
 
-    # Notify admin when a new vendor signs up
+  # Notify admin when a new vendor signs up
   def new_vendor_notification
     @vendor = params[:vendor]
     mail(

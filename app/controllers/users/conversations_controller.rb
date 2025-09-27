@@ -28,5 +28,4 @@ end
 
   redirect_to users_conversation_path(conversation)
 end
-
 end

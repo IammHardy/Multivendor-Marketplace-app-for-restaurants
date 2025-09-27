@@ -22,7 +22,7 @@ class Vendor < ApplicationRecord
   has_one_attached :id_card
 
   # === Enum for vendor status ===
-  enum(:status, { pending_approval: 0, active: 1, suspended: 2 })
+  enum(:status, { pending_approval: 0, active: 1, suspended: 2 , rejected: 3})
 
   # Virtual attribute to track current validation step
   attr_accessor :validation_step

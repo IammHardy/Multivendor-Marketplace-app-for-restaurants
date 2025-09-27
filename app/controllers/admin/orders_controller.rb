@@ -4,7 +4,7 @@ class Admin::OrdersController < Admin::BaseController
     @orders = Order.includes(:user, order_items: { food: :vendor }).all
   end
 
-   
+
 
 def show
   @order = Order.includes(order_items: { food: :vendor }, user: {}).find(params[:id])
@@ -23,6 +23,4 @@ def update_status
   def set_order
     @order = Order.find(params[:id])
   end
-
-  
 end

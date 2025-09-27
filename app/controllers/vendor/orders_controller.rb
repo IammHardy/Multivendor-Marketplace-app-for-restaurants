@@ -1,7 +1,7 @@
 # app/controllers/vendor/orders_controller.rb
 class Vendor::OrdersController < Vendor::BaseController
   before_action :authenticate_vendor!
-  before_action :set_order, only: [:show, :mark_as_shipped]
+  before_action :set_order, only: [ :show, :mark_as_shipped ]
 
   def index
     # Show ALL orders (pending + paid) so vendor can track them

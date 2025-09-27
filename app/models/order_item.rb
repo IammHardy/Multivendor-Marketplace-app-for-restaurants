@@ -1,11 +1,10 @@
 class OrderItem < ApplicationRecord
   belongs_to :order
   belongs_to :food
-  belongs_to :vendor, optional: true
+  belongs_to :vendor
 
-  before_create :set_price_and_commissions
-
-  private
+ before_validation :set_price_and_commissions
+ has_one :vendor_earning, dependent: :destroy  # ✅ add this
 
   def set_price_and_commissions
     self.price = food.price * quantity

@@ -1,5 +1,5 @@
 class VendorsController < ApplicationController
-  before_action :authenticate_vendor!, only: [:edit, :update]
+  before_action :authenticate_vendor!, only: [ :edit, :update ]
   before_action :set_vendor, only: :show
 
   def index

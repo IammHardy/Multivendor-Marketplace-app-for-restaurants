@@ -1,0 +1,31 @@
+<div class="max-w-6xl mx-auto px-4 py-12">
+  <h1 class="text-3xl font-bold mb-6">Search Results</h1>
+
+  <% if @results.any? %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <% @results.each do |food| %>
+        <%= link_to food_path(food), class: "group block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1" do %>
+          
+          <% if food.image.attached? %>
+            <%= image_tag food.image, class: "w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" %>
+          <% else %>
+            <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">
+              No image
+            </div>
+          <% end %>
+
+          <div class="p-4">
+            <h2 class="text-lg font-semibold text-gray-800"><%= food.name %></h2>
+            <p class="text-sm text-gray-600">Vendor: <%= food.vendor.name %></p>
+            <p class="text-pink-600 font-bold">
+              ₦<%= number_to_currency(food.price, unit: "", precision: 0) %>
+            </p>
+          </div>
+
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-gray-600">No foods found matching your filters.</p>
+  <% end %>
+</div>

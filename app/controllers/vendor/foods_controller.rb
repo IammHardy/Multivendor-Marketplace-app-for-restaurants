@@ -1,9 +1,8 @@
 class Vendor::FoodsController < Vendor::BaseController
-  before_action :set_food, only: [:show, :edit, :update, :destroy]
+  before_action :set_food, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @foods = current_vendor.foods.order(created_at: :desc).page(params[:page]).per(10)
-
   end
 
   def show

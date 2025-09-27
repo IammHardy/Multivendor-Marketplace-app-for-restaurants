@@ -1,4 +1,4 @@
-require 'httparty'
+require "httparty"
 
 class PaymentsController < ApplicationController
   before_action :authenticate_user!
@@ -85,8 +85,8 @@ class PaymentsController < ApplicationController
       Status: #{order.status}
     MSG
 
-    number = ENV['ADMIN_WHATSAPP_NUMBER']
-    apikey = ENV['CALLMEBOT_API_KEY']
+    number = ENV["ADMIN_WHATSAPP_NUMBER"]
+    apikey = ENV["CALLMEBOT_API_KEY"]
 
     HTTParty.get(
       "https://api.callmebot.com/whatsapp.php",

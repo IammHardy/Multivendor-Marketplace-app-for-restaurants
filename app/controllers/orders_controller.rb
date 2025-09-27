@@ -1,10 +1,10 @@
 # app/controllers/orders_controller.rb
 class OrdersController < ApplicationController
   include ERB::Util
-  before_action :authenticate_user!, only: [:new, :create, :payment, :mark_as_paid]
+  before_action :authenticate_user!, only: [ :new, :create, :payment, :mark_as_paid ]
 
-  require 'prawn'
-  require 'prawn/table'
+  require "prawn"
+  require "prawn/table"
 
   def index
     @orders = current_user.orders.order(created_at: :desc)
@@ -69,13 +69,13 @@ end
       "Hello Admin, I just paid for Order ##{@order.id}.\n"\
       "Name: #{user_name}\nTotal: ₦#{total_price}\nPlease confirm."
     )
-    
+
     redirect_to "https://wa.me/2349038311561?text=#{message}", allow_other_host: true
   end
 
   def download_summary
     @order = Order.find(params[:id])
-    
+
     pdf = Prawn::Document.new
     font_path = Rails.root.join("app/assets/fonts/DejaVuSans.ttf")
     pdf.font_families.update("DejaVuSans" => { normal: font_path, bold: font_path })
@@ -96,7 +96,7 @@ end
     pdf.text "Items", style: :bold
     pdf.move_down 10
 
-    table_data = [["Item", "Qty", "Unit Price", "Total"]]
+    table_data = [ [ "Item", "Qty", "Unit Price", "Total" ] ]
     @order.order_items.each do |item|
       table_data << [
         item.food.name,
@@ -106,7 +106,7 @@ end
       ]
     end
 
-    pdf.table(table_data, header: true, row_colors: ["F0F0F0", "FFFFFF"], width: pdf.bounds.width)
+    pdf.table(table_data, header: true, row_colors: [ "F0F0F0", "FFFFFF" ], width: pdf.bounds.width)
     pdf.move_down 20
     pdf.text "Thank you for your order!", size: 14, style: :bold, align: :center
 

@@ -6,7 +6,7 @@ class Users::MessagesController < ApplicationController
     @message = @conversation.messages.build(message_params)
     @message.sender = current_user
     @message.recipient = @conversation.vendor # polymorphic recipient (Vendor)
-    
+
     if @message.save
       redirect_to users_conversation_path(@conversation), notice: "Message sent."
     else

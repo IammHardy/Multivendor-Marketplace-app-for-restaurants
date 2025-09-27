@@ -1,12 +1,12 @@
 class Admin::VendorsController < Admin::BaseController
-  before_action :set_vendor, only: [:show, :edit, :update, :destroy, :approve, :reject]
+  before_action :set_vendor, only: [ :show, :edit, :update, :destroy, :approve, :reject ]
 
   # List all vendors
   def index
     @vendors = Vendor.order(:created_at).page(params[:page]).per(10)
   end
 
- # app/controllers/admin/vendors_controller.rb
+# app/controllers/admin/vendors_controller.rb
 def approve
   @vendor = Vendor.find(params[:id])
   if @vendor.update(status: "active")  # or whatever attribute you use

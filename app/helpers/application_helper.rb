@@ -6,7 +6,7 @@ module ApplicationHelper
     content_tag :nav, role: "navigation", aria: { label: "Pagination" }, class: "flex justify-center mt-6 gap-1" do
       safe_join([
         # Previous page
-        (link_to "«", url_for(page: collection.prev_page), class: prev_page_classes(collection), disabled: collection.first_page?) ,
+        (link_to "«", url_for(page: collection.prev_page), class: prev_page_classes(collection), disabled: collection.first_page?),
 
         # Page numbers
         safe_join(collection.each_page.map do |page|

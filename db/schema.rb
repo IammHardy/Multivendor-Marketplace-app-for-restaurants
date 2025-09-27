@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_25_084034) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_27_072004) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -151,6 +151,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_25_084034) do
     t.string "sender_type"
     t.string "recipient_type", null: false
     t.bigint "recipient_id", null: false
+    t.boolean "delivered", default: false, null: false
     t.index ["conversation_id"], name: "index_messages_on_conversation_id"
     t.index ["recipient_type", "recipient_id"], name: "index_messages_on_recipient"
     t.index ["sender_user_id"], name: "index_messages_on_sender_user_id"
@@ -200,6 +201,23 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_25_084034) do
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
+  create_table "promotions", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.string "badge"
+    t.boolean "active"
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "cta_text"
+    t.string "cta_url"
+    t.bigint "vendor_id"
+    t.bigint "food_id"
+    t.index ["food_id"], name: "index_promotions_on_food_id"
+    t.index ["vendor_id"], name: "index_promotions_on_vendor_id"
+  end
+
   create_table "reviews", force: :cascade do |t|
     t.text "content"
     t.integer "rating"
@@ -230,6 +248,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_25_084034) do
     t.integer "rating"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "approved", default: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -314,6 +333,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_25_084034) do
     t.string "unlock_token"
     t.datetime "locked_at"
     t.datetime "last_seen_at"
+    t.text "description"
     t.index ["email"], name: "index_vendors_on_email", unique: true
     t.index ["reset_password_token"], name: "index_vendors_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_vendors_on_unlock_token", unique: true
@@ -342,6 +362,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_25_084034) do
   add_foreign_key "order_items", "vendors"
   add_foreign_key "orders", "carts"
   add_foreign_key "orders", "users", on_delete: :cascade
+  add_foreign_key "promotions", "foods"
+  add_foreign_key "promotions", "vendors"
   add_foreign_key "reviews", "foods"
   add_foreign_key "reviews", "users"
   add_foreign_key "support_tickets", "orders"

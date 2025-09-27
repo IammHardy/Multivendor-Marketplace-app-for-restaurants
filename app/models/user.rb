@@ -2,7 +2,7 @@ class User < ApplicationRecord
   # Devise modules
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :confirmable, :omniauthable, omniauth_providers: [:google_oauth2, :tiktok, :facebook]
+         :confirmable, :omniauthable, omniauth_providers: [ :google_oauth2, :tiktok, :facebook ]
 
   # Associations
   has_one :cart, dependent: :destroy
@@ -14,6 +14,7 @@ class User < ApplicationRecord
 
   has_many :conversation_participants, as: :participant
   has_many :conversations, through: :conversation_participants
+  
   has_many :messages, as: :sender
 
   # Roles: customer (default), vendor, admin

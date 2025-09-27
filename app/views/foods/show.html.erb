@@ -76,21 +76,22 @@
     <%= link_to "See all reviews", foods_path(category_id: @food.categories.first&.id, anchor: "reviews"), class: "text-red-600 hover:underline mt-2 inline-block" %>
   </div>
 
-  <!-- Write a Review -->
-  <div class="mt-12 bg-white p-6 rounded-2xl shadow-lg">
-    <h3 class="text-xl font-bold text-red-600 mb-4">Write a Review</h3>
-    <%= form_with(model: [@food, @review], local: true, class: "space-y-4") do |f| %>
-      <div>
-        <%= f.label :rating, "Rating (1 to 5):", class: "block font-semibold mb-1" %>
-        <%= f.number_field :rating, in: 1..5, class: "w-24 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500" %>
-      </div>
-      <div>
-        <%= f.label :comment, "Comment:", class: "block font-semibold mb-1" %>
-        <%= f.text_area :comment, rows: 4, class: "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500" %>
-      </div>
-      <%= f.submit "Submit Review", class: "bg-red-600 text-white px-4 py-2 rounded-full font-bold hover:bg-red-500 transition" %>
-    <% end %>
+ <!-- app/views/reviews/new.html.erb -->
+<h2 class="text-2xl font-bold mb-4">Add Review for <%= @food.name %></h2>
+
+<%= form_with(model: [@food, @review], local: true) do |f| %>
+  <div class="mb-4">
+    <%= f.label :rating, "Rating (1-5)", class: "block font-semibold" %>
+    <%= f.number_field :rating, in: 1..5, class: "border rounded px-2 py-1 w-20" %>
   </div>
+
+  <div class="mb-4">
+    <%= f.label :comment, "Comment", class: "block font-semibold" %>
+    <%= f.text_area :comment, rows: 4, class: "border rounded px-2 py-1 w-full" %>
+  </div>
+
+  <%= f.submit "Submit Review", class: "bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" %>
+<% end %>
 
   <div class="mt-8">
     <%= paginate @reviews %>

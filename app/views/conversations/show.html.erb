@@ -2,20 +2,17 @@
 
 <div class="space-y-2">
   <% @conversation.messages.each do |message| %>
-  <div class="bg-gray-50 p-3 rounded shadow-sm">
-    <strong>
-      <% if message.sender.present? %>
-        <%= message.sender.is_a?(Vendor) ? "You" : message.sender.try(:name) %>:
-      <% else %>
-        System:
-      <% end %>
-    </strong>
-    <%= message.body %>
-  </div>
-<% end %>
-
-<% end %>
-
+    <div class="bg-gray-50 p-3 rounded shadow-sm">
+      <strong>
+        <% if message.sender.present? %>
+          <%= message.sender.is_a?(Vendor) ? "You" : message.sender.try(:name) %>:
+        <% else %>
+          System:
+        <% end %>
+      </strong>
+      <%= message.body %>
+    </div>
+  <% end %>
 </div>
 
 <%= form_with model: [@conversation, @new_message], url: vendor_conversation_messages_path(@conversation), local: true do |f| %>

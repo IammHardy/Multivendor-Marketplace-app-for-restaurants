@@ -1,8 +1,9 @@
+# spec/factories/vendors.rb
 FactoryBot.define do
   factory :vendor do
-    name { Faker::Company.name }
-    email { Faker::Internet.unique.email }
-    password { "password" }
-    active { true }
+    sequence(:email) { |n| "vendor#{n}@example.com" } # ensures unique email
+    name { "Vendor Name" }
+    password { "password123" }
+    # add other required fields
   end
 end

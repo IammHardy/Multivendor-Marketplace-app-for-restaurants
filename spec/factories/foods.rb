@@ -1,9 +1,7 @@
-# spec/factories/foods.rb
 FactoryBot.define do
   factory :food do
-    name { "Test Food" }
-    price { 100.0 }   # <- important for calculations
-    description { "Delicious food" }
-    vendor
+    sequence(:name) { |n| "Food #{n}" }
+    price { 100.0 }
+    association :vendor
   end
 end

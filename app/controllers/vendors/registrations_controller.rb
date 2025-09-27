@@ -1,6 +1,7 @@
 class Vendors::RegistrationsController < Devise::RegistrationsController
   layout "vendor"
-  before_action :set_vendor, except: [:step1, :step1_create]
+  before_action :authenticate_vendor!, except: [:step1, :step1_create, :step2, :step3, :step4, :complete, :check_email]
+  before_action :set_vendor, except: [ :step1, :step1_create ]
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   # --- STEP 1: Account Information ---
@@ -113,10 +114,10 @@ end
   protected
 
   def configure_permitted_parameters
-    attrs = [:name, :email, :phone, :address, :contact_person, :business_type,
+    attrs = [ :name, :email, :phone, :address, :contact_person, :business_type,
              :bio, :whatsapp, :bank_name, :account_name, :account_number,
              :payout_method, :city, :opening_hours, :cac_number, :id_card,
-             :profile_image, :banner_image, :state]
+             :profile_image, :banner_image, :state ]
     devise_parameter_sanitizer.permit(:sign_up, keys: attrs)
     devise_parameter_sanitizer.permit(:account_update, keys: attrs)
   end

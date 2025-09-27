@@ -49,6 +49,5 @@ module Orders
     @vendors_paid << { vendor: item.vendor, amount: earning.amount }
   end
 end
-
   end
 end

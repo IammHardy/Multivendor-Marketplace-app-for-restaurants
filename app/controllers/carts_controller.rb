@@ -1,5 +1,5 @@
 class CartsController < ApplicationController
-   before_action :authenticate_user!, only: [:checkout, :add_item, :remove_item]
+   before_action :authenticate_user!, only: [ :checkout, :add_item, :remove_item ]
  def create
   @cart = current_cart
   food = Food.find(params[:food_id])

@@ -1,6 +1,6 @@
 class Vendor::ConversationsController < Vendor::BaseController
   before_action :authenticate_vendor!
-  before_action :set_conversation, only: [:show]
+  before_action :set_conversation, only: [ :show ]
 
   def index
     # Get all conversations for the current vendor

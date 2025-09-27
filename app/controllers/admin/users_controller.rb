@@ -1,7 +1,7 @@
 class Admin::UsersController < Admin::BaseController
   before_action :authenticate_user!
   before_action :require_admin
-  before_action :set_user, only: [:show, :destroy]
+  before_action :set_user, only: [ :show, :destroy ]
 
   def index
     @q = User.ransack(params[:q])

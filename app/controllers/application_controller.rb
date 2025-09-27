@@ -26,7 +26,7 @@ end
         .where(user_id: current_user.id, messages: { read: false })
         .distinct.count
 
-      # New support tickets (only for Users, not vendors)
+# New support tickets (only for Users, not vendors)
 @new_support_tickets_count = current_user.support_tickets.where(status: "new").count
 
 

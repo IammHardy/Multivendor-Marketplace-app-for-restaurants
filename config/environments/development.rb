@@ -9,7 +9,7 @@ Rails.application.configure do
 
 
 
-  # development.rb
+# development.rb
 config.active_storage.service = :local
   # Show full error reports.
   config.consider_all_requests_local = true
@@ -22,15 +22,15 @@ config.active_storage.service = :local
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
  config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
-  
+
 
   config.action_mailer.smtp_settings = {
-    address:              'smtp.gmail.com',
+    address:              "smtp.gmail.com",
     port:                 587,
-    domain:               'gmail.com',
-    user_name:            ENV['GMAIL_USERNAME'],
-    password:             ENV['GMAIL_PASSWORD'],
-    authentication:       'plain',
+    domain:               "gmail.com",
+    user_name:            ENV["GMAIL_USERNAME"],
+    password:             ENV["GMAIL_PASSWORD"],
+    authentication:       "plain",
     enable_starttls_auto: true
   }
 
@@ -75,8 +75,4 @@ config.active_storage.service = :local
   config.active_job.queue_adapter = :async
 
   config.hosts << /[a-z0-9\-]+\.ngrok-free\.app/
-
-
 end
-
-

@@ -1,6 +1,6 @@
 class CategoriesController < ApplicationController
-  before_action :authenticate_user!, except: [:show, :index]  # Only admin actions require login
-  before_action :check_admin, except: [:show, :index]
+  before_action :authenticate_user!, except: [ :show, :index ]  # Only admin actions require login
+  before_action :check_admin, except: [ :show, :index ]
 
   # GET /categories
   def index

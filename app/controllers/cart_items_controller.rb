@@ -18,7 +18,7 @@ class CartItemsController < ApplicationController
     end
   end
 
-  
+
 
   def update
     cart_item = CartItem.find(params[:id])

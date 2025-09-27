@@ -27,30 +27,30 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "solid_cache"
 gem "solid_queue"
 gem "solid_cable"
-#new gem for user authentication
-gem 'devise'
+# new gem for user authentication
+gem "devise"
 
-#env
-gem 'dotenv-rails', groups: [:development, :test]
+# env
+gem "dotenv-rails", groups: [ :development, :test ]
 
 
 #
-#ransack
-gem 'ransack'
+# ransack
+gem "ransack"
 
 
 
-#pagination
-gem 'kaminari'
+# pagination
+gem "kaminari"
 
-#revenue chart gem
-# gem "chartkick"
+ # revenue chart gem
+ # gem "chartkick"
  gem "groupdate"
 
-#prum
-gem 'prawn'
+# prum
+gem "prawn"
 
-gem 'prawn-table'
+gem "prawn-table"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
@@ -73,37 +73,38 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
-  gem 'factory_bot_rails'
-   gem 'rspec-rails'
-     gem 'faker'
+  gem "factory_bot_rails"
+   gem "rspec-rails"
+     gem "faker"
 end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
-  gem 'letter_opener_web'
+  gem "letter_opener_web"
 end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+  gem 'shoulda-matchers', '~> 6.0'
 end
 
 gem "paystackapi", "~> 0.1.0"
-gem 'httparty'
+gem "httparty"
 
 gem "tailwindcss-rails"
-gem 'image_processing', '~> 1.12'
+gem "image_processing", "~> 1.12"
 gem "mini_magick"
-gem 'friendly_id', '~> 5.4.0'
+gem "friendly_id", "~> 5.4.0"
 
-gem 'omniauth-google-oauth2'
-gem 'omniauth-tiktok'
-gem 'omniauth-facebook'
+gem "omniauth-google-oauth2"
+gem "omniauth-tiktok"
+gem "omniauth-facebook"
 
-gem 'jwt', '~> 2.6'
-gem 'active_storage_validations'
+gem "jwt", "~> 2.6"
+gem "active_storage_validations"
 
 # Gemfile
 gem "chartkick"
@@ -111,8 +112,3 @@ gem "groupdate"
 
 # Gemfile
 gem "cssbundling-rails"
-
-
-
-
-
