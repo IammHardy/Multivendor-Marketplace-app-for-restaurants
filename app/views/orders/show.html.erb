@@ -1,9 +1,10 @@
-<div class="max-w-3xl mx-auto bg-white/95 backdrop-blur p-8 rounded-2xl shadow-lg border border-red-100">
+<div class="max-w-3xl mx-auto bg-white/95 backdrop-blur p-6 rounded-2xl shadow-lg border border-red-100">
+
   <!-- Title -->
   <h2 class="text-3xl font-extrabold text-red-600 mb-6 text-center">Order Summary</h2>
 
   <!-- Order Info -->
-  <div class="space-y-3 mb-8 text-gray-700">
+  <div class="space-y-2 mb-6 text-gray-700">
     <p><span class="font-semibold text-gray-900">Total:</span> ₦<%= number_with_precision(@order.total_price || 0, precision: 0) %></p>
     <p>
       <span class="font-semibold text-gray-900">Status:</span>
@@ -20,7 +21,7 @@
   <!-- Items -->
   <h3 class="text-xl font-bold text-gray-800 mb-3 border-b border-red-200 pb-2">Items</h3>
   <% if @order.order_items.any? %>
-    <ul class="space-y-2 mb-8">
+    <ul class="space-y-2 mb-6">
       <% @order.order_items.each do |item| %>
         <li class="flex justify-between items-center bg-red-50 px-4 py-2 rounded-lg">
           <span><%= item.food.name %> × <%= item.quantity %></span>
@@ -29,46 +30,40 @@
       <% end %>
     </ul>
   <% else %>
-    <p class="mb-8 text-gray-500 italic">No items found.</p>
+    <p class="mb-6 text-gray-500 italic">No items found.</p>
   <% end %>
 
   <!-- Actions -->
-  <div class="flex flex-col sm:flex-row sm:justify-center sm:space-x-4 space-y-3 sm:space-y-0 mb-8">
+  <div class="flex flex-col sm:flex-row sm:justify-center sm:space-x-3 space-y-3 sm:space-y-0 mb-6">
+
     <% if @order.status_pending? %>
       <%= button_to "Proceed to Payment", paystack_checkout_path(order_id: @order.id), method: :post, data: { turbo: false }, 
-        class: "bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-semibold shadow-md transition" %>
+          class: "bg-[#F97316] hover:bg-orange-500 text-white px-5 py-2 rounded-lg font-semibold shadow transition" %>
     <% elsif @order.status_paid? %>
       <div class="text-center sm:text-left">
         <p class="text-green-600 font-semibold mb-2">✅ Payment Verified! Your order is now being processed.</p>
-        <%= link_to "Message Admin", message_admin_order_path(@order), 
-          class: "inline-block bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-semibold shadow-md transition", 
-          target: "_blank" %>
+        <%= link_to "WhatsApp Admin", "https://wa.me/234XXXXXXXXXX", target: "_blank", 
+            class: "inline-block bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-lg font-semibold shadow transition" %>
       </div>
     <% end %>
 
     <% if @order.status_paid? && @order.vendor.present? %>
-      <div class="flex flex-col sm:flex-row sm:justify-center sm:space-x-4 space-y-3 sm:space-y-0">
+      <div class="flex flex-col sm:flex-row sm:justify-center sm:space-x-3 space-y-2 sm:space-y-0">
         <%= button_to "Message Vendor",
               start_users_conversations_path(vendor_id: @order.vendor.id),
               method: :post,
-              class: "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" %>
-
-
-        <!-- WhatsApp chat button -->
-        <% if @order.vendor.phone.present? %>
-          <%= link_to "WhatsApp Vendor", "https://wa.me/#{@order.vendor.phone}", target: "_blank", 
-              class: "bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-semibold shadow-md transition" %>
-        <% end %>
+              class: "px-4 py-2 bg-[#F97316] hover:bg-orange-500 text-white rounded-lg font-semibold shadow transition text-sm" %>
       </div>
     <% end %>
 
     <!-- Download Summary -->
     <%= link_to 'Download Summary', download_summary_order_path(@order, reference: @order.payment_reference), 
-        class: 'bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-xl font-semibold shadow-md transition text-center' %>
+        class: 'bg-[#FACC15] hover:bg-yellow-400 text-gray-900 px-5 py-2 rounded-lg font-semibold shadow transition text-center text-sm' %>
   </div>
 
   <!-- Back -->
   <div class="text-center">
     <%= link_to '← Back to Orders', orders_path, class: 'text-red-600 hover:text-red-800 font-medium underline' %>
   </div>
+
 </div>

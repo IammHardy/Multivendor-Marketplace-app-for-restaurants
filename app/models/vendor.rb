@@ -20,6 +20,7 @@ class Vendor < ApplicationRecord
   has_one_attached :profile_image
   has_one_attached :banner_image
   has_one_attached :id_card
+  
 
   # === Enum for vendor status ===
   enum(:status, { pending_approval: 0, active: 1, suspended: 2 , rejected: 3})
@@ -58,7 +59,23 @@ class Vendor < ApplicationRecord
 
   validates :account_name, presence: true, if: -> { validation_step == 4 && account_number.present? }
   validates :bank_name, presence: true, if: -> { validation_step == 4 && account_number.present? }
+extend FriendlyId
+  friendly_id :name, use: :slugged   # use the vendor's name for the slug
 
+  # Average rating, rounded to 1 decimal
+  def average_rating
+    reviews.average(:rating)&.round(1) || 0
+  end
+
+  # Count of reviews
+  def reviews_count
+    reviews.count
+  end
+
+  # Lowest menu price
+def starting_price
+  foods.minimum(:price) || 0
+end
   # === Custom validation methods ===
   def id_card_presence_and_type
     if !id_card.attached?
@@ -131,13 +148,5 @@ class Vendor < ApplicationRecord
   # Reviews through foods (optional)
   has_many :reviews, through: :foods
 
-  # Average rating helper
-  def average_rating
-    reviews.average(:rating)&.round(1)
-  end
-
-  # Total number of reviews
-  def reviews_count
-    reviews.count
-  end
+  
 end

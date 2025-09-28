@@ -1,2 +1,14 @@
-// Import all the channels to be used by Action Cable
-import "./conversation_channel"
+import { Turbo } from "@hotwired/turbo-rails"
+import consumer from "./consumer"
+
+document.querySelectorAll('[data-turbo-stream-from]').forEach(element => {
+  const conversationId = element.dataset.turboStreamFrom.split(":").pop()
+  consumer.subscriptions.create(
+    { channel: "ConversationChannel", conversation_id: conversationId },
+    {
+      received(data) {
+        // Turbo handles inserting the stream automatically
+      }
+    }
+  )
+})

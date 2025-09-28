@@ -37,14 +37,20 @@ class Vendor::FoodsController < Vendor::BaseController
   end
 
   def destroy
-    @food.destroy
-    redirect_to vendor_foods_path, alert: "Food deleted successfully!"
+  @food = current_vendor.foods.friendly.find(params[:id])
+  @food.destroy
+
+  respond_to do |format|
+    format.turbo_stream
+    format.html { redirect_to vendor_foods_path, alert: "Food deleted successfully!" }
   end
+end
+
 
   private
 
   def set_food
-    @food = current_vendor.foods.find(params[:id])
+    @food = current_vendor.foods.friendly.find(params[:id])
   end
 
   def food_params

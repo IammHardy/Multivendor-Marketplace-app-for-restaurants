@@ -1,39 +1,39 @@
 <main class="bg-brand-white">
 
-<section class="relative bg-pink">
+<section id="hero-section" class="relative bg-gradient-to-br from-orange-50 via-orange-100 to-yellow-50">
   <div class="max-w-7xl mx-auto px-6 lg:px-12 py-20 lg:py-32 grid lg:grid-cols-2 items-center gap-12">
     
     <!-- LEFT: Headline -->
     <div class="space-y-6 text-center lg:text-left z-10">
       <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-gray-900">
         Super Delicious <br/>
-        <span class="text-pink-600">Meals & Vendors</span> near You
+        <span class="text-brand-orange">Meals & Vendors</span> near You
       </h1>
 
-      <p class="text-lg text-gray-600 max-w-md mx-auto lg:mx-0">
+      <p class="text-lg text-gray-700 max-w-md mx-auto lg:mx-0">
         Discover top restaurants and vendors in your city. Fast delivery, fresh food.
       </p>
 
       <!-- CTA Buttons -->
       <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
         <%= link_to "Order Now", vendors_path,
-          class: "px-8 py-4 rounded-full bg-pink-600 text-white font-semibold shadow-md hover:bg-pink-700 transition" %>
+          class: "px-8 py-4 rounded-full bg-[#F97316] text-white font-semibold shadow-md hover:bg-orange-600 focus:ring-4 focus:ring-orange-300 transition" %>
         <%= link_to "Learn More", "#how-it-works",
-          class: "px-8 py-4 rounded-full border border-pink-600 text-pink-600 font-semibold shadow-sm hover:bg-pink-50 transition" %>
+          class: "px-8 py-4 rounded-full border-2 border-brand-orange text-brand-orange font-semibold shadow-sm hover:bg-orange-100 focus:ring-4 focus:ring-orange-200 transition" %>
       </div>
 
       <!-- ⭐ STATS -->
       <div class="mt-10 grid grid-cols-3 gap-6 text-center lg:text-left">
         <div>
-          <p id="happy-customers" class="text-4xl font-extrabold text-red-600">0</p>
+          <p id="happy-customers" class="text-4xl font-extrabold text-brand-orange">0</p>
           <p class="text-gray-700 text-sm">Happy Customers</p>
         </div>
         <div>
-          <p id="vendors-count" class="text-4xl font-extrabold text-red-600">0</p>
+          <p id="vendors-count" class="text-4xl font-extrabold text-brand-orange">0</p>
           <p class="text-gray-700 text-sm">Vendors</p>
         </div>
         <div>
-          <p id="orders-delivered" class="text-4xl font-extrabold text-red-600">0</p>
+          <p id="orders-delivered" class="text-4xl font-extrabold text-brand-orange">0</p>
           <p class="text-gray-700 text-sm">Orders Delivered</p>
         </div>
       </div>
@@ -43,12 +43,11 @@
     <div class="relative flex justify-center lg:justify-end">
       <%= image_tag "hero-cupcake.png",
           alt: "Delicious Meal",
-          class: "w-full max-w-md lg:max-w-lg drop-shadow-2xl relative z-10 animate-float hover:scale-105 transition-transform duration-500
-" %>
+          class: "w-full max-w-md lg:max-w-lg drop-shadow-2xl relative z-10 animate-float hover:scale-105 transition-transform duration-500" %>
     </div>
-           
   </div>
 </section>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const counters = [
@@ -70,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
         current = target;
         clearInterval(timer);
       }
-      el.textContent = Math.floor(current).toLocaleString() + (target >= 1000 ? "+" : "+");
+      el.textContent = Math.floor(current).toLocaleString() + "+";
     }, 16);
   }
 
@@ -84,20 +83,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }, { threshold: 0.5 });
 
-  observer.observe(document.querySelector("section.bg-pink"));
+  const heroSection = document.getElementById("hero-section");
+  if (heroSection) observer.observe(heroSection);
 });
 </script>
 
 
- 
-</section>
-
-<div class="max-w-3xl mx-auto relative -mt-10 z-20">
+<div class="max-w-3xl mx-auto relative -mt-10 z-20 px-4">
   <%= form_with url: search_path, method: :get, local: true,
-        class: "bg-white rounded-full shadow-lg p-4 flex flex-col sm:flex-row items-center gap-4" do %>
+        class: "bg-white rounded-full shadow-lg p-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4" do %>
 
     <!-- Foods -->
-    <select name="food_id" class="flex-1 border-none focus:ring-0">
+    <select name="food_id"
+      class="flex-1 rounded-full border border-gray-200 px-4 py-2 text-gray-700 focus:ring-2 focus:ring-brand-orange focus:outline-none">
       <option value="">Select Food</option>
       <% @foods.each do |food| %>
         <option value="<%= food.id %>"><%= food.name %></option>
@@ -105,7 +103,8 @@ document.addEventListener("DOMContentLoaded", () => {
     </select>
 
     <!-- Vendors -->
-    <select name="vendor_id" class="flex-1 border-none focus:ring-0">
+    <select name="vendor_id"
+      class="flex-1 rounded-full border border-gray-200 px-4 py-2 text-gray-700 focus:ring-2 focus:ring-brand-orange focus:outline-none">
       <option value="">Select Vendor</option>
       <% @vendors.each do |vendor| %>
         <option value="<%= vendor.id %>"><%= vendor.name %></option>
@@ -113,7 +112,8 @@ document.addEventListener("DOMContentLoaded", () => {
     </select>
 
     <!-- Price Range -->
-    <select name="price_range" class="flex-1 border-none focus:ring-0">
+    <select name="price_range"
+      class="flex-1 rounded-full border border-gray-200 px-4 py-2 text-gray-700 focus:ring-2 focus:ring-brand-orange focus:outline-none">
       <option value="">Price Range</option>
       <% @price_ranges.each do |pr| %>
         <option value="<%= [pr[:min], pr[:max]].join('-') %>">
@@ -123,20 +123,22 @@ document.addEventListener("DOMContentLoaded", () => {
     </select>
 
     <!-- Submit -->
-    <button type="submit" class="bg-pink-600 text-white rounded-full p-3 hover:bg-pink-700 transition">
-      <i class="fas fa-search"></i>
+    <button type="submit"
+      class="flex items-center justify-center bg-brand-orange hover:bg-orange-600 text-white rounded-full px-5 py-3 transition w-full sm:w-auto">
+      <i class="fas fa-search text-lg"></i>
     </button>
   <% end %>
 </div>
 
 
 
-<section class="py-20 bg-gradient-to-b from-gray-50 to-white" id="top-vendors">
+
+<section class="py-20 bg-gradient-to-b from-orange-50 to-yellow-50" id="top-vendors">
   <div class="max-w-7xl mx-auto px-6 text-center">
 
     <!-- Section Title -->
     <h2 id="vendors-title"
-        class="text-3xl md:text-4xl font-extrabold text-red-600 mb-12 opacity-0 translate-y-4 transition-all duration-700">
+        class="text-3xl md:text-4xl font-extrabold text-brand-orange mb-12 opacity-0 translate-y-4 transition-all duration-700">
       Top Vendors in Your Area
     </h2>
 
@@ -146,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="vendor-card opacity-0 translate-y-6 cursor-pointer
                     bg-white rounded-3xl shadow-md hover:shadow-xl transform hover:scale-105 transition-all duration-300 overflow-hidden"
              onclick="window.location='<%= vendor_path(vendor) %>'">
-          
+
           <!-- Banner image -->
           <% if vendor.banner_image.attached? %>
             <%= image_tag vendor.banner_image, class: "w-full h-48 object-cover rounded-t-3xl" %>
@@ -156,11 +158,38 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
           <% end %>
 
-          <!-- Vendor name -->
-          <div class="p-4">
-            <h3 class="text-lg font-bold text-red-600">
+          <!-- Vendor Info -->
+          <div class="p-4 space-y-2">
+            <!-- Name -->
+            <h3 class="text-lg font-bold text-brand-orange">
               <%= vendor.name %>
             </h3>
+
+            <!-- Rating -->
+            <div class="flex items-center justify-center md:justify-start gap-1 text-yellow-500 text-sm">
+              <% rating = vendor.average_rating || 4.5 %> <!-- fallback rating -->
+              <% 5.times do |i| %>
+                <% if i < rating.floor %>
+                  <i class="fas fa-star"></i>
+                <% elsif i < rating %>
+                  <i class="fas fa-star-half-alt"></i>
+                <% else %>
+                  <i class="far fa-star"></i>
+                <% end %>
+              <% end %>
+              <span class="ml-2 text-gray-600 text-xs">
+                (<%= vendor.reviews_count || 20 %> reviews)
+              </span>
+            </div>
+
+            <!-- Starting Price -->
+            <% if vendor.respond_to?(:starting_price) %>
+              <p class="text-sm text-gray-700">
+                From <span class="font-semibold text-brand-orange">₦<%= vendor.starting_price %></span>
+              </p>
+            <% else %>
+              <p class="text-sm text-gray-500">Affordable meals</p>
+            <% end %>
           </div>
         </div>
       <% end %>
@@ -171,12 +200,11 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
 
     <!-- View All Vendors Button -->
-    <%= link_to "View All Vendors", vendors_path,
-        class: "inline-block bg-red-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:bg-red-700 transition duration-300" %>
+<%= link_to "View All Vendors", vendors_path,
+  class: "inline-block bg-[#F97316] text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:bg-orange-600 transition duration-300" %>
 
   </div>
 </section>
-
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -189,7 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
     vendorCards.forEach((card, i) => {
       setTimeout(() => {
         card.classList.remove("opacity-0", "translate-y-6");
-      }, i * 100);
+      }, i * 120); // small stagger for nice entrance
     });
   }
 
@@ -213,19 +241,29 @@ document.addEventListener("DOMContentLoaded", () => {
   "Desserts" => "🍰"
 } %>
 
-<section class="py-20 bg-white" id="popular-categories">
+<section class="py-20 bg-gradient-to-b from-orange-50 to-yellow-50" id="popular-categories">
   <div class="max-w-7xl mx-auto px-6 text-center">
 
-    <h2 class="text-3xl md:text-4xl font-extrabold text-red-600 mb-12">
+    <!-- Section Title -->
+    <h2 class="text-3xl md:text-4xl font-extrabold text-brand-orange mb-12">
       Browse by Popular Categories
     </h2>
 
+    <!-- Categories Grid -->
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8">
       <% @main_categories.each do |cat| %>
-        <%= link_to foods_path(category_id: cat.slug),
-            class: "flex flex-col items-center gap-3 bg-white rounded-2xl shadow hover:shadow-lg p-6 transition" do %>
-          <span class="text-4xl"><%= icon_map[cat.name] || "🍽️" %></span>
-          <span class="text-lg font-semibold"><%= cat.name %></span>
+       <%= link_to foods_path(category_id: cat.slug),
+      class: "group flex flex-col items-center gap-3 bg-white rounded-3xl shadow-md hover:shadow-xl p-6 transition transform hover:-translate-y-1 hover:bg-orange-50" do %>
+
+          <!-- Icon -->
+          <span class="text-5xl transition-transform group-hover:scale-110">
+            <%= icon_map[cat.name] || "🍽️" %>
+          </span>
+
+          <!-- Name -->
+          <span class="text-base sm:text-lg font-semibold text-gray-800 group-hover:text-brand-orange">
+            <%= cat.name %>
+          </span>
         <% end %>
       <% end %>
     </div>
@@ -234,13 +272,14 @@ document.addEventListener("DOMContentLoaded", () => {
 </section>
 
 
+
 <!-- How It Works Section -->
 <section id="how-it-works" class="bg-white py-20">
   <div class="max-w-7xl mx-auto px-6 text-center">
 
     <!-- Title -->
-    <h2 id="how-title" 
-        class="text-3xl md:text-4xl font-bold text-gray-900 mb-16 opacity-0 translate-y-4 transition-all duration-700">
+    <h2 id="how-title"
+        class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-16 opacity-0 translate-y-4 transition-all duration-700">
       How It Works
     </h2>
 
@@ -250,16 +289,16 @@ document.addEventListener("DOMContentLoaded", () => {
         { icon: "fa-solid fa-store",        title: "Browse Vendors", text: "Explore top-rated vendors near you." },
         { icon: "fa-solid fa-utensils",     title: "Browse Menu",    text: "See delicious meals from each vendor." },
         { icon: "fa-solid fa-cart-plus",    title: "Add to Cart",    text: "Pick your favorite dishes and drinks." },
-        { icon: "fa-solid fa-credit-card",  title: "Pay Securely",   text: "Checkout with Paystack" },
+        { icon: "fa-solid fa-credit-card",  title: "Pay Securely",   text: "Checkout quickly and safely." },
         { icon: "fa-solid fa-truck-fast",   title: "Fast Delivery",  text: "Sit back while we bring it to your door." }
       ] %>
 
       <% steps.each_with_index do |step, i| %>
-        <div class="how-step flex flex-col items-center text-center p-4 opacity-0 translate-y-6 transition-all duration-700"
+        <div class="how-step flex flex-col items-center text-center p-6 opacity-0 translate-y-6 transition-all duration-700"
              style="transition-delay:<%= i * 150 %>ms;">
-          
+
           <!-- Icon circle -->
-          <div class="w-20 h-20 flex items-center justify-center rounded-full bg-red-100 text-red-600 text-3xl mb-6 shadow-sm">
+          <div class="w-20 h-20 flex items-center justify-center rounded-full bg-orange-100 text-brand-orange text-3xl mb-6 shadow-md">
             <i class="<%= step[:icon] %>"></i>
           </div>
 
@@ -267,7 +306,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <h3 class="text-lg font-semibold text-gray-800 mb-2"><%= step[:title] %></h3>
 
           <!-- Text -->
-          <p class="text-gray-600 text-sm md:text-base leading-relaxed">
+          <p class="text-gray-600 text-sm md:text-base leading-relaxed max-w-[220px]">
             <%= step[:text] %>
           </p>
         </div>
@@ -277,6 +316,7 @@ document.addEventListener("DOMContentLoaded", () => {
   </div>
 </section>
 
+<!-- Animation Script -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const section = document.getElementById("how-it-works");
@@ -300,34 +340,38 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 
+
 <!-- Testimonials Section -->
-<section class="py-20 bg-gray-50" id="testimonials">
+<section class="py-20 bg-gradient-to-b from-orange-50 to-yellow-50" id="testimonials">
   <div class="max-w-7xl mx-auto px-6 text-center">
+
     <!-- Title -->
-    <h2 class="text-3xl md:text-4xl font-extrabold text-red-600 mb-12">
+    <h2 class="text-3xl md:text-4xl font-extrabold text-brand-orange mb-16 opacity-0 translate-y-4 transition-all duration-700">
       What Our Customers Say
     </h2>
 
-    <!-- Grid -->
-    <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <!-- Testimonials Grid -->
+    <div class="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+
       <% @testimonials = Testimonial.where(approved: true).limit(3) %>
 
       <% if @testimonials.any? %>
-        <% @testimonials.each do |t| %>
-          <div class="testimonial-card bg-white p-6 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-500 opacity-0 translate-y-6">
-            
+        <% @testimonials.each_with_index do |t, i| %>
+          <div class="testimonial-card bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition-all duration-700 opacity-0 translate-y-6"
+               style="transition-delay:<%= i * 150 %>ms;">
+
             <!-- Avatar -->
-            <div class="flex items-center justify-center mb-4">
-              <%= image_tag "https://i.pravatar.cc/150?u=#{t.id}", 
-                alt: t.name, 
-                class: "w-16 h-16 rounded-full ring-2 ring-red-100 object-cover" %>
+            <div class="flex items-center justify-center mb-5">
+              <%= image_tag "https://i.pravatar.cc/150?u=#{t.id}",
+                  alt: t.name,
+                  class: "w-20 h-20 rounded-full ring-4 ring-orange-100 shadow-md object-cover" %>
             </div>
 
             <!-- Name -->
             <h3 class="text-lg font-semibold text-gray-800 mb-1"><%= t.name %></h3>
 
             <!-- Rating -->
-            <div class="flex justify-center mb-3 text-yellow-400">
+            <div class="flex justify-center mb-4 text-yellow-400">
               <% t.rating.times do %>
                 <i class="fas fa-star"></i>
               <% end %>
@@ -343,170 +387,235 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
         <% end %>
       <% else %>
-        <p class="text-gray-500 col-span-full">No testimonials yet, check back soon!</p>
+        <p class="text-gray-500 col-span-full">
+          No testimonials yet, check back soon!
+        </p>
       <% end %>
+
     </div>
   </div>
 </section>
 
+<!-- Animation Script -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  const testimonials = document.querySelectorAll(".testimonial-card");
+  const title = document.querySelector('#testimonials h2');
+  const testimonialCards = document.querySelectorAll(".testimonial-card");
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.classList.remove("opacity-0", "translate-y-6");
+        if (entry.target === title) {
+          entry.target.classList.remove("opacity-0", "translate-y-4");
+        } else {
+          entry.target.classList.remove("opacity-0", "translate-y-6");
+        }
         entry.target.classList.add("opacity-100", "translate-y-0");
         observer.unobserve(entry.target);
       }
     });
   }, { threshold: 0.2 });
 
-  testimonials.forEach(card => observer.observe(card));
+  observer.observe(title);
+  testimonialCards.forEach(card => observer.observe(card));
 });
 </script>
 
 
-<section class="w-full bg-gray-50 py-20" id="promotions">
+<!-- Promotions Section -->
+<section class="w-full bg-white-50 py-20" id="promotions">
   <div class="max-w-7xl mx-auto px-6 text-center">
 
-    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-12">
+    <!-- Title -->
+    <h2 class="text-3xl md:text-4xl font-extrabold text-brand-orange mb-16 opacity-0 translate-y-4 transition-all duration-700">
       Special Offers & Promotions
     </h2>
 
+    <!-- Promotions Grid -->
     <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <% @promotions.each do |promo| %>   <!-- ✅ loop defines `promo` -->
+      <% @promotions.each_with_index do |promo, i| %>
+        <div class="promo-card bg-white rounded-2xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-700 opacity-0 translate-y-6"
+             style="transition-delay:<%= i * 150 %>ms;">
 
-        <div class="bg-white rounded-2xl shadow-md hover:shadow-xl overflow-hidden transition duration-300">
+          <!-- Promo Image -->
           <div class="relative">
-            <%= image_tag promo.image, class: "w-full h-48 object-cover" if promo.image.attached? %>
+            <% if promo.image.attached? %>
+              <%= image_tag promo.image, class: "w-full h-56 object-cover" %>
+            <% else %>
+              <div class="w-full h-56 bg-gray-200 flex items-center justify-center text-gray-400 italic">
+                No image available
+              </div>
+            <% end %>
 
             <% if promo.badge.present? %>
-              <span class="absolute top-3 left-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+              <span class="absolute top-4 left-4 bg-[#F97316] text-white text-xs font-bold px-3 py-1 rounded-full shadow">
                 <%= promo.badge %>
               </span>
             <% end %>
           </div>
 
-          <div class="p-6">
-            <h3 class="text-lg font-semibold text-gray-800 mb-2"><%= promo.title %></h3>
-            <p class="text-gray-600 mb-4"><%= promo.description %></p>
+          <!-- Promo Content -->
+          <div class="p-6 text-left">
+            <h3 class="text-xl font-semibold text-gray-800 mb-2"><%= promo.title %></h3>
+            <p class="text-gray-600 text-sm leading-relaxed mb-4"><%= promo.description %></p>
 
             <% if promo.cta_url.present? && promo.cta_text.present? %>
               <%= link_to promo.cta_text, promo.cta_url,
-                  class: "inline-block bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-4 py-2 rounded-full transition duration-300" %>
+                  class: "inline-block bg-[#F97316] hover:bg-orange-700 text-white font-medium px-5 py-2 rounded-full transition-all duration-300" %>
             <% end %>
           </div>
         </div>
-
-      <% end %> <!-- ✅ closes the loop -->
+      <% end %>
     </div>
-
   </div>
 </section>
 
-<section class="py-16 bg-gray-50 border-t">
+<!-- Animation Script -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const title = document.querySelector('#promotions h2');
+  const promoCards = document.querySelectorAll(".promo-card");
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        if (entry.target === title) {
+          entry.target.classList.remove("opacity-0", "translate-y-4");
+        } else {
+          entry.target.classList.remove("opacity-0", "translate-y-6");
+        }
+        entry.target.classList.add("opacity-100", "translate-y-0");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  observer.observe(title);
+  promoCards.forEach(card => observer.observe(card));
+});
+</script>
+
+
+<!-- FAQ Section -->
+<section class="py-20 bg-gradient-to-b from-orange-50 to-yellow-50 border-t" id="faq">
   <div class="max-w-4xl mx-auto px-4">
-    <h2 class="text-3xl font-bold text-center mb-12 text-gray-900">
+
+    <!-- Title -->
+    <h2 class="text-3xl md:text-4xl font-extrabold text-center mb-12 text-brand-orange">
       Frequently Asked Questions
     </h2>
 
-    <!-- FAQ Item -->
-    <details class="group border-b border-gray-200 py-4">
-      <summary class="flex justify-between items-center cursor-pointer text-lg font-medium text-gray-800">
-        How long does delivery take?
-        <span class="transition-transform duration-300 group-open:rotate-180">▼</span>
-      </summary>
-      <p class="mt-2 text-gray-600 leading-relaxed">
-        Most orders arrive within <strong>30–45 minutes</strong> depending on your location and the vendor.
-      </p>
-    </details>
+    <!-- FAQ Items -->
+    <% faq_items = [
+      { q: "How long does delivery take?",
+        a: "Most orders arrive within <strong>30–45 minutes</strong> depending on your location and the vendor." },
+      { q: "What payment methods do you accept?",
+        a: "We accept secure card payments via <strong>Paystack</strong> and Bank Transfers (e.g., OPay)." },
+      { q: "Can I track my order in real-time?",
+        a: "Yes! Once your order is placed, you can track the status from your account dashboard." },
+      { q: "How do I become a vendor on the platform?",
+        a: "Simply click on <strong>“Become a Vendor”</strong> on the top menu and complete the registration process." }
+    ] %>
 
-    <!-- FAQ Item -->
-    <details class="group border-b border-gray-200 py-4">
-      <summary class="flex justify-between items-center cursor-pointer text-lg font-medium text-gray-800">
-        What payment methods do you accept?
-        <span class="transition-transform duration-300 group-open:rotate-180">▼</span>
-      </summary>
-      <p class="mt-2 text-gray-600 leading-relaxed">
-        We accept secure card payments via <strong>Paystack</strong> and Bank Transfers(OPAY).
-      </p>
-    </details>
+    <% faq_items.each_with_index do |faq, i| %>
+      <details class="group border-b border-gray-200 py-5 transition-all duration-300 hover:bg-white rounded-md"
+               style="transition-delay:<%= i * 100 %>ms;">
+        
+        <!-- Question -->
+        <summary class="flex justify-between items-center cursor-pointer text-lg font-medium text-gray-800 focus:outline-none">
+          <span><%= faq[:q] %></span>
+          <span class="text-brand-orange transition-transform duration-300 group-open:rotate-180">▼</span>
+        </summary>
 
-    <!-- FAQ Item -->
-    <details class="group border-b border-gray-200 py-4">
-      <summary class="flex justify-between items-center cursor-pointer text-lg font-medium text-gray-800">
-        Can I track my order in real-time?
-        <span class="transition-transform duration-300 group-open:rotate-180">▼</span>
-      </summary>
-      <p class="mt-2 text-gray-600 leading-relaxed">
-        Yes! Once your order is placed, you can track the status from your account dashboard.
-      </p>
-    </details>
+        <!-- Answer -->
+        <p class="mt-3 text-gray-600 leading-relaxed">
+          <%= faq[:a].html_safe %>
+        </p>
+      </details>
+    <% end %>
 
-    <!-- FAQ Item -->
-    <details class="group border-b border-gray-200 py-4">
-      <summary class="flex justify-between items-center cursor-pointer text-lg font-medium text-gray-800">
-        How do I become a vendor on the platform?
-        <span class="transition-transform duration-300 group-open:rotate-180">▼</span>
-      </summary>
-      <p class="mt-2 text-gray-600 leading-relaxed">
-        Simply click on <strong>“Become a Vendor”</strong> on the top menu and complete the registration process.
-      </p>
-    </details>
   </div>
 </section>
 
+<!-- Animation Script -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const faqSection = document.getElementById("faq");
+  const faqItems = faqSection.querySelectorAll("details");
 
-<section class="py-16 bg-white">
+  const observer = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      faqItems.forEach((item, i) => {
+        item.classList.add("opacity-100", "translate-y-0");
+        item.classList.remove("opacity-0", "translate-y-4");
+      });
+      observer.disconnect();
+    }
+  }, { threshold: 0.2 });
+
+  // Initial hidden state
+  faqItems.forEach(item => {
+    item.classList.add("opacity-0", "translate-y-4");
+  });
+
+  observer.observe(faqSection);
+});
+</script>
+
+
+
+<!-- Why Customers Trust Us -->
+<section class="py-20 bg-white" id="trust">
   <div class="max-w-6xl mx-auto px-4">
-    <h2 class="text-3xl font-bold text-center mb-12 text-gray-900">
+
+    <!-- Title -->
+    <h2 class="text-3xl md:text-4xl font-extrabold text-center mb-16 text-gray-900">
       Why Customers Trust Us
     </h2>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-      
-      <!-- Badge 1 -->
-      <div class="flex flex-col items-center p-6 rounded-xl shadow-sm hover:shadow-md transition">
-        <div class="w-16 h-16 flex items-center justify-center rounded-full bg-green-100 mb-4">
-          <i class="fa-solid fa-shield-halved text-green-600 text-2xl"></i>
+    <!-- Badges Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+
+      <!-- Badge -->
+      <div class="trust-card flex flex-col items-center p-8 bg-white rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 opacity-0 translate-y-4">
+        <div class="w-20 h-20 flex items-center justify-center rounded-full bg-green-100 mb-5 shadow-inner">
+          <i class="fa-solid fa-shield-halved text-green-600 text-3xl"></i>
         </div>
-        <h3 class="text-lg font-semibold text-gray-800 mb-2">Secure Payments</h3>
-        <p class="text-gray-600 text-sm">
+        <h3 class="text-lg font-semibold text-gray-800 mb-3">Secure Payments</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">
           Pay safely with top payment providers like <strong>Paystack</strong> and other trusted gateways.
         </p>
       </div>
 
-      <!-- Badge 2 -->
-      <div class="flex flex-col items-center p-6 rounded-xl shadow-sm hover:shadow-md transition">
-        <div class="w-16 h-16 flex items-center justify-center rounded-full bg-blue-100 mb-4">
-          <i class="fa-solid fa-truck-fast text-blue-600 text-2xl"></i>
+      <!-- Badge -->
+      <div class="trust-card flex flex-col items-center p-8 bg-white rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 opacity-0 translate-y-4">
+        <div class="w-20 h-20 flex items-center justify-center rounded-full bg-blue-100 mb-5 shadow-inner">
+          <i class="fa-solid fa-truck-fast text-blue-600 text-3xl"></i>
         </div>
-        <h3 class="text-lg font-semibold text-gray-800 mb-2">Fast Delivery</h3>
-        <p class="text-gray-600 text-sm">
+        <h3 class="text-lg font-semibold text-gray-800 mb-3">Fast Delivery</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">
           Enjoy fresh meals delivered to your door in under <strong>45 minutes</strong>.
         </p>
       </div>
 
-      <!-- Badge 3 -->
-      <div class="flex flex-col items-center p-6 rounded-xl shadow-sm hover:shadow-md transition">
-        <div class="w-16 h-16 flex items-center justify-center rounded-full bg-yellow-100 mb-4">
-          <i class="fa-solid fa-certificate text-yellow-600 text-2xl"></i>
+      <!-- Badge -->
+      <div class="trust-card flex flex-col items-center p-8 bg-white rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 opacity-0 translate-y-4">
+        <div class="w-20 h-20 flex items-center justify-center rounded-full bg-yellow-100 mb-5 shadow-inner">
+          <i class="fa-solid fa-certificate text-yellow-600 text-3xl"></i>
         </div>
-        <h3 class="text-lg font-semibold text-gray-800 mb-2">Verified Vendors</h3>
-        <p class="text-gray-600 text-sm">
+        <h3 class="text-lg font-semibold text-gray-800 mb-3">Verified Vendors</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">
           All vendors are vetted and approved to guarantee <strong>quality & hygiene</strong>.
         </p>
       </div>
 
-      <!-- Badge 4 -->
-      <div class="flex flex-col items-center p-6 rounded-xl shadow-sm hover:shadow-md transition">
-        <div class="w-16 h-16 flex items-center justify-center rounded-full bg-red-100 mb-4">
-          <i class="fa-solid fa-headset text-red-600 text-2xl"></i>
+      <!-- Badge -->
+      <div class="trust-card flex flex-col items-center p-8 bg-white rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 opacity-0 translate-y-4">
+        <div class="w-20 h-20 flex items-center justify-center rounded-full bg-red-100 mb-5 shadow-inner">
+          <i class="fa-solid fa-headset text-red-600 text-3xl"></i>
         </div>
-        <h3 class="text-lg font-semibold text-gray-800 mb-2">24/7 Support</h3>
-        <p class="text-gray-600 text-sm">
+        <h3 class="text-lg font-semibold text-gray-800 mb-3">24/7 Support</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">
           Our support team is always ready to help with <strong>orders, refunds, and more</strong>.
         </p>
       </div>
@@ -515,42 +624,80 @@ document.addEventListener("DOMContentLoaded", () => {
   </div>
 </section>
 
+<!-- Fade-in Animation -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const cards = document.querySelectorAll(".trust-card");
 
- <!-- Call-to-Action -->
-<section class="w-full bg-red-600 py-20 text-center text-white">
-  <h2 class="text-3xl md:text-4xl font-bold mb-6">
-    Ready to Taste or Join the Future of Food Delivery?
-  </h2>
-  <p class="text-white/90 max-w-2xl mx-auto mb-8">
-    Whether you’re hungry for your next meal or ready to grow your food business,
-    we’ve got you covered.
-  </p>
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add("opacity-100", "translate-y-0");
+          entry.target.classList.remove("opacity-0", "translate-y-4");
+        }, i * 150); // staggered animation
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
 
-  <div class="flex flex-col sm:flex-row justify-center gap-4">
-    <%= link_to "Browse Foods & Vendors", vendors_path,
-      class: "bg-yellow-400 text-red-700 px-8 py-3 rounded-full font-bold hover:bg-yellow-300 transition" %>
+  cards.forEach(card => observer.observe(card));
+});
+</script>
 
-    <%= link_to "Become a Vendor", new_vendor_registration_path,
-      class: "bg-white text-red-600 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition" %>
+
+
+<!-- Call-to-Action -->
+<section class="w-full bg-[#F97316] py-20 text-center text-white">
+  <div class="max-w-4xl mx-auto px-4">
+
+    <!-- Heading -->
+    <h2 class="text-3xl md:text-4xl font-extrabold leading-tight mb-6">
+      Ready to Taste or Join the Future of Food Delivery?
+    </h2>
+
+    <!-- Sub-text -->
+    <p class="text-white/90 max-w-2xl mx-auto mb-10 leading-relaxed">
+      Whether you’re hungry for your next meal or ready to grow your food business,
+      we’ve got you covered.
+    </p>
+
+    <!-- Buttons -->
+    <div class="flex flex-col sm:flex-row justify-center gap-4">
+
+      <!-- Primary CTA -->
+      <%= link_to "Browse Foods & Vendors", vendors_path,
+        class: "inline-block bg-accent-yellow text-[white] font-bold uppercase tracking-wide px-8 py-3 rounded-full shadow-md hover:bg-yellow-300 hover:shadow-lg transition duration-300" %>
+
+      <!-- Secondary CTA -->
+      <%= link_to "Become a Vendor", new_vendor_registration_path,
+        class: "inline-block bg-white text-[#F97316] font-bold uppercase tracking-wide px-8 py-3 rounded-full shadow-md hover:bg-gray-100 hover:shadow-lg transition duration-300" %>
+
+    </div>
+
   </div>
 </section>
 
 
-  <!-- Footer -->
+
+
+ <!-- Footer -->
 <footer class="bg-black text-white pt-16 pb-8">
   <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
 
     <!-- Company Info -->
     <div>
-      <h3 class="font-bold text-3xl mb-4 text-yellow-400">Food App</h3>
+      <h3 class="font-bold text-3xl mb-4 text-brand-orange">Food App</h3>
       <p class="text-gray-400 text-sm leading-relaxed mb-4">
         Connecting you with the best Nigerian vendors delivering quality meals.
       </p>
+
+      <!-- Store Badges -->
       <div class="flex space-x-3">
-        <a href="#" class="w-28">
+        <a href="#" class="w-28 hover:opacity-90 transition">
           <img src="/images/appstore-badge.png" alt="Download on App Store" class="w-full h-auto">
         </a>
-        <a href="#" class="w-28">
+        <a href="#" class="w-28 hover:opacity-90 transition">
           <img src="/images/playstore-badge.png" alt="Get it on Google Play" class="w-full h-auto">
         </a>
       </div>
@@ -558,38 +705,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <!-- Quick Links -->
     <div>
-      <h4 class="font-semibold text-lg mb-4">Quick Links</h4>
+      <h4 class="font-semibold text-lg mb-4 text-brand-orange">Quick Links</h4>
       <ul class="space-y-2">
-        <li><%= link_to "Home", root_path, class: "text-gray-400 hover:text-yellow-400 transition duration-300" %></li>
-        <li><%= link_to "Vendors", vendors_path, class: "text-gray-400 hover:text-yellow-400 transition duration-300" %></li>
-        <li><%= link_to "Foods", foods_path, class: "text-gray-400 hover:text-yellow-400 transition duration-300" %></li>
-        <li><%= link_to "FAQ", "#faq", class: "text-gray-400 hover:text-yellow-400 transition duration-300" %></li>
+        <li><%= link_to "Home", root_path, class: "text-gray-400 hover:text-brand-orange transition duration-300" %></li>
+        <li><%= link_to "Vendors", vendors_path, class: "text-gray-400 hover:text-brand-orange transition duration-300" %></li>
+        <li><%= link_to "Foods", foods_path, class: "text-gray-400 hover:text-brand-orange transition duration-300" %></li>
+        <li><%= link_to "FAQ", "#faq", class: "text-gray-400 hover:text-brand-orange transition duration-300" %></li>
       </ul>
     </div>
 
     <!-- Support -->
     <div>
-      <h4 class="font-semibold text-lg mb-4">Support</h4>
+      <h4 class="font-semibold text-lg mb-4 text-brand-orange">Support</h4>
       <ul class="space-y-2">
-        <li><%= link_to "Help Center", "#", class: "text-gray-400 hover:text-yellow-400 transition duration-300" %></li>
-        <li><%= link_to "Privacy Policy", "#", class: "text-gray-400 hover:text-yellow-400 transition duration-300" %></li>
-        <li><%= link_to "Terms of Service", "#", class: "text-gray-400 hover:text-yellow-400 transition duration-300" %></li>
-        <li><%= link_to "Refund Policy", "#", class: "text-gray-400 hover:text-yellow-400 transition duration-300" %></li>
+        <li><%= link_to "Help Center", "#", class: "text-gray-400 hover:text-brand-orange transition duration-300" %></li>
+        <li><%= link_to "Privacy Policy", "#", class: "text-gray-400 hover:text-brand-orange transition duration-300" %></li>
+        <li><%= link_to "Terms of Service", "#", class: "text-gray-400 hover:text-brand-orange transition duration-300" %></li>
+        <li><%= link_to "Refund Policy", "#", class: "text-gray-400 hover:text-brand-orange transition duration-300" %></li>
       </ul>
     </div>
 
     <!-- Contact Info -->
     <div>
-      <h4 class="font-semibold text-lg mb-4">Contact Us</h4>
+      <h4 class="font-semibold text-lg mb-4 text-brand-orange">Contact Us</h4>
       <p class="text-gray-400 text-sm mb-2">
         Email:
-        <a href="mailto:support@foodapp.com" class="hover:text-yellow-400 transition duration-300">
+        <a href="mailto:support@foodapp.com" class="hover:text-brand-orange transition duration-300">
           support@foodapp.com
         </a>
       </p>
       <p class="text-gray-400 text-sm mb-2">
         Phone:
-        <a href="tel:+2348000000000" class="hover:text-yellow-400 transition duration-300">
+        <a href="tel:+2348000000000" class="hover:text-brand-orange transition duration-300">
           +234 800 000 0000
         </a>
       </p>
@@ -597,25 +744,28 @@ document.addEventListener("DOMContentLoaded", () => {
         Address: Abuja, Nigeria
       </p>
 
+      <!-- Social Links -->
       <div class="flex space-x-4 mt-4">
-        <a href="#" class="text-gray-400 hover:text-yellow-400 transition duration-300 text-xl">
+        <a href="#" class="text-gray-400 hover:text-brand-orange transition duration-300 text-xl">
           <i class="fab fa-facebook-f"></i>
         </a>
-        <a href="#" class="text-gray-400 hover:text-yellow-400 transition duration-300 text-xl">
+        <a href="#" class="text-gray-400 hover:text-brand-orange transition duration-300 text-xl">
           <i class="fab fa-twitter"></i>
         </a>
-        <a href="#" class="text-gray-400 hover:text-yellow-400 transition duration-300 text-xl">
+        <a href="#" class="text-gray-400 hover:text-brand-orange transition duration-300 text-xl">
           <i class="fab fa-instagram"></i>
         </a>
       </div>
     </div>
-
   </div>
 
+  <!-- Bottom Bar -->
   <div class="text-center mt-12 text-gray-500 text-sm border-t border-gray-800 pt-6">
     © <%= Time.current.year %> Food App. All rights reserved.
   </div>
 </footer>
+
+
 
 
 </main>

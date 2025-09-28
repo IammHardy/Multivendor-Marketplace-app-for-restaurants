@@ -1,33 +1,47 @@
 class FoodsController < ApplicationController
-  before_action :set_food, only: [ :show ]
+  before_action :set_food, only: [:show]
 
-def index
-  if params[:category_id].present?
-    @selected_category = Category.friendly.find(params[:category_id])
-    @subcategories     = @selected_category.subcategories
+  def index
+    # Load main categories
+    @main_categories = Category.where(parent_id: nil).order(:name)
 
-    if params[:subcategory_id].present?
-      @selected_subcategory = Category.friendly.find(params[:subcategory_id])
-      @foods = @selected_subcategory.foods.includes(:reviews, :vendor)
+    # Determine selected category
+    if params[:category_id].present?
+      @selected_category = Category.friendly.find(params[:category_id])
     else
-      @foods = @selected_category.foods.includes(:reviews, :vendor)
+      @selected_category = @main_categories.first
     end
-  else
-    @foods = Food.all.includes(:reviews, :vendor)
+
+    # Load subcategories of the selected category
+    @subcategories = @selected_category.children
+
+    # Determine selected subcategory
+    if params[:subcategory_id].present?
+      @selected_subcategory = @subcategories.friendly.find(params[:subcategory_id])
+    else
+      @selected_subcategory = @subcategories.first
+    end
+
+    # Load foods filtered by subcategory if present, else by category
+    if @selected_subcategory.present?
+      @foods = @selected_subcategory.foods.includes(:vendor, :reviews).order(created_at: :desc)
+    else
+      @foods = @selected_category.foods.includes(:vendor, :reviews).order(created_at: :desc)
+    end
   end
+
+ def show
+  @food = Food.friendly.find(params[:id])
+  @vendor = @food.vendor
+
+  # Reviews
+  @reviews = @food.reviews.includes(:user).order(created_at: :desc).page(params[:page]).per(5)
+  @review  = @food.reviews.new
+
+  # Optional: show other foods from the same vendor
+  @other_foods_from_vendor = @vendor.foods.where.not(id: @food.id).limit(4)
 end
 
-
-
-
-
-  def show
-    # @food is already set by set_food
-    @vendor = Vendor.find(params[:vendor_id])
-      @food = @vendor.foods.find(params[:id])
-    @reviews = @food.reviews.includes(:user).order(created_at: :desc).page(params[:page]).per(5)
-    @review = @food.reviews.new
-  end
 
   private
 

@@ -1,10 +1,87 @@
-<h1 class="text-3xl font-bold mb-6 text-center">Our Vendors</h1>
-<div class="grid md:grid-cols-3 gap-6">
-  <% @vendors.each do |vendor| %>
-    <div class="bg-white p-4 rounded shadow hover:shadow-lg cursor-pointer" onclick="window.location='<%= vendor_path(vendor) %>'">
-      <h2 class="font-bold text-xl mb-2"><%= vendor.name %></h2>
-      <p class="text-gray-600"><%= vendor.bio.presence || "No description available" %></p>
+<section class="py-16 bg-gradient-to-b from-orange-50 to-yellow-50 min-h-screen">
+  <div class="max-w-7xl mx-auto px-6 sm:px-12">
 
+    <!-- Page Header -->
+    <div class="mb-8 flex justify-between items-center">
+      <h1 class="text-4xl font-extrabold text-brand-orange">Our Trusted Vendors</h1>
+      <%= link_to "← Back to Home", root_path,
+          class: "px-4 py-2 rounded-full border border-gray-400 hover:bg-gray-200 transition" %>
     </div>
-  <% end %>
-</div>
+
+    <% if @vendors.any? %>
+      <!-- Vendors Grid -->
+      <div class="grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <% @vendors.each do |vendor| %>
+          <div
+            class="vendor-card group bg-white rounded-3xl shadow-md hover:shadow-xl overflow-hidden transition-transform duration-300 cursor-pointer transform hover:-translate-y-1"
+            onclick="window.location='<%= vendor_path(vendor) %>'">
+
+            <!-- Vendor Banner / Image -->
+            <div class="relative h-48 bg-gray-100">
+              <% if vendor.profile_image.attached? %>
+                <%= image_tag vendor.profile_image,
+                      class: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 rounded-t-3xl" %>
+              <% else %>
+                <div class="flex items-center justify-center h-full text-gray-400 text-2xl rounded-t-3xl">
+                  <i class="fa-solid fa-store"></i>
+                </div>
+              <% end %>
+
+              <!-- Rating Badge -->
+              <% if vendor.vendor_reviews.any? %>
+                <% avg_rating = vendor.vendor_reviews.average(:rating).round(1) %>
+                <div class="absolute top-3 right-3 bg-[#F97316] text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
+                  ⭐ <%= avg_rating %>/5
+                </div>
+              <% end %>
+            </div>
+
+            <!-- Vendor Info -->
+            <div class="p-5 space-y-2">
+              <h2 class="text-lg font-bold text-brand-orange group-hover:text-[#FACC15] transition-colors">
+                <%= vendor.name %>
+              </h2>
+
+              <p class="text-gray-600 text-sm line-clamp-2">
+                <%= vendor.bio.presence || "No description provided yet." %>
+              </p>
+
+              <div class="flex items-center justify-between mt-3 text-sm text-gray-500">
+                <span>
+                  <i class="fa-solid fa-utensils text-[#F97316] mr-1"></i>
+                  <%= pluralize(vendor.foods.count, "item") %>
+                </span>
+                <span>
+                  <i class="fa-solid fa-location-dot text-[#F97316] mr-1"></i>
+                  <%= vendor.city.presence || "N/A" %>
+                </span>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-center text-gray-500 mt-12">No vendors available yet. Please check back later!</p>
+    <% end %>
+
+    <!-- CTA -->
+    <div class="text-center mt-12">
+      <%= link_to "Become a Vendor", new_vendor_registration_path,
+          class: "inline-block bg-[#F97316] text-white px-8 py-3 rounded-full font-semibold shadow-md hover:bg-orange-600 transition duration-300" %>
+    </div>
+  </div>
+</section>
+
+<!-- Optional JS animation for staggered card entrance -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const vendorCards = document.querySelectorAll(".vendor-card");
+  vendorCards.forEach((card, i) => {
+    card.classList.add("opacity-0", "translate-y-6");
+    setTimeout(() => {
+      card.classList.remove("opacity-0", "translate-y-6");
+      card.classList.add("opacity-100", "translate-y-0");
+    }, i * 120);
+  });
+});
+</script>

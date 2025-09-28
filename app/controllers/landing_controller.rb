@@ -28,22 +28,24 @@ class LandingController < ApplicationController
 end
 
 
-  # ✅ Optional search action (can also be a separate controller)
-  def search
-    @results = Food.includes(:vendor)
+ def search
+  @results = Food.includes(:vendor)
 
-    if params[:food_id].present?
-      @results = @results.where(id: params[:food_id])
-    end
-
-    if params[:vendor_id].present?
-      @results = @results.where(vendor_id: params[:vendor_id])
-    end
-
-    if params[:price_range].present?
-      min, max = params[:price_range].split('-').map(&:to_i)
-      @results = @results.where("price >= ?", min)
-      @results = @results.where("price <= ?", max) if max > 0
-    end
+  if params[:food_id].present?
+    @results = @results.where(id: params[:food_id])
   end
+
+  if params[:vendor_id].present?
+    @results = @results.where(vendor_id: params[:vendor_id])
+  end
+
+  if params[:price_range].present?
+    min, max = params[:price_range].split('-').map(&:to_i)
+    @results = @results.where("price >= ?", min)
+    @results = @results.where("price <= ?", max) if max > 0
+  end
+
+  @results = @results.to_a  # ✅ ensures vendor is eager loaded
+end
+
 end

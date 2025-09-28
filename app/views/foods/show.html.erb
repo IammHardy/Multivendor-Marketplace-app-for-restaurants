@@ -1,99 +1,99 @@
-<div class="max-w-6xl mx-auto px-4 py-12">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-  <!-- Food Hero Section -->
-  <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col md:flex-row gap-8">
-    
+  <!-- Back Link -->
+  <div class="mb-6">
+    <%= link_to "← Back to Browse Menu", 
+                foods_path(category_id: @food.categories.first&.slug), 
+                class: "inline-block text-[#F97316] font-semibold hover:underline" %>
+  </div>
+
+  <!-- Food + Vendor Info -->
+  <div class="flex flex-col md:flex-row gap-8 mb-12">
+
     <!-- Food Image -->
     <div class="md:w-1/2">
       <% if @food.image.attached? %>
-        <%= image_tag url_for(@food.image), class: "w-full h-80 md:h-full object-cover transition-transform duration-300 hover:scale-105 rounded-t-2xl md:rounded-l-2xl" %>
+        <%= image_tag @food.image, class: "w-full h-96 object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300" %>
       <% else %>
-        <div class="w-full h-80 flex items-center justify-center bg-gray-100 rounded-t-2xl md:rounded-l-2xl">
-          <p class="text-gray-400">No image available</p>
-        </div>
+        <img src="/images/default-food.jpg" class="w-full h-96 object-cover rounded-2xl shadow-lg">
       <% end %>
     </div>
 
-    <!-- Food Info -->
-    <div class="md:w-1/2 p-6 flex flex-col justify-between">
-      <div>
-        <h1 class="text-3xl font-bold text-red-600 mb-4"><%= @food.name %></h1>
-        <p class="text-gray-800 font-semibold text-xl mb-4">
-          ₦<%= number_to_currency(@food.price, unit: "", precision: 0) %>
+    <!-- Food Info + Vendor -->
+    <div class="md:w-1/2 flex flex-col justify-between">
+      <div class="space-y-4">
+        <h1 class="text-3xl font-extrabold text-[#F97316]"><%= @food.name %></h1>
+        <p class="text-gray-700"><%= @food.description %></p>
+        <p class="text-2xl font-semibold text-gray-800">₦<%= number_to_currency(@food.price, unit: "", precision: 0) %></p>
+
+        <!-- Vendor Badge -->
+        <p>
+          Vendor: 
+          <%= link_to @vendor.name, vendor_path(@vendor), class: "text-[#FACC15] font-semibold hover:underline" %>
         </p>
-        <p class="text-gray-600 mb-4">
-          <%= @food.description.presence || "No description available." %>
-        </p>
 
-        <!-- Categories -->
-        <div class="flex flex-wrap gap-2 mb-4">
-          <% @food.categories.each do |category| %>
-            <%= link_to category.name, category_path(category), class: "bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-semibold hover:bg-red-200 transition" %>
-          <% end %>
-        </div>
-      </div>
+        <!-- Add to Cart -->
+       <%= form_with url: cart_items_path, method: :post, local: true, class: "flex items-center gap-3 mt-4" do |f| %>
+  <%= hidden_field_tag :food_id, @food.id %>
+  <%= number_field_tag :quantity, 1, min: 1, class: "w-20 text-center border rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#F97316] text-gray-900 font-semibold" %>
 
-      <!-- Add to Cart Form -->
-      <div class="mt-4">
-        <%= form_with url: add_item_cart_path, method: :post, local: true, class: "flex flex-col gap-3" do %>
-          <%= hidden_field_tag :food_id, @food.id %>
-          <div>
-            <%= label_tag "quantity_#{@food.id}", "Quantity", class: "font-semibold" %>
-            <%= number_field_tag :quantity, 1, min: 1, id: "quantity_#{@food.id}", class: "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500" %>
-          </div>
-          <%= submit_tag "Add to Cart", class: "bg-red-600 text-white px-4 py-2 rounded-full font-bold hover:bg-red-500 transition" %>
-          <%= link_to "← Back to Foods", foods_path, class: "text-center bg-gray-100 text-gray-700 px-4 py-2 rounded-full hover:bg-gray-200 transition" %>
-        <% end %>
-      </div>
-    </div> <!-- ✅ CLOSE Food Info -->
-  </div> <!-- ✅ CLOSE Hero Section -->
 
-  <!-- Reviews Section -->
-  <div class="mt-12">
-    <h2 class="text-2xl font-bold text-red-600 mb-6">Customer Reviews</h2>
 
-    <% if @food.reviews.any? %>
-      <div class="space-y-6">
-        <% @food.reviews.includes(:user).each do |review| %>
-          <div class="bg-gray-50 p-4 rounded-xl shadow flex flex-col">
-            <div class="flex items-center justify-between mb-2">
-              <p class="font-semibold text-gray-800"><%= review.user&.email || "Anonymous" %></p>
-              <div class="flex space-x-1 text-yellow-400">
-                <% filled_stars = review.rating.to_i %>
-                <% empty_stars = 5 - filled_stars %>
-                <% filled_stars.times { %>★<% } %>
-                <% empty_stars.times { %>☆<% } %>
-              </div>
-            </div>
-            <p class="text-gray-700"><%= review.comment %></p>
-          </div>
-        <% end %>
-      </div>
-    <% else %>
-      <p class="text-gray-500">No reviews yet. Be the first to review!</p>
-    <% end %>
+<%= f.submit "Add to Cart", class: "bg-[#F97316] text-white px-5 py-2 rounded-full font-bold shadow-lg hover:bg-orange-500 hover:scale-105 transition-transform duration-200" %>
 
-    <%= link_to "See all reviews", foods_path(category_id: @food.categories.first&.id, anchor: "reviews"), class: "text-red-600 hover:underline mt-2 inline-block" %>
-  </div>
+<!-- Proceed to Checkout button -->
+<%= f.submit "Proceed to Checkout", name: "commit_type", value: "Checkout", class: "bg-[#FACC15] text-gray-900 px-5 py-2 rounded-full font-bold shadow-lg hover:bg-yellow-400 hover:scale-105 transition-transform duration-200" %>
 
- <!-- app/views/reviews/new.html.erb -->
-<h2 class="text-2xl font-bold mb-4">Add Review for <%= @food.name %></h2>
-
-<%= form_with(model: [@food, @review], local: true) do |f| %>
-  <div class="mb-4">
-    <%= f.label :rating, "Rating (1-5)", class: "block font-semibold" %>
-    <%= f.number_field :rating, in: 1..5, class: "border rounded px-2 py-1 w-20" %>
-  </div>
-
-  <div class="mb-4">
-    <%= f.label :comment, "Comment", class: "block font-semibold" %>
-    <%= f.text_area :comment, rows: 4, class: "border rounded px-2 py-1 w-full" %>
-  </div>
-
-  <%= f.submit "Submit Review", class: "bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" %>
 <% end %>
 
-  <div class="mt-8">
-    <%= paginate @reviews %>
+      </div>
+    </div>
   </div>
+
+  <!-- Reviews -->
+  <div id="reviews" class="mb-12">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Reviews</h2>
+
+    <% if @reviews.any? %>
+      <% @reviews.each do |review| %>
+        <div class="mb-4 border-b border-gray-200 pb-3">
+          <p class="text-gray-800 font-semibold"><%= review.user.name %></p>
+          <p class="text-sm text-yellow-500">⭐ <%= review.rating %> / 5</p>
+          <p class="text-gray-700"><%= review.comment %></p>
+        </div>
+      <% end %>
+      <%= paginate @reviews %>
+    <% else %>
+      <p class="text-gray-500">No reviews yet.</p>
+    <% end %>
+
+    <!-- Review Form -->
+    <div class="mt-6 bg-[#FFF7E5] p-6 rounded-2xl shadow-md">
+      <h3 class="text-xl font-semibold mb-4">Leave a Review</h3>
+      <%= form_with model: [@food, @review], local: true, class: "space-y-4" do |f| %>
+        <div>
+          <%= f.label :rating, "Rating (1-5)", class: "block mb-1 font-medium" %>
+          <%= f.number_field :rating, in: 1..5, class: "w-24 border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#F97316]" %>
+        </div>
+        <div>
+          <%= f.label :comment, "Comment", class: "block mb-1 font-medium" %>
+          <%= f.text_area :comment, rows: 3, class: "w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#FACC15]" %>
+        </div>
+        <%= f.submit "Submit Review", class: "bg-[#F97316] text-white px-5 py-2 rounded-full font-semibold hover:bg-orange-600 transition" %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Other Foods from Vendor -->
+  <% if @other_foods_from_vendor.any? %>
+    <div>
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">Other Foods from <%= @vendor.name %></h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <% @other_foods_from_vendor.each do |food| %>
+          <%= render partial: "foods/food_card", locals: { food: food } %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
 </div>

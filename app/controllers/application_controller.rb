@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   before_action :load_main_categories
   before_action :set_unread_counts
 
+
   before_action :update_last_seen
 
 def update_last_seen

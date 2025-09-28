@@ -13,3 +13,13 @@ import "chartkick/chart.js"
 
 
 import "./channels"
+
+
+  document.addEventListener("turbo:submit-end", (event) => {
+    if (event.target.closest("#new_message_form")) {
+      event.target.reset()
+      const messages = document.getElementById("messages")
+      messages.scrollTop = messages.scrollHeight
+    }
+  })
+

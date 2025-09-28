@@ -1,0 +1,11 @@
+<% sender_is_user = message.sender_type == "User" %>
+
+<div class="mb-4 flex <%= sender_is_user ? 'justify-end' : 'justify-start' %>">
+  <div class="<%= sender_is_user ? 'bg-[#F97316] text-white' : 'bg-white text-gray-900 border border-gray-200' %>
+              rounded-2xl px-5 py-3 max-w-xs shadow-sm break-words">
+    <p class="text-sm"><%= message.body %></p>
+    <span class="text-xs text-gray-300 block mt-1">
+      <%= message.created_at.strftime("%b %d, %H:%M") %>
+    </span>
+  </div>
+</div>

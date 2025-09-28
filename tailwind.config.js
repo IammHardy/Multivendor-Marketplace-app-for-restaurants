@@ -8,7 +8,12 @@ module.exports = {
     './public/*.html'
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'brand-orange': '#F97316',
+        'accent-yellow': '#FACC15',
+      },
+    },
   },
   plugins: [],
 }

@@ -23,93 +23,106 @@
 
   <body class="bg-gray-50 text-gray-800 font-sans">
   <!-- HEADER -->
-<header class="bg-red-600 text-white shadow sticky top-0 z-50">
+<!-- HEADER -->
+<header class="bg-[#F97316] text-white shadow sticky top-0 z-50">
   <div class="max-w-6xl mx-auto flex items-center justify-between px-4 h-20 relative">
-    
+
     <!-- Logo -->
     <%= link_to root_path, class: "text-3xl font-extrabold tracking-wide text-white" do %>
-      Sajuma
-    <% end %>
-    <!-- Desktop Menu -->
-   <nav class="hidden lg:flex gap-6 items-center">
-  <%= link_to "Home", (current_user&.admin? ? admin_dashboard_path : root_path),
-      class: "hover:text-yellow-400 font-medium" %>
-  <%= link_to "Browse Menu", foods_path, class: "hover:text-yellow-400 font-bold" %>
-
-  <% if user_signed_in? %>
-    <% if current_user.is_a?(User) %>
-      <%= link_to "My Orders", orders_path, class: "hover:text-yellow-400 font-medium" %>
-      <%= link_to "My Conversations#{@unread_conversations_count.positive? ? " (#{@unread_conversations_count})" : ""}".html_safe,
-                  users_conversations_path, class: "hover:text-yellow-400 font-medium" %>
-      <%= link_to "Support Tickets#{@new_support_tickets_count.positive? ? " (#{@new_support_tickets_count})" : ""}".html_safe,
-                  support_tickets_path, class: "hover:text-yellow-400 font-medium" %>
-
-    <% elsif current_user.is_a?(Vendor) %>
-      <%= link_to "Conversations#{@unread_conversations_count.positive? ? " (#{@unread_conversations_count})" : ""}".html_safe,
-                  vendor_conversations_path, class: "hover:text-yellow-400 font-medium" %>
-    <% elsif current_user.admin? %>
-      <%= link_to "Admin Dashboard", admin_dashboard_path, class: "hover:text-yellow-400 font-medium" %>
+      FoodApp
     <% end %>
 
-    <%= button_to "Logout", destroy_user_session_path, method: :delete,
-          form_class: "inline", class: "hover:text-yellow-400 font-medium" %>
+    <!-- Desktop Navigation -->
+    <nav class="hidden lg:flex gap-6 items-center">
+      <%= link_to "Home", (current_user&.admin? ? admin_dashboard_path : root_path),
+          class: "hover:text-[#FACC15] font-medium transition-colors" %>
 
-  <% else %>
-    <%= link_to "Login", new_user_session_path, class: "hover:text-yellow-400 font-medium" %>
-    <%= link_to "Sign Up", new_user_registration_path, class: "hover:text-yellow-400 font-medium" %>
-  <% end %>
+      <%= link_to "Browse Menu", foods_path,
+          class: "hover:text-[#FACC15] font-bold transition-colors" %>
 
-  <% if current_cart.present? && current_cart.cart_items.any? %>
-    <%= link_to cart_path, class: "relative hover:text-yellow-300" do %>
-      <i class="fas fa-shopping-cart text-lg"></i>
-      <span class="absolute -top-2 -right-3 bg-white text-red-600 text-xs font-bold rounded-full px-2 py-0.5">
-        <%= current_cart.cart_items.sum(:quantity) %>
-      </span>
-    <% end %>
-  <% end %>
-</nav>
+      <% if user_signed_in? %>
+        <% if current_user.is_a?(User) %>
+          <%= link_to "My Orders", orders_path,
+              class: "hover:text-[#FACC15] font-medium transition-colors" %>
 
+          <%= link_to "My Conversations#{@unread_conversations_count.positive? ? " (#{@unread_conversations_count})" : ""}".html_safe,
+              users_conversations_path, class: "hover:text-[#FACC15] font-medium transition-colors" %>
 
-    <!-- Hamburger (mobile only) -->
+          <%= link_to "Support Tickets#{@new_support_tickets_count.positive? ? " (#{@new_support_tickets_count})" : ""}".html_safe,
+              support_tickets_path, class: "hover:text-[#FACC15] font-medium transition-colors" %>
+
+        <% elsif current_user.is_a?(Vendor) %>
+          <%= link_to "Conversations#{@unread_conversations_count.positive? ? " (#{@unread_conversations_count})" : ""}".html_safe,
+              vendor_conversations_path, class: "hover:text-[#FACC15] font-medium transition-colors" %>
+
+        <% elsif current_user.admin? %>
+          <%= link_to "Admin Dashboard", admin_dashboard_path,
+              class: "hover:text-[#FACC15] font-medium transition-colors" %>
+        <% end %>
+
+        <%= button_to "Logout", destroy_user_session_path, method: :delete,
+            form_class: "inline", class: "hover:text-[#FACC15] font-medium transition-colors" %>
+
+      <% else %>
+        <%= link_to "Login", new_user_session_path,
+            class: "hover:text-[#FACC15] font-medium transition-colors" %>
+        <%= link_to "Sign Up", new_user_registration_path,
+            class: "hover:text-[#FACC15] font-medium transition-colors" %>
+      <% end %>
+              <%= link_to "Become a Vendor", new_vendor_registration_path,
+    class: "hover:text-[#FACC15] font-medium transition-colors" %>
+
+      <% if current_cart.present? && current_cart.cart_items.any? %>
+        <%= link_to cart_path, class: "relative hover:text-[#FACC15] transition-colors" do %>
+          <i class="fas fa-shopping-cart text-lg"></i>
+          <span class="absolute -top-2 -right-3 bg-white text-[#F97316] text-xs font-bold rounded-full px-2 py-0.5">
+            <%= current_cart.cart_items.sum(:quantity) %>
+          </span>
+        <% end %>
+      <% end %>
+    </nav>
+
+    <!-- Hamburger for Mobile -->
     <button id="hamburger-btn" class="lg:hidden text-white text-2xl relative z-50">
       <i class="fas fa-bars"></i>
     </button>
 
     <!-- Mobile Menu -->
-   <nav id="mobile-nav" class="hidden absolute top-full right-0 left-0 bg-white shadow-lg z-60 flex flex-col gap-1 p-4 rounded-b-md transition-all duration-300 transform -translate-y-5 opacity-0">
+    <nav id="mobile-nav"
+      class="hidden absolute top-full right-0 left-0 bg-white shadow-lg z-60 flex flex-col gap-1 p-4 rounded-b-md transition-all duration-300 transform -translate-y-5 opacity-0">
+      
       <%= link_to "Home", (current_user&.admin? ? admin_dashboard_path : root_path),
-          class: "block px-4 py-2 text-red-600 hover:bg-red-100 hover:text-yellow-400 font-medium rounded" %>
+          class: "block px-4 py-2 text-[#F97316] hover:bg-[#FFF3E0] hover:text-[#FACC15] font-medium rounded transition-colors" %>
 
       <% if user_signed_in? %>
-  <span class="block px-4 py-2 text-gray-500 text-sm">
-    Logged in as <%= current_user.email %>
-  </span>
+        <span class="block px-4 py-2 text-gray-500 text-sm">
+          Logged in as <%= current_user.email %>
+        </span>
 
-  <% unless current_user.admin? %>
-    <%= link_to "My Orders", orders_path,
-        class: "block px-4 py-2 text-red-600 hover:bg-red-100 hover:text-yellow-400 font-medium rounded" %>
-  <% else %>
-    <%= link_to "Admin Dashboard", admin_dashboard_path,
-        class: "block px-4 py-2 text-red-600 hover:bg-red-100 hover:text-yellow-400 font-medium rounded" %>
-  <% end %>
-
+        <% unless current_user.admin? %>
+          <%= link_to "My Orders", orders_path,
+              class: "block px-4 py-2 text-[#F97316] hover:bg-[#FFF3E0] hover:text-[#FACC15] font-medium rounded transition-colors" %>
+        <% else %>
+          <%= link_to "Admin Dashboard", admin_dashboard_path,
+              class: "block px-4 py-2 text-[#F97316] hover:bg-[#FFF3E0] hover:text-[#FACC15] font-medium rounded transition-colors" %>
+        <% end %>
+      <% end %>
 
       <%= link_to "Browse Menu", foods_path,
-            class: "block px-4 py-2 text-red-600 hover:bg-red-100 hover:text-yellow-400 font-bold rounded" %>
+          class: "block px-4 py-2 text-[#F97316] hover:bg-[#FFF3E0] hover:text-[#FACC15] font-bold rounded transition-colors" %>
 
       <% if current_cart.present? && current_cart.cart_items.any? %>
-        <%= link_to cart_path, class: "relative block px-4 py-2 text-yellow-400 hover:text-yellow-300" do %>
+        <%= link_to cart_path, class: "relative block px-4 py-2 text-[#FACC15] hover:text-[#F97316] transition-colors" do %>
           <i class="fas fa-shopping-cart text-lg"></i>
-          <span class="absolute -top-2 -right-3 bg-white text-red-600 text-xs font-bold rounded-full px-2 py-0.5">
+          <span class="absolute -top-2 -right-3 bg-white text-[#F97316] text-xs font-bold rounded-full px-2 py-0.5">
             <%= current_cart.cart_items.sum(:quantity) %>
           </span>
         <% end %>
       <% end %>
-      <% end %>
     </nav>
-
   </div>
 </header>
+
           <script>
   const btn = document.getElementById('hamburger-btn');
   const nav = document.getElementById('mobile-nav');
@@ -191,7 +204,8 @@
 
 
     <!-- MAIN CONTENT -->
-   
+  
+
     <%= yield %>
 
    

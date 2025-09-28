@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_27_072004) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_27_110923) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -334,8 +334,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_27_072004) do
     t.datetime "locked_at"
     t.datetime "last_seen_at"
     t.text "description"
+    t.string "slug"
     t.index ["email"], name: "index_vendors_on_email", unique: true
     t.index ["reset_password_token"], name: "index_vendors_on_reset_password_token", unique: true
+    t.index ["slug"], name: "index_vendors_on_slug", unique: true
     t.index ["unlock_token"], name: "index_vendors_on_unlock_token", unique: true
   end
 

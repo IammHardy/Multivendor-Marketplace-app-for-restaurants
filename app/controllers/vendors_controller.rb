@@ -10,6 +10,9 @@ class VendorsController < ApplicationController
     # Load all foods for this vendor, including categories (many-to-many)
     @foods = @vendor.foods.includes(:categories)
 
+    @vendor = Vendor.includes(:vendor_reviews, foods: :categories).friendly.find(params[:id])
+
+
     # Filter foods by category if category_id is passed
     if params[:category_id].present?
       @foods = @foods.joins(:categories).where(categories: { id: params[:category_id] })
@@ -41,7 +44,7 @@ class VendorsController < ApplicationController
   private
 
   def set_vendor
-    @vendor = Vendor.find(params[:id])
+    @vendor = Vendor.friendly.find(params[:id])
   end
 
   def vendor_params

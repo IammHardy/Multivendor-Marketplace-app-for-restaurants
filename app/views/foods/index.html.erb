@@ -1,67 +1,97 @@
-<h2 class="text-3xl font-bold text-center mb-8 text-red-600">Browse Menu</h2>
+<h2 class="text-3xl font-bold text-center mb-8 text-[#F97316]">Browse Menu</h2>
 
+<div class="mb-6 text-center">
+  <%= link_to "← Back to Home", root_path,
+        class: "inline-block px-4 py-2 rounded-full border border-gray-400 hover:bg-[#F97316] hover:text-white transition" %>
+</div>
 <!-- Main Category Tabs -->
-<div class="flex flex-wrap justify-center gap-4 mb-8">
+<div id="main-categories" class="flex flex-wrap justify-center gap-4 mb-4 opacity-0 translate-y-4 transition-all duration-700">
   <% @main_categories.each do |cat| %>
     <%= link_to cat.name,
                 foods_path(category_id: cat.slug),
-                class: "px-4 py-2 rounded-full font-semibold border border-red-600 transition hover:bg-red-600 hover:text-white #{'bg-red-600 text-white' if @selected_category == cat}" %>
+                class: "px-4 py-2 rounded-full font-semibold border border-[#F97316] transition hover:bg-[#F97316] hover:text-white #{'bg-[#F97316] text-white' if @selected_category == cat}" %>
   <% end %>
 </div>
 
-
 <!-- Subcategory Tabs -->
 <% if @subcategories.present? %>
-  <div class="flex flex-wrap justify-center gap-3 mb-8">
+  <div id="sub-categories" class="flex flex-wrap justify-center gap-3 mb-8 opacity-0 translate-y-4 transition-all duration-700">
     <% @subcategories.each do |sub| %>
       <%= link_to sub.name,
                   foods_path(category_id: @selected_category.slug, subcategory_id: sub.slug),
-                  class: "px-4 py-2 rounded-full font-semibold border border-red-600 transition hover:bg-red-600 hover:text-white #{'bg-red-600 text-white' if @selected_subcategory == sub}" %>
+                  class: "px-4 py-2 rounded-full font-semibold border border-[#F97316] transition hover:bg-[#F97316] hover:text-white #{'bg-[#F97316] text-white' if @selected_subcategory == sub}" %>
     <% end %>
   </div>
 <% end %>
 
+<!-- Animation Script for Tabs -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const mainCats = document.getElementById("main-categories");
+  const subCats  = document.getElementById("sub-categories");
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        if (mainCats) mainCats.classList.remove("opacity-0", "translate-y-4");
+        if (subCats) subCats.classList.remove("opacity-0", "translate-y-4");
+        observer.disconnect();
+      }
+    });
+  }, { threshold: 0.2 });
+
+  if (mainCats) observer.observe(mainCats);
+  if (subCats) observer.observe(subCats);
+});
+</script>
 
 
 <!-- Food Grid -->
-<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+<div id="food-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
   <% if @foods.any? %>
-    <% @foods.each do |food| %>
-      <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden flex flex-col">
-        
-        <!-- Food Image -->
-        <%= link_to food_path(food), class: "flex-1" do %>
+    <% @foods.each_with_index do |food, i| %>
+      <div class="food-card opacity-0 translate-y-6 bg-white rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden flex flex-col relative"
+           style="transition-delay:<%= i * 100 %>ms;">
+
+        <!-- Food Image + Vendor Badge -->
+        <%= link_to food_path(food), class: "relative block" do %>
           <% if food.image.attached? %>
             <%= image_tag food.image, class: "w-full h-48 object-cover transition-transform duration-300 hover:scale-105" %>
           <% else %>
             <img src="/images/default-food.jpg" alt="<%= food.name %>" class="w-full h-48 object-cover rounded-t-2xl">
           <% end %>
+        <% end %>
 
-          <!-- Food Info -->
-          <div class="p-4">
-            <h3 class="text-lg font-bold text-red-600 mb-1"><%= food.name %></h3>
+        <!-- Vendor Badge -->
+        <%= link_to food.vendor.name,
+                    vendor_path(food.vendor),
+                    class: "absolute top-2 left-2 bg-[#F97316] text-white text-xs font-semibold px-2 py-1 rounded-full shadow hover:bg-[#FACC15] transition" %>
+
+        <!-- Food Info -->
+        <div class="p-4 flex-1 flex flex-col justify-between">
+          <div>
+            <h3 class="text-lg font-bold text-[#F97316] mb-1"><%= food.name %></h3>
             <p class="text-gray-600 mb-2 line-clamp-3"><%= food.description %></p>
             <p class="font-semibold text-gray-800 mb-2">₦<%= number_to_currency(food.price, unit: "", precision: 0) %></p>
 
-            <!-- Reviews -->
             <% if food.reviews.any? %>
               <p class="text-sm text-gray-700 mb-1">
                 ⭐ <%= number_with_precision(food.reviews.average(:rating), precision: 1) %> • <%= pluralize(food.reviews.count, "review") %>
               </p>
-              <%= link_to "Read all reviews", food_path(food, anchor: "reviews"), class: "text-sm text-red-600 hover:underline" %>
+              <%= link_to "Read all reviews", food_path(food, anchor: "reviews"), class: "text-sm text-[#F97316] hover:underline" %>
             <% else %>
               <p class="text-sm text-gray-400 mb-1">No reviews yet</p>
             <% end %>
           </div>
-        <% end %>
 
-        <!-- Add to Cart -->
-        <div class="p-4 border-t border-gray-100">
-          <%= form_with url: cart_items_path, method: :post, local: true, class: "flex items-center gap-2" do |f| %>
-            <%= hidden_field_tag :food_id, food.id %>
-            <%= number_field_tag :quantity, 1, min: 1, class: "w-16 border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-red-500" %>
-            <%= f.submit "Add to Cart", class: "bg-red-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-red-500 transition" %>
-          <% end %>
+          <!-- Add to Cart -->
+          <div class="pt-2 mt-auto border-t border-gray-100">
+            <%= form_with url: cart_items_path, method: :post, local: true, class: "flex items-center gap-2" do |f| %>
+              <%= hidden_field_tag :food_id, food.id %>
+              <%= number_field_tag :quantity, 1, min: 1, class: "w-16 border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#F97316]" %>
+              <%= f.submit "Add to Cart", class: "bg-[#F97316] text-white px-4 py-2 rounded-full font-semibold hover:bg-[#FACC15] transition" %>
+            <% end %>
+          </div>
         </div>
       </div>
     <% end %>
@@ -69,3 +99,25 @@
     <p class="col-span-4 text-center text-gray-500 text-lg">No items available in this category.</p>
   <% end %>
 </div>
+
+<!-- Animation Script -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const foodGrid = document.getElementById("food-grid");
+  const foodCards = document.querySelectorAll(".food-card");
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        foodCards.forEach(card => {
+          card.classList.remove("opacity-0", "translate-y-6");
+          card.classList.add("opacity-100", "translate-y-0");
+        });
+        observer.disconnect();
+      }
+    });
+  }, { threshold: 0.2 });
+
+  observer.observe(foodGrid);
+});
+</script>

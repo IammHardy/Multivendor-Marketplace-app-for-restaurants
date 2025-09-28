@@ -4,7 +4,8 @@
   <% if @results.any? %>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       <% @results.each do |food| %>
-        <%= link_to food_path(food), class: "group block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1" do %>
+        <%= link_to vendor_food_path(food.vendor, food),
+                    class: "group block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1" do %>
           
           <% if food.image.attached? %>
             <%= image_tag food.image, class: "w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" %>
@@ -21,10 +22,9 @@
               ₦<%= number_to_currency(food.price, unit: "", precision: 0) %>
             </p>
           </div>
-
-        <% end %>
-      <% end %>
-    </div>
+        <% end %> <!-- closes link_to -->
+      <% end %>   <!-- closes each -->
+    </div>        <!-- closes grid -->
   <% else %>
     <p class="text-gray-600">No foods found matching your filters.</p>
   <% end %>

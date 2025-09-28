@@ -1,36 +1,88 @@
-<main class="bg-gray-50 min-h-screen px-6 py-12">
+<main class="bg-[#FFF7E5] min-h-screen px-6 py-12">
 
-  <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg p-8">
-    <h1 class="text-3xl font-bold text-red-600 mb-6 text-center">Checkout</h1>
+  <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-8">
 
-    <% if @cart_items.any? %>
-      <div class="space-y-4 mb-6">
-        <% @cart_items.each do |item| %>
-          <div class="flex justify-between items-center p-4 bg-red-50 rounded-lg shadow-sm">
-            <div>
-              <h3 class="font-semibold text-red-600"><%= item.food.name %></h3>
-              <p class="text-gray-700">Quantity: <%= item.quantity %> x ₦<%= number_to_currency(item.food.price, unit: "", precision: 0) %></p>
-            </div>
-            <p class="font-bold">₦<%= number_to_currency(item.food.price * item.quantity, unit: "", precision: 0) %></p>
-          </div>
-        <% end %>
-      </div>
+    <h1 class="text-3xl font-extrabold text-[#F97316] mb-8 text-center animate-fade-in">Checkout</h1>
 
-      <div class="text-right font-bold text-xl mb-6">
-        Total: ₦<%= number_to_currency(@grand_total, unit: "", precision: 0) %>
-      </div>
-
-      <%= form_with url: paystack_checkout_path, method: :post, class: "text-center" do %>
-        <%= hidden_field_tag :amount, @grand_total %>
-        <%= submit_tag "Proceed to Pay", class: "bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-500 transition font-semibold" %>
+    <!-- Cart Items -->
+    <div class="mb-8 animate-fade-in delay-100">
+      <h2 class="text-2xl font-semibold mb-4">Your Order</h2>
+      <% if @cart_items.any? %>
+        <ul class="space-y-3">
+          <% @cart_items.each do |item| %>
+            <li class="flex justify-between items-center bg-[#FFF1E0] p-4 rounded-xl shadow-sm hover:shadow-md transition animate-fade-in">
+              <span class="font-medium text-[#F97316]"><%= item.food.name %> (x<%= item.quantity %>)</span>
+              <span class="font-semibold text-[#F97316]">₦<%= number_to_currency(item.food.price * item.quantity, unit: "", precision: 0) %></span>
+            </li>
+          <% end %>
+        </ul>
+        <p class="text-right mt-4 text-xl font-bold text-gray-800">Total: ₦<%= number_to_currency(@grand_total, unit: "", precision: 0) %></p>
+      <% else %>
+        <p class="text-center text-gray-500">Your cart is empty.</p>
+        <div class="mt-4 text-center">
+          <%= link_to "Back to Menu", foods_path, class: "bg-[#F97316] text-white px-4 py-2 rounded-full font-semibold hover:bg-orange-500 transition" %>
+        </div>
       <% end %>
-    <% else %>
-      <p class="text-gray-500 text-center">Your cart is empty.</p>
-      <div class="mt-6 text-center">
-        <%= link_to "Back to Menu", foods_path, class: "text-red-600 hover:underline font-semibold" %>
+    </div>
+
+    <!-- Checkout Form -->
+    <% if @cart_items.any? %>
+      <div class="animate-fade-in delay-200">
+        <h2 class="text-2xl font-semibold mb-6">Delivery Information</h2>
+        <%= form_with model: @order, url: checkout_path, local: true, class: "space-y-5" do |form| %>
+  <div>
+    <%= form.label :name, "Full Name", class: "block mb-2 font-medium text-gray-700" %>
+    <%= form.text_field :name, class: "w-full border rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-[#F97316]" %>
+  </div>
+
+  <div>
+    <%= form.label :address, "Delivery Address", class: "block mb-2 font-medium text-gray-700" %>
+    <%= form.text_area :address, rows: 3, class: "w-full border rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-[#F97316]" %>
+  </div>
+
+  <div>
+    <%= form.label :phone, "Phone Number", class: "block mb-2 font-medium text-gray-700" %>
+    <%= form.text_field :phone, class: "w-full border rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-[#F97316]" %>
+  </div>
+
+  <div class="text-center mt-6">
+    <%= form.submit "Place Order", class: "bg-[#F97316] text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-orange-500 transition" %>
+  </div>
+<% end %>
+
       </div>
     <% end %>
 
   </div>
 
 </main>
+
+<!-- Smooth Scroll Fade-In Animation -->
+<style>
+  .animate-fade-in {
+    opacity: 0;
+    transform: translateY(1.5rem);
+    transition: all 0.6s ease-out;
+  }
+
+  .animate-fade-in.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const fadeElems = document.querySelectorAll(".animate-fade-in");
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) {
+          entry.target.classList.add("show");
+        }
+      });
+    }, { threshold: 0.1 });
+
+    fadeElems.forEach(elem => observer.observe(elem));
+  });
+</script>

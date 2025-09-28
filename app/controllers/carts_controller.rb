@@ -20,9 +20,12 @@ end
 
 
 
+# carts_controller.rb
 def index
-  @cart_items = current_user.cart_items.includes(:food)
+  @cart_items = current_cart.cart_items.includes(:food)
+  @grand_total = @cart_items.sum { |item| item.food.price * item.quantity }
 end
+
 
   def show
   @cart = current_cart
@@ -67,11 +70,12 @@ end
   end
 
   def checkout
-    @cart = current_cart
-    @cart_items = @cart.cart_items.includes(:food)
-    @grand_total = @cart_items.sum { |item| item.food.price * item.quantity }
+  @cart = current_cart
+  @cart_items = @cart.cart_items.includes(:food)
+  @grand_total = @cart_items.sum { |item| item.food.price * item.quantity }
 
-    # For now:
-    render :checkout
-  end
+  # For now:
+  render :Checkout
+end
+
 end
