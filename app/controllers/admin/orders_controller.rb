@@ -2,6 +2,7 @@
 class Admin::OrdersController < Admin::BaseController
    def index
     @orders = Order.includes(:user, order_items: { food: :vendor }).all
+    @orders = Order.order(created_at: :desc).page(params[:page]).per(10)
   end
 
 

@@ -82,6 +82,7 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
   gem "letter_opener_web"
+  gem "letter_opener"
 end
 
 group :test do
@@ -106,9 +107,12 @@ gem "omniauth-facebook"
 gem "jwt", "~> 2.6"
 gem "active_storage_validations"
 
-# Gemfile
-gem "chartkick"
+
 gem "groupdate"
 
 # Gemfile
 gem "cssbundling-rails"
+
+
+
+

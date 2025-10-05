@@ -1,0 +1,34 @@
+<h1>All Support Tickets</h1>
+
+<table class="min-w-full bg-white shadow rounded-xl">
+  <thead>
+    <tr>
+      <th class="px-4 py-2">Customer</th>
+      <th class="px-4 py-2">Subject</th>
+      <th class="px-4 py-2">Order</th>
+      <th class="px-4 py-2">Status</th>
+      <th class="px-4 py-2">Created At</th>
+      <th class="px-4 py-2">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tickets.each do |ticket| %>
+      <tr class="border-b">
+        <td class="px-4 py-2"><%= ticket.user.name %></td>
+        <td class="px-4 py-2"><%= ticket.subject %></td>
+        <td class="px-4 py-2">
+          <% if ticket.order %>
+            <%= link_to ticket.order.order_number, order_path(ticket.order) %>
+          <% else %>
+            N/A
+          <% end %>
+        </td>
+        <td class="px-4 py-2"><%= ticket.status.capitalize %></td>
+        <td class="px-4 py-2"><%= ticket.created_at.strftime("%b %d, %Y") %></td>
+        <td class="px-4 py-2">
+          <%= link_to "View / Respond", admin_support_ticket_path(ticket), class: "text-orange-500 hover:underline" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

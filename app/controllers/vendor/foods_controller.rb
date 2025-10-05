@@ -1,59 +1,75 @@
 class Vendor::FoodsController < Vendor::BaseController
-  before_action :set_food, only: [ :show, :edit, :update, :destroy ]
-
+  before_action :authenticate_vendor!
+  before_action :set_food, only: [:edit, :update, :destroy]
+   
+  # GET /vendor/foods
   def index
-    @foods = current_vendor.foods.order(created_at: :desc).page(params[:page]).per(10)
+    @foods = current_vendor.foods.includes(:categories)
+    @foods = current_vendor.foods.page(params[:page]).per(8)
   end
 
-  def show
-  end
+    def change
+  add_column :foods, :active, :boolean, default: false, null: false
+end
 
-  def new
-    @food = current_vendor.foods.new
-    @categories = Category.all
-  end
-
-  def create
-    @food = current_vendor.foods.new(food_params)
-    if @food.save
-      redirect_to vendor_foods_path, notice: "Food created successfully!"
-    else
-      @categories = Category.all
-      render :new, status: :unprocessable_entity
-    end
-  end
-
-  def edit
-    @categories = Category.all
-  end
-
-  def update
-    if @food.update(food_params)
-      redirect_to vendor_foods_path, notice: "Food updated successfully!"
-    else
-      @categories = Category.all
-      render :edit, status: :unprocessable_entity
-    end
-  end
-
-  def destroy
+def toggle_status
   @food = current_vendor.foods.friendly.find(params[:id])
-  @food.destroy
+  @food.update(active: !@food.active)
+  redirect_to vendor_foods_path, notice: "Food status updated successfully."
+end
 
-  respond_to do |format|
-    format.turbo_stream
-    format.html { redirect_to vendor_foods_path, alert: "Food deleted successfully!" }
-  end
+def toggle_stock
+  @food = current_vendor.foods.friendly.find(params[:id])
+  @food.update(in_stock: !@food.in_stock)   # ✅ flips between true/false
+  redirect_to vendor_foods_path, notice: "Food stock status updated successfully."
 end
 
 
+
+
+  # GET /vendor/foods/new
+  def new
+    @food = current_vendor.foods.build
+  end
+
+  # POST /vendor/foods
+  def create
+    @food = current_vendor.foods.build(food_params)
+    if @food.save
+      redirect_to vendor_foods_path, notice: "Food created successfully."
+    else
+      render :new
+    end
+  end
+
+  # GET /vendor/foods/:id/edit
+  def edit; end
+
+  # PATCH/PUT /vendor/foods/:id
+  def update
+    if @food.update(food_params)
+      redirect_to vendor_foods_path, notice: "Food updated successfully."
+    else
+      render :edit
+    end
+  end
+
+  # DELETE /vendor/foods/:id
+  def destroy
+    @food.destroy
+    redirect_to vendor_foods_path, notice: "Food deleted successfully."
+  end
+
   private
 
+  # Use Friendly ID and ensure the food belongs to the current_vendor
   def set_food
     @food = current_vendor.foods.friendly.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to vendor_foods_path, alert: "Food not found or you don't have permission."
   end
 
   def food_params
-    params.require(:food).permit(:name, :description, :price, :image, category_ids: [])
+    params.require(:food).permit(:name, :description, :price, :image, :stock, category_ids: [])
   end
 end

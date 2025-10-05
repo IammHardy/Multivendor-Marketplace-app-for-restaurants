@@ -1,0 +1,18 @@
+<% if cart.cart_items.any? %>
+  <% cart.cart_items.each do |item| %>
+    <div class="flex justify-between mb-2">
+      <span><%= item.food.name %> x <%= item.quantity %></span>
+      <span>₦<%= number_to_currency(item.total_price, unit: "", precision: 0) %></span>
+    </div>
+  <% end %>
+
+  <div class="mt-2 font-semibold">
+    Total: ₦<%= number_to_currency(cart.cart_items.sum { |i| i.total_price }, unit: "", precision: 0) %>
+  </div>
+
+  <div class="mt-4">
+    <%= link_to "Go to Cart", cart_path, class: "w-full block text-center bg-yellow-400 text-gray-900 py-2 rounded-full hover:bg-yellow-500 transition" %>
+  </div>
+<% else %>
+  <p class="text-gray-500 text-center">Your cart is empty</p>
+<% end %>

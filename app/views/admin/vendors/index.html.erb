@@ -1,30 +1,55 @@
-<h1 class="text-2xl font-bold mb-6">Vendors</h1>
+<h1 class="text-3xl font-bold mb-6 text-gray-700">Vendors</h1>
 
-<table class="min-w-full bg-white shadow rounded-lg overflow-hidden">
-  <thead class="bg-gray-100">
-    <tr>
-      <th class="px-4 py-2 text-left">Business Name</th>
-      <th class="px-4 py-2 text-left">Email</th>
-      <th class="px-4 py-2 text-left">Phone</th>
-      <th class="px-4 py-2 text-left">Status</th>
-      <th class="px-4 py-2 text-left">Joined</th>
-      <th class="px-4 py-2 text-center">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @vendors.each do |vendor| %>
-      <tr class="border-b hover:bg-gray-50">
-        <td class="px-4 py-2"><%= vendor.name %></td>
-        <td class="px-4 py-2"><%= vendor.email %></td>
-        <td class="px-4 py-2"><%= vendor.phone %></td>
-        <td class="px-4 py-2"><%= vendor.status %></td>
-        <td class="px-4 py-2"><%= vendor.created_at.strftime("%b %d, %Y") %></td>
-        <td class="px-4 py-2 text-center">
-          <%= link_to "View", admin_vendor_path(vendor), class: "text-blue-600 hover:underline" %> |
-          <%= link_to "Edit", edit_admin_vendor_path(vendor), class: "text-yellow-600 hover:underline" %> |
-          <%= link_to "Delete", admin_vendor_path(vendor), method: :delete, data: { confirm: "Are you sure?" }, class: "text-red-600 hover:underline" %>
-        </td>
+<div class="overflow-x-auto bg-white shadow rounded-lg">
+  <table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-100">
+      <tr>
+        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Business Name</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Email</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Phone</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Joined</th>
+        <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700">Actions</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+
+    <tbody class="bg-white divide-y divide-gray-200">
+      <% @vendors.each do |vendor| %>
+        <tr class="hover:bg-gray-50 transition">
+          <td class="px-6 py-3 text-gray-800 font-medium"><%= vendor.name %></td>
+          <td class="px-6 py-3 text-gray-600"><%= vendor.email %></td>
+          <td class="px-6 py-3 text-gray-600"><%= vendor.phone || "N/A" %></td>
+
+          <!-- Status Badge -->
+          <td class="px-6 py-3">
+            <% if vendor.active? %>
+              <span class="px-3 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Active</span>
+            <% elsif vendor.pending_approval? %>
+              <span class="px-3 py-1 text-xs font-semibold text-yellow-700 bg-yellow-100 rounded-full">Pending</span>
+            <% else %>
+              <span class="px-3 py-1 text-xs font-semibold text-red-700 bg-red-100 rounded-full">Inactive</span>
+            <% end %>
+          </td>
+
+          <td class="px-6 py-3 text-gray-600"><%= vendor.created_at.strftime("%b %d, %Y") %></td>
+
+          <!-- Action Buttons -->
+          <td class="px-6 py-3 text-center flex justify-center gap-2">
+            <%= link_to "View", admin_vendor_path(vendor), class: "px-3 py-1 bg-[#FACC15] hover:bg-yellow-400 text-gray-800 rounded-lg font-medium transition shadow" %>
+            <%= link_to "Edit", edit_admin_vendor_path(vendor), class: "px-3 py-1 bg-[#F97316] hover:bg-[#E65C00] text-white rounded-lg font-medium transition shadow" %>
+            <%= button_to "Delete",
+                  admin_vendor_path(vendor),
+                  method: :delete,
+                  data: { turbo_confirm: "Are you sure?" },
+                  class: "px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition shadow" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<!-- Pagination -->
+<div class="mt-6 flex justify-end">
+  <%= paginate @vendors %>
+</div>

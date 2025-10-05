@@ -25,6 +25,6 @@ class SupportTicketsController < ApplicationController
   private
 
   def ticket_params
-    params.require(:support_ticket).permit(:subject, :description, :order_id, :priority)
+    params.require(:support_ticket).permit(:subject, :body, :order_id)
   end
 end

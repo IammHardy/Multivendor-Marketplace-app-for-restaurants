@@ -1,52 +1,105 @@
 <main class="bg-brand-white">
 
+<!-- Hero Section -->
 <section id="hero-section" class="relative bg-gradient-to-br from-orange-50 via-orange-100 to-yellow-50">
   <div class="max-w-7xl mx-auto px-6 lg:px-12 py-20 lg:py-32 grid lg:grid-cols-2 items-center gap-12">
     
-    <!-- LEFT: Headline -->
-    <div class="space-y-6 text-center lg:text-left z-10">
+    <!-- Left: Headline -->
+    <div class="space-y-6 text-center lg:text-left">
       <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-gray-900">
         Super Delicious <br/>
         <span class="text-brand-orange">Meals & Vendors</span> near You
       </h1>
-
       <p class="text-lg text-gray-700 max-w-md mx-auto lg:mx-0">
         Discover top restaurants and vendors in your city. Fast delivery, fresh food.
       </p>
-
-      <!-- CTA Buttons -->
       <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-        <%= link_to "Order Now", vendors_path,
-          class: "px-8 py-4 rounded-full bg-[#F97316] text-white font-semibold shadow-md hover:bg-orange-600 focus:ring-4 focus:ring-orange-300 transition" %>
+        <%= link_to "Order Now", public_vendors_path,
+          class: "px-8 py-4 rounded-full bg-[#F97316] text-white font-semibold shadow-md hover:bg-orange-600 transition" %>
         <%= link_to "Learn More", "#how-it-works",
-          class: "px-8 py-4 rounded-full border-2 border-brand-orange text-brand-orange font-semibold shadow-sm hover:bg-orange-100 focus:ring-4 focus:ring-orange-200 transition" %>
+          class: "px-8 py-4 rounded-full border-2 border-brand-orange text-brand-orange font-semibold shadow-sm hover:bg-orange-100 transition" %>
       </div>
 
-      <!-- ⭐ STATS -->
-      <div class="mt-10 grid grid-cols-3 gap-6 text-center lg:text-left">
-        <div>
-          <p id="happy-customers" class="text-4xl font-extrabold text-brand-orange">0</p>
-          <p class="text-gray-700 text-sm">Happy Customers</p>
+      <!-- Hero Counters -->
+      <div class="mt-10 flex flex-col sm:flex-row justify-center lg:justify-start gap-8 text-center sm:text-left">
+        <div class="flex flex-col">
+          <span id="happy-customers" class="text-4xl font-bold text-[#F97316]">0+</span>
+          <span class="text-gray-700 text-lg font-bold">Happy Customers</span>
         </div>
-        <div>
-          <p id="vendors-count" class="text-4xl font-extrabold text-brand-orange">0</p>
-          <p class="text-gray-700 text-sm">Vendors</p>
+        <div class="flex flex-col">
+          <span id="vendors-count" class="text-4xl font-bold text-[#F97316]">0+</span>
+          <span class="text-gray-700 text-lg font-bold">Vendors</span>
         </div>
-        <div>
-          <p id="orders-delivered" class="text-4xl font-extrabold text-brand-orange">0</p>
-          <p class="text-gray-700 text-sm">Orders Delivered</p>
+        <div class="flex flex-col">
+          <span id="orders-delivered" class="text-4xl font-bold text-[#F97316]">0+</span>
+          <span class="text-gray-700 text-lg font-bold">Orders Delivered</span>
         </div>
       </div>
     </div>
 
-    <!-- RIGHT: Hero Image -->
+    <!-- Right: Hero Image -->
     <div class="relative flex justify-center lg:justify-end">
       <%= image_tag "hero-cupcake.png",
-          alt: "Delicious Meal",
-          class: "w-full max-w-md lg:max-w-lg drop-shadow-2xl relative z-10 animate-float hover:scale-105 transition-transform duration-500" %>
+        alt: "Delicious Meal",
+        class: "w-full max-w-md lg:max-w-lg drop-shadow-2xl animate-float hover:scale-105 transition-transform duration-500" %>
     </div>
   </div>
 </section>
+<!-- Floating Filter Bar BELOW hero, overlapping upwards -->
+<div class="relative z-20 -mt-12 flex justify-center">
+  <%= form_with url: search_path, method: :get, local: true,
+        class: "bg-white rounded-3xl shadow-2xl ring-1 ring-orange-100 px-6 py-5 w-[95%] lg:w-4/5 grid grid-cols-1 md:grid-cols-4 gap-4 items-end" do %>
+
+    <!-- Food -->
+    <div>
+      <label class="block text-xs font-medium text-gray-400 mb-1">Food</label>
+      <select name="food_id"
+        class="w-full bg-transparent text-gray-700 border-0 border-b border-gray-200 focus:ring-0 focus:border-orange-400 text-sm">
+        <option value="">Select Food</option>
+        <% @foods.each do |food| %>
+          <option value="<%= food.id %>"><%= food.name %></option>
+        <% end %>
+      </select>
+    </div>
+
+    <!-- Vendor -->
+    <div>
+      <label class="block text-xs font-medium text-gray-400 mb-1">Vendor</label>
+      <select name="vendor_id"
+        class="w-full bg-transparent text-gray-700 border-0 border-b border-gray-200 focus:ring-0 focus:border-orange-400 text-sm">
+        <option value="">Select Vendor</option>
+        <% @vendors.each do |vendor| %>
+          <option value="<%= vendor.id %>"><%= vendor.name %></option>
+        <% end %>
+      </select>
+    </div>
+
+    <!-- Price -->
+    <div>
+      <label class="block text-xs font-medium text-gray-400 mb-1">Price</label>
+      <select name="price_range"
+        class="w-full bg-transparent text-gray-700 border-0 border-b border-gray-200 focus:ring-0 focus:border-orange-400 text-sm">
+        <option value="">Range</option>
+        <% @price_ranges.each do |pr| %>
+          <option value="<%= [pr[:min], pr[:max]].join('-') %>"><%= pr[:label] %></option>
+        <% end %>
+      </select>
+    </div>
+
+    <!-- Search -->
+    <div class="flex justify-center md:justify-end">
+      <button type="submit"
+        class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-full shadow-md transition w-full md:w-auto">
+        🔍 Search
+      </button>
+    </div>
+
+  <% end %>
+</div>
+
+
+
+
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -89,46 +142,8 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 
-<div class="max-w-3xl mx-auto relative -mt-10 z-20 px-4">
-  <%= form_with url: search_path, method: :get, local: true,
-        class: "bg-white rounded-full shadow-lg p-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4" do %>
 
-    <!-- Foods -->
-    <select name="food_id"
-      class="flex-1 rounded-full border border-gray-200 px-4 py-2 text-gray-700 focus:ring-2 focus:ring-brand-orange focus:outline-none">
-      <option value="">Select Food</option>
-      <% @foods.each do |food| %>
-        <option value="<%= food.id %>"><%= food.name %></option>
-      <% end %>
-    </select>
 
-    <!-- Vendors -->
-    <select name="vendor_id"
-      class="flex-1 rounded-full border border-gray-200 px-4 py-2 text-gray-700 focus:ring-2 focus:ring-brand-orange focus:outline-none">
-      <option value="">Select Vendor</option>
-      <% @vendors.each do |vendor| %>
-        <option value="<%= vendor.id %>"><%= vendor.name %></option>
-      <% end %>
-    </select>
-
-    <!-- Price Range -->
-    <select name="price_range"
-      class="flex-1 rounded-full border border-gray-200 px-4 py-2 text-gray-700 focus:ring-2 focus:ring-brand-orange focus:outline-none">
-      <option value="">Price Range</option>
-      <% @price_ranges.each do |pr| %>
-        <option value="<%= [pr[:min], pr[:max]].join('-') %>">
-          <%= pr[:label] %>
-        </option>
-      <% end %>
-    </select>
-
-    <!-- Submit -->
-    <button type="submit"
-      class="flex items-center justify-center bg-brand-orange hover:bg-orange-600 text-white rounded-full px-5 py-3 transition w-full sm:w-auto">
-      <i class="fas fa-search text-lg"></i>
-    </button>
-  <% end %>
-</div>
 
 
 
@@ -143,11 +158,10 @@ document.addEventListener("DOMContentLoaded", () => {
     </h2>
 
     <!-- Vendor Grid -->
-    <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mb-12">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
       <% @top_vendors.each do |vendor| %>
-        <div class="vendor-card opacity-0 translate-y-6 cursor-pointer
-                    bg-white rounded-3xl shadow-md hover:shadow-xl transform hover:scale-105 transition-all duration-300 overflow-hidden"
-             onclick="window.location='<%= vendor_path(vendor) %>'">
+        <div class="vendor-card cursor-pointer bg-white rounded-3xl shadow-md hover:shadow-xl transform hover:scale-105 transition-all duration-300 overflow-hidden opacity-0 translate-y-6"
+             onclick="window.location='<%= public_vendor_path(vendor) %>'">
 
           <!-- Banner image -->
           <% if vendor.banner_image.attached? %>
@@ -160,14 +174,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
           <!-- Vendor Info -->
           <div class="p-4 space-y-2">
-            <!-- Name -->
-            <h3 class="text-lg font-bold text-brand-orange">
-              <%= vendor.name %>
-            </h3>
-
-            <!-- Rating -->
+            <h3 class="text-lg font-bold text-brand-orange"><%= vendor.name %></h3>
             <div class="flex items-center justify-center md:justify-start gap-1 text-yellow-500 text-sm">
-              <% rating = vendor.average_rating || 4.5 %> <!-- fallback rating -->
+              <% rating = vendor.average_rating || 4.5 %>
               <% 5.times do |i| %>
                 <% if i < rating.floor %>
                   <i class="fas fa-star"></i>
@@ -177,12 +186,8 @@ document.addEventListener("DOMContentLoaded", () => {
                   <i class="far fa-star"></i>
                 <% end %>
               <% end %>
-              <span class="ml-2 text-gray-600 text-xs">
-                (<%= vendor.reviews_count || 20 %> reviews)
-              </span>
+              <span class="ml-2 text-gray-600 text-xs">(<%= vendor.reviews_count || 20 %> reviews)</span>
             </div>
-
-            <!-- Starting Price -->
             <% if vendor.respond_to?(:starting_price) %>
               <p class="text-sm text-gray-700">
                 From <span class="font-semibold text-brand-orange">₦<%= vendor.starting_price %></span>
@@ -200,12 +205,12 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
 
     <!-- View All Vendors Button -->
-<%= link_to "View All Vendors", vendors_path,
-  class: "inline-block bg-[#F97316] text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:bg-orange-600 transition duration-300" %>
-
+    <%= link_to "View All Vendors", public_vendors_path,
+        class: "inline-block mt-6 bg-[#F97316] text-white font-semibold px-6 py-3 rounded-full shadow-md hover:bg-orange-600 transition" %>
   </div>
 </section>
 
+<!-- Animation Script -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const vendorSection = document.getElementById("top-vendors");
@@ -217,20 +222,26 @@ document.addEventListener("DOMContentLoaded", () => {
     vendorCards.forEach((card, i) => {
       setTimeout(() => {
         card.classList.remove("opacity-0", "translate-y-6");
-      }, i * 120); // small stagger for nice entrance
+      }, i * 100); // small stagger
     });
   }
 
-  const observer = new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting) {
-      animateVendors();
-      observer.disconnect();
-    }
-  }, { threshold: 0.2 });
+  // Mobile: show immediately, Desktop: animate on scroll
+  if (window.innerWidth < 640) {
+    animateVendors();
+  } else {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        animateVendors();
+        observer.disconnect();
+      }
+    }, { threshold: 0.2 });
 
-  observer.observe(vendorSection);
+    observer.observe(vendorSection);
+  }
 });
 </script>
+
 
 
 
@@ -243,33 +254,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <section class="py-20 bg-gradient-to-b from-orange-50 to-yellow-50" id="popular-categories">
   <div class="max-w-7xl mx-auto px-6 text-center">
-
-    <!-- Section Title -->
     <h2 class="text-3xl md:text-4xl font-extrabold text-brand-orange mb-12">
       Browse by Popular Categories
     </h2>
-
-    <!-- Categories Grid -->
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8">
-      <% @main_categories.each do |cat| %>
-       <%= link_to foods_path(category_id: cat.slug),
-      class: "group flex flex-col items-center gap-3 bg-white rounded-3xl shadow-md hover:shadow-xl p-6 transition transform hover:-translate-y-1 hover:bg-orange-50" do %>
+      <% icon_map = { "Meals" => "🍛", "Drinks" => "🥤", "Small Chops & Sides" => "🍟", "Desserts" => "🍰" } %>
 
-          <!-- Icon -->
+      <% @main_categories.each do |cat| %>
+        <%= link_to public_category_foods_path(cat),
+            class: "group flex flex-col items-center gap-3 bg-white rounded-3xl shadow-md hover:shadow-xl p-6 transition transform hover:-translate-y-1 hover:bg-orange-50" do %>
+
           <span class="text-5xl transition-transform group-hover:scale-110">
             <%= icon_map[cat.name] || "🍽️" %>
           </span>
 
-          <!-- Name -->
           <span class="text-base sm:text-lg font-semibold text-gray-800 group-hover:text-brand-orange">
             <%= cat.name %>
           </span>
         <% end %>
       <% end %>
     </div>
-
   </div>
 </section>
+
+
 
 
 
@@ -362,7 +370,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             <!-- Avatar -->
             <div class="flex items-center justify-center mb-5">
-              <%= image_tag "https://i.pravatar.cc/150?u=#{t.id}",
+              <%= image_tag "https://www.istockphoto.com/photos/nigerian-man=#{t.id}",
                   alt: t.name,
                   class: "w-20 h-20 rounded-full ring-4 ring-orange-100 shadow-md object-cover" %>
             </div>
@@ -421,48 +429,61 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-
 <!-- Promotions Section -->
-<section class="w-full bg-white-50 py-20" id="promotions">
+<section class="py-20 bg-gradient-to-b from-orange-50 to-yellow-50" id="promotions">
   <div class="max-w-7xl mx-auto px-6 text-center">
-
-    <!-- Title -->
-    <h2 class="text-3xl md:text-4xl font-extrabold text-brand-orange mb-16 opacity-0 translate-y-4 transition-all duration-700">
-      Special Offers & Promotions
+    <!-- Section Title -->
+    <h2 class="text-3xl md:text-4xl font-extrabold text-brand-orange mb-12 opacity-0 translate-y-4 transition-all duration-700">
+      Promotions & Deals
     </h2>
 
     <!-- Promotions Grid -->
     <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <% @promotions.each_with_index do |promo, i| %>
-        <div class="promo-card bg-white rounded-2xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-700 opacity-0 translate-y-6"
-             style="transition-delay:<%= i * 150 %>ms;">
+      <% @promotions.each do |promo| %>
+        <div class="promo-card bg-white rounded-3xl shadow-md overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1 opacity-0 translate-y-6">
 
-          <!-- Promo Image -->
-          <div class="relative">
-            <% if promo.image.attached? %>
-              <%= image_tag promo.image, class: "w-full h-56 object-cover" %>
-            <% else %>
-              <div class="w-full h-56 bg-gray-200 flex items-center justify-center text-gray-400 italic">
-                No image available
-              </div>
-            <% end %>
+          <!-- Food / Promo Image -->
+          <% if promo.food&.image&.attached? %>
+            <%= image_tag promo.food.image, class: "w-full h-56 object-cover", alt: promo.food.name %>
+          <% elsif promo.image.attached? %>
+            <%= image_tag promo.image, class: "w-full h-56 object-cover", alt: promo.title %>
+          <% else %>
+            <div class="w-full h-56 bg-gray-200 flex items-center justify-center">
+              <span class="text-gray-500 text-sm">No image</span>
+            </div>
+          <% end %>
 
-            <% if promo.badge.present? %>
-              <span class="absolute top-4 left-4 bg-[#F97316] text-white text-xs font-bold px-3 py-1 rounded-full shadow">
-                <%= promo.badge %>
+          <!-- Promo Details -->
+          <div class="p-6 space-y-3 text-left">
+
+            <!-- Vendor Badge -->
+            <% if promo.vendor.present? %>
+              <span class="inline-block bg-orange-100 text-orange-800 text-xs font-semibold px-3 py-1 rounded-full">
+                <%= promo.vendor.name %>
               </span>
             <% end %>
-          </div>
 
-          <!-- Promo Content -->
-          <div class="p-6 text-left">
-            <h3 class="text-xl font-semibold text-gray-800 mb-2"><%= promo.title %></h3>
-            <p class="text-gray-600 text-sm leading-relaxed mb-4"><%= promo.description %></p>
+            <!-- Title -->
+            <h3 class="text-xl font-semibold text-gray-800 mt-2"><%= promo.title %></h3>
 
-            <% if promo.cta_url.present? && promo.cta_text.present? %>
-              <%= link_to promo.cta_text, promo.cta_url,
-                  class: "inline-block bg-[#F97316] hover:bg-orange-700 text-white font-medium px-5 py-2 rounded-full transition-all duration-300" %>
+            <!-- Description -->
+            <p class="text-gray-600 text-sm line-clamp-3">
+              <%= promo.description %>
+            </p>
+
+            <!-- Featured Food Link -->
+            <% if promo.food.present? %>
+              <p class="text-sm mt-2">
+                <%= link_to promo.food.name, public_food_path(promo.food), class: "text-[#F97316] hover:underline font-medium" %>
+                — <%= number_to_currency(promo.food.price, unit: "₦") %>
+              </p>
             <% end %>
+
+            <!-- CTA → Public Vendor Page -->
+            <% if promo.vendor.present? %>
+              <%= link_to promo.cta_text.presence || "View Vendor", public_vendor_path(promo.vendor), class: "inline-block bg-[#F97316] hover:bg-orange-700 text-white font-medium px-5 py-2 rounded-full transition mt-3" %>
+            <% end %>
+
           </div>
         </div>
       <% end %>
@@ -494,6 +515,7 @@ document.addEventListener("DOMContentLoaded", () => {
   promoCards.forEach(card => observer.observe(card));
 });
 </script>
+
 
 
 <!-- FAQ Section -->
@@ -666,8 +688,9 @@ document.addEventListener("DOMContentLoaded", () => {
     <div class="flex flex-col sm:flex-row justify-center gap-4">
 
       <!-- Primary CTA -->
-      <%= link_to "Browse Foods & Vendors", vendors_path,
-        class: "inline-block bg-accent-yellow text-[white] font-bold uppercase tracking-wide px-8 py-3 rounded-full shadow-md hover:bg-yellow-300 hover:shadow-lg transition duration-300" %>
+      <%= link_to "Browse Foods & Vendors", public_vendors_path,
+  class: "inline-block bg-accent-yellow text-[white] font-bold uppercase tracking-wide px-8 py-3 rounded-full shadow-md hover:bg-yellow-300 hover:shadow-lg transition duration-300" %>
+
 
       <!-- Secondary CTA -->
       <%= link_to "Become a Vendor", new_vendor_registration_path,
@@ -708,8 +731,8 @@ document.addEventListener("DOMContentLoaded", () => {
       <h4 class="font-semibold text-lg mb-4 text-brand-orange">Quick Links</h4>
       <ul class="space-y-2">
         <li><%= link_to "Home", root_path, class: "text-gray-400 hover:text-brand-orange transition duration-300" %></li>
-        <li><%= link_to "Vendors", vendors_path, class: "text-gray-400 hover:text-brand-orange transition duration-300" %></li>
-        <li><%= link_to "Foods", foods_path, class: "text-gray-400 hover:text-brand-orange transition duration-300" %></li>
+        <li><%= link_to "Vendors", public_vendors_path, class: "text-gray-400 hover:text-brand-orange transition duration-300" %></li>
+        <li><%= link_to "Foods", public_foods_path, class: "text-gray-400 hover:text-brand-orange transition duration-300" %></li>
         <li><%= link_to "FAQ", "#faq", class: "text-gray-400 hover:text-brand-orange transition duration-300" %></li>
       </ul>
     </div>

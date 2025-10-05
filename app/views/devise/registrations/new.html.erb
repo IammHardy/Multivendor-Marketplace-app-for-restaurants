@@ -1,6 +1,10 @@
-<div class="auth-container min-h-screen flex items-center justify-center bg-gray-50 p-6">
-  <div class="auth-box bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
-    <h2 class="text-3xl font-extrabold text-center text-red-600 mb-6">Create Your Account 👋</h2>
+<div class="auth-container min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-orange-100 to-yellow-50 p-6">
+  <div class="auth-box bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md">
+    
+    <!-- Title -->
+    <h2 class="text-3xl font-extrabold text-center text-orange-600 mb-6">
+      Create Your Account 👋
+    </h2>
 
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
@@ -9,7 +13,7 @@
       <div class="mb-4">
         <%= f.label :email, class: "block font-semibold mb-1 text-gray-700" %>
         <%= f.email_field :email, autofocus: true, autocomplete: "email",
-              class: "w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-red-300 focus:outline-none" %>
+              class: "w-full border border-gray-200 rounded-xl px-4 py-3 text-gray-700 focus:ring-2 focus:ring-orange-300 focus:outline-none shadow-sm" %>
       </div>
 
       <!-- Password -->
@@ -19,37 +23,43 @@
           <small class="text-gray-500">(<%= @minimum_password_length %> characters minimum)</small>
         <% end %>
         <%= f.password_field :password, autocomplete: "new-password",
-              class: "w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-red-300 focus:outline-none" %>
+              class: "w-full border border-gray-200 rounded-xl px-4 py-3 text-gray-700 focus:ring-2 focus:ring-orange-300 focus:outline-none shadow-sm" %>
       </div>
 
       <!-- Password Confirmation -->
       <div class="mb-6">
         <%= f.label :password_confirmation, class: "block font-semibold mb-1 text-gray-700" %>
         <%= f.password_field :password_confirmation, autocomplete: "new-password",
-              class: "w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-red-300 focus:outline-none" %>
+              class: "w-full border border-gray-200 rounded-xl px-4 py-3 text-gray-700 focus:ring-2 focus:ring-orange-300 focus:outline-none shadow-sm" %>
       </div>
 
       <!-- Submit -->
       <div class="mb-6">
-        <%= f.submit "Sign Up", class: "w-full bg-red-600 text-white py-3 rounded-lg font-bold hover:bg-red-700 transition" %>
+        <%= f.submit "Sign Up", class: "w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-full font-bold shadow-md transition" %>
       </div>
     <% end %>
 
     <!-- Divider -->
-    <div class="text-center mb-4 text-gray-500">Or sign up with</div>
+    <div class="flex items-center my-6">
+      <div class="flex-grow h-px bg-gray-200"></div>
+      <span class="px-4 text-gray-500 text-sm">Or sign up with</span>
+      <div class="flex-grow h-px bg-gray-200"></div>
+    </div>
 
     <!-- OAuth Buttons -->
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-3">
       <% if devise_mapping.omniauthable? %>
         <% resource_class.omniauth_providers.each do |provider| %>
-          <%= link_to omniauth_authorize_path(resource_name, provider), class: "oauth-btn #{provider.to_s.gsub('_oauth2','')}-btn" do %>
+          <%= link_to omniauth_authorize_path(resource_name, provider),
+                class: "flex items-center justify-center gap-2 px-4 py-3 rounded-full font-semibold shadow-sm border hover:shadow-md transition #{provider == :google_oauth2 ? 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50' : ''} #{provider == :facebook ? 'bg-blue-600 text-white hover:bg-blue-700' : ''} #{provider == :tiktok ? 'bg-black text-white hover:bg-gray-900' : ''}" do %>
+            
             <% case provider %>
             <% when :google_oauth2 %>
-              <i class="fab fa-google mr-2"></i> Sign up with Google
+              <i class="fab fa-google"></i> Sign up with Google
             <% when :facebook %>
-              <i class="fab fa-facebook-f mr-2"></i> Sign up with Facebook
+              <i class="fab fa-facebook-f"></i> Sign up with Facebook
             <% when :tiktok %>
-              <i class="fab fa-tiktok mr-2"></i> Sign up with TikTok
+              <i class="fab fa-tiktok"></i> Sign up with TikTok
             <% end %>
           <% end %>
         <% end %>

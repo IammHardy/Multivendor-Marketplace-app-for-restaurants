@@ -1,46 +1,65 @@
 <h1 class="text-2xl font-bold mb-6">Reports & Analytics</h1>
 
 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-  <div class="p-4 bg-white rounded-xl shadow text-center">
-    <p class="text-gray-500">Users</p>
-    <p class="text-2xl font-bold"><%= @total_users %></p>
+
+  <!-- Users Card -->
+  <div class="p-6 bg-white rounded-2xl shadow hover:shadow-lg transition text-center">
+    <p class="text-gray-500 font-medium">Users</p>
+    <p class="text-3xl font-bold text-[#F97316] mt-2"><%= @total_users %></p>
+    <canvas id="usersChart" class="mt-3 w-full" height="80"></canvas>
   </div>
-  <div class="p-4 bg-white rounded-xl shadow text-center">
-    <p class="text-gray-500">Vendors</p>
-    <p class="text-2xl font-bold"><%= @total_vendors %></p>
+
+  <!-- Vendors Card -->
+  <div class="p-6 bg-white rounded-2xl shadow hover:shadow-lg transition text-center">
+    <p class="text-gray-500 font-medium">Vendors</p>
+    <p class="text-3xl font-bold text-[#F97316] mt-2"><%= @total_vendors %></p>
+    <canvas id="vendorsChart" class="mt-3 w-full" height="80"></canvas>
   </div>
-  <div class="p-4 bg-white rounded-xl shadow text-center">
-    <p class="text-gray-500">Orders</p>
-    <p class="text-2xl font-bold"><%= @total_orders %></p>
+
+  <!-- Orders Card -->
+  <div class="p-6 bg-white rounded-2xl shadow hover:shadow-lg transition text-center">
+    <p class="text-gray-500 font-medium">Orders</p>
+    <p class="text-3xl font-bold text-[#F97316] mt-2"><%= @total_orders %></p>
+    <canvas id="ordersChart" class="mt-3 w-full" height="80"></canvas>
   </div>
-  <div class="p-4 bg-white rounded-xl shadow text-center">
-    <p class="text-gray-500">Revenue</p>
-    <p class="text-2xl font-bold">₦<%= @revenue %></p>
+
+  <!-- Revenue Card -->
+  <div class="p-6 bg-white rounded-2xl shadow hover:shadow-lg transition text-center">
+    <p class="text-gray-500 font-medium">Revenue</p>
+    <p class="text-3xl font-bold text-green-600 mt-2">₦<%= @revenue %></p>
+    <canvas id="revenueChart" class="mt-3 w-full" height="80"></canvas>
   </div>
+
 </div>
 
-<h2 class="text-xl font-bold mb-4">Recent Orders</h2>
-<table class="min-w-full bg-white shadow rounded-lg overflow-hidden">
-  <thead class="bg-gray-100">
-    <tr>
-      <th class="px-4 py-2 text-left">Order ID</th>
-      <th class="px-4 py-2 text-left">User</th>
-      <th class="px-4 py-2 text-left">Vendor</th>
-      <th class="px-4 py-2 text-left">Total</th>
-      <th class="px-4 py-2 text-left">Status</th>
-      <th class="px-4 py-2 text-left">Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @recent_orders.each do |order| %>
-      <tr class="border-b hover:bg-gray-50">
-        <td class="px-4 py-2">#<%= order.id %></td>
-        <td class="px-4 py-2"><%= order.user&.name || order.user&.email %></td>
-        <td class="px-4 py-2"><%= order.vendor&.business_name %></td>
-        <td class="px-4 py-2">₦<%= order.total_price %></td>
-        <td class="px-4 py-2"><%= order.status.capitalize %></td>
-        <td class="px-4 py-2"><%= order.created_at.strftime("%b %d, %Y") %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<script type="module">
+  document.addEventListener("turbo:load", () => {
+    const sparklineOptions = (color, data) => ({
+      type: 'line',
+      data: {
+        labels: Array(data.length).fill(''),
+        datasets: [{
+          data: data,
+          borderColor: color,
+          borderWidth: 2,
+          fill: false,
+          tension: 0.3,
+          pointRadius: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { x: { display: false }, y: { display: false } }
+      }
+    });
+
+    if (window.Chart) {
+      new Chart(document.getElementById('usersChart'), sparklineOptions('#F97316', <%= @users_last_7_days.to_json %>));
+      new Chart(document.getElementById('vendorsChart'), sparklineOptions('#F97316', <%= @vendors_last_7_days.to_json %>));
+      new Chart(document.getElementById('ordersChart'), sparklineOptions('#F97316', <%= @orders_last_7_days.to_json %>));
+      new Chart(document.getElementById('revenueChart'), sparklineOptions('green', <%= @revenue_last_7_days.to_json %>));
+    }
+  });
+</script>

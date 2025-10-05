@@ -10,7 +10,6 @@ class Category < ApplicationRecord
   friendly_id :name, use: :slugged
 
  # Hierarchical structure
- has_many :children, class_name: "Category", foreign_key: "parent_id"
   validates :name, presence: true, uniqueness: true
   validates :slug, presence: true, uniqueness: true
 end

@@ -1,26 +1,40 @@
-<div class="max-w-3xl mx-auto mt-10 p-6 bg-white rounded-lg shadow">
-  <h1 class="text-3xl font-bold text-red-600 mb-6">Place Your Order</h1>
+<div class="max-w-4xl mx-auto mt-12 p-8 bg-white rounded-2xl shadow-lg">
+  <h1 class="text-4xl font-extrabold text-red-600 mb-8">Place Your Order</h1>
 
   <% if @cart.cart_items.any? %>
-    <h2 class="text-xl font-semibold mb-4">Your Cart Items:</h2>
-    <ul class="mb-4 space-y-2">
+    <h2 class="text-2xl font-semibold text-gray-700 mb-6">Your Cart Items</h2>
+
+    <ul class="divide-y divide-gray-200 mb-6">
       <% @cart.cart_items.each do |item| %>
-        <li class="flex justify-between border-b pb-2">
-          <span><%= item.food.name %> (x<%= item.quantity %>)</span>
-          <span class="font-semibold">₦<%= number_to_currency(item.food.price * item.quantity, unit: "", precision: 2) %></span>
+        <li class="flex justify-between items-center py-4">
+          <div class="flex items-center gap-4">
+            <% if item.food.image.attached? %>
+              <%= image_tag item.food.image.variant(resize_to_fill: [60, 60]),
+                            class: "w-16 h-16 rounded-lg object-cover" %>
+            <% else %>
+              <%= image_tag "default-promo.jpg", class: "w-16 h-16 rounded-lg object-cover" %>
+            <% end %>
+            <span class="font-medium text-gray-800"><%= item.food.name %> <span class="text-gray-500">(x<%= item.quantity %>)</span></span>
+          </div>
+          <span class="font-semibold text-red-600">₦<%= number_to_currency(item.food.price * item.quantity, unit: "", precision: 2) %></span>
         </li>
       <% end %>
     </ul>
 
-    <p class="text-lg font-bold mb-4">Total: ₦<%= number_to_currency(calculate_total, unit: "", precision: 2) %></p>
+    <div class="flex justify-between items-center mb-6">
+      <span class="text-xl font-semibold text-gray-700">Total:</span>
+      <span class="text-2xl font-bold text-red-600">₦<%= number_to_currency(calculate_total, unit: "", precision: 2) %></span>
+    </div>
 
     <%= form_with model: @order, url: orders_path, local: true do |form| %>
       <div class="flex justify-end">
-        <%= form.submit "Confirm Order", class: "bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-6 rounded transition" %>
+        <%= form.submit "Confirm Order", class: "bg-red-600 hover:bg-red-500 text-white font-bold py-3 px-8 rounded-full shadow-lg transition" %>
       </div>
     <% end %>
   <% else %>
-    <p class="mb-4">Your cart is empty. Please add some foods first.</p>
-    <%= link_to "Go to Foods", foods_path, class: "bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-6 rounded transition" %>
+    <div class="text-center py-12">
+      <p class="text-gray-500 text-lg mb-6">Your cart is empty. Please add some foods first.</p>
+      <%= link_to "Browse Foods", foods_path, class: "inline-block bg-red-600 hover:bg-red-500 text-white font-bold py-3 px-8 rounded-full shadow-lg transition" %>
+    </div>
   <% end %>
 </div>

@@ -1,0 +1,10 @@
+<h1>New Message from <%= @message.sender.name %></h1>
+
+<p>You have received a new message regarding Order #<%= @message.order.id %>:</p>
+
+<blockquote>
+  <%= @message.body %>
+</blockquote>
+
+<p>Reply to the customer by logging in to your vendor dashboard:</p>
+<p><%= link_to "View Order", vendor_order_url(@message.order) %></p>

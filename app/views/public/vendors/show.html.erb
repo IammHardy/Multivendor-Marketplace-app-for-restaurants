@@ -1,0 +1,194 @@
+<main class="max-w-7xl mx-auto px-6 py-8">
+
+  <!-- Back Link -->
+  <div class="mb-6">
+    <%= link_to "← Back to Vendors", public_vendors_path, class: "inline-block text-orange-500 font-semibold hover:underline" %>
+  </div>
+
+  <!-- Vendor Hero -->
+  <section class="relative w-full h-64 sm:h-80 md:h-96 bg-gray-200 rounded-2xl overflow-hidden mb-8">
+    <% if @vendor.banner_image.attached? %>
+      <%= image_tag @vendor.banner_image, class: "w-full h-full object-cover" %>
+    <% else %>
+      <img src="/images/default-vendor.jpg" class="w-full h-full object-cover">
+    <% end %>
+
+    <div class="absolute inset-0 bg-black/30 flex flex-col items-center justify-center text-white">
+      <% if @vendor.profile_image.attached? %>
+        <%= image_tag @vendor.profile_image, class: "w-24 h-24 rounded-full border-4 border-white mb-4" %>
+      <% else %>
+        <img src="/images/default-promo.jpg" class="w-24 h-24 rounded-full border-4 border-white mb-4">
+      <% end %>
+
+      <h1 class="text-3xl sm:text-4xl font-bold"><%= @vendor.name %></h1>
+      <p class="mt-2 text-center text-sm sm:text-base md:text-lg">
+        <%= @vendor.bio.presence || "Delicious meals from #{@vendor.name}" %>
+      </p>
+
+      <% if @average_rating.present? %>
+        <div class="mt-2 flex justify-center items-center space-x-1">
+          <% full_stars = @average_rating.floor %>
+          <% half_star = (@average_rating - full_stars) >= 0.5 %>
+          <% empty_stars = 5 - full_stars - (half_star ? 1 : 0) %>
+
+          <% full_stars.times { %><span class="text-yellow-400 text-xl">★</span><% } %>
+          <% if half_star %><span class="text-yellow-400 text-xl">★</span><% end %>
+          <% empty_stars.times { %><span class="text-gray-300 text-xl">★</span><% } %>
+
+          <span class="ml-2 text-white font-medium text-base">
+            (<%= @reviews_count %> reviews)
+          </span>
+        </div>
+      <% end %>
+    </div>
+  </section>
+
+  <!-- About Vendor -->
+  <section class="bg-white rounded-2xl shadow-md p-6 mb-8">
+    <h2 class="text-2xl font-bold mb-4">About</h2>
+    <p class="text-gray-700 mb-4"><%= @vendor.bio.presence || "No description available." %></p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-gray-700">
+      <div class="space-y-2">
+        <p><strong>Location:</strong> <%= @vendor.city.presence || "Not specified" %></p>
+        <p><strong>Business Type:</strong> <%= @vendor.business_type.presence || "Not specified" %></p>
+        <% if @vendor.opening_hours.present? %>
+          <p><strong>Opening Hours:</strong> <%= @vendor.opening_hours %></p>
+        <% end %>
+      </div>
+
+      
+    </div>
+  </section>
+
+  <!-- Vendor Menu -->
+  <section class="mb-12">
+    <h2 class="text-3xl font-bold text-orange-500 mb-6 text-center">Menu</h2>
+
+    <% if @foods.any? %>
+      <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <% @foods.each do |food| %>
+          <%= render partial: "public/foods/food_card", locals: { food: food } %>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-center text-gray-500">No menu items available yet.</p>
+    <% end %>
+  </section>
+
+  <!-- Reviews Section -->
+<!-- Reviews Section -->
+<section class="bg-gradient-to-b from-orange-50 to-yellow-50 rounded-3xl shadow-lg p-8 mb-12">
+  <h2 class="text-3xl font-extrabold text-[#F97316] mb-6 text-center">
+    Customer Reviews
+  </h2>
+
+  <% if @vendor.vendor_reviews.any? %>
+    <div class="space-y-6">
+      <% @vendor.vendor_reviews.order(created_at: :desc).each do |review| %>
+        <div class="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition">
+          <!-- Reviewer name + rating stars -->
+          <div class="flex items-center justify-between mb-3">
+            <span class="font-semibold text-gray-900 text-lg">
+              <%= review.user.name.presence || "Anonymous" %>
+            </span>
+
+            <!-- ⭐ Display rating as stars -->
+            <div class="flex space-x-1">
+              <% 5.times do |i| %>
+                <% if review.rating >= i+1 %>
+                  <i class="fas fa-star text-yellow-400"></i>
+                <% else %>
+                  <i class="far fa-star text-gray-300"></i>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+
+          <!-- Comment -->
+          <p class="text-gray-700 italic leading-relaxed">"<%= review.comment %>"</p>
+
+          <!-- Date -->
+          <p class="text-sm text-gray-400 mt-3">
+            <%= review.created_at.strftime("%B %d, %Y") %>
+          </p>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-center text-gray-500 italic">
+      No reviews yet. Be the first to leave one!
+    </p>
+  <% end %>
+</section>
+
+
+  <!-- Reviews Section -->
+<% if user_signed_in? %>
+ <%= form_with(model: VendorReview.new, url: public_vendor_vendor_reviews_path(@vendor), local: true) do |f| %>
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Your Rating</label>
+      
+      <!-- Hidden field to store rating -->
+      <%= f.hidden_field :rating, id: "review_rating" %>
+
+      <!-- Stars -->
+      <div id="star-rating" class="flex space-x-1 cursor-pointer text-2xl text-gray-300">
+        <% 5.times do |i| %>
+          <i class="far fa-star" data-value="<%= i+1 %>"></i>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <%= f.label :comment, "Your Comment", class: "block text-sm font-medium text-gray-500 mb-2" %>
+      <%= f.text_area :comment, rows: 4,
+        class: "w-full rounded-3xl border border-gray-300 px-4 py-3 text-gray-700 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 transition" %>
+    </div>
+
+    <div class="text-center">
+      <%= f.submit "Submit Review",
+        class: "bg-[#F97316] hover:bg-orange-600 text-white font-semibold px-8 py-3 rounded-full shadow-md transition duration-300" %>
+    </div>
+  <% end %>
+<% end %>
+
+
+<!-- Animation Script -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const stars = document.querySelectorAll("#star-rating i");
+  const ratingInput = document.getElementById("review_rating");
+
+  stars.forEach(star => {
+    star.addEventListener("click", () => {
+      const value = star.getAttribute("data-value");
+      ratingInput.value = value;
+
+      // Highlight stars up to selected one
+      stars.forEach(s => {
+        if (s.getAttribute("data-value") <= value) {
+          s.classList.remove("far");
+          s.classList.add("fas", "text-yellow-400");
+        } else {
+          s.classList.remove("fas", "text-yellow-400");
+          s.classList.add("far");
+        }
+      });
+    });
+  });
+});
+</script>
+
+
+
+
+
+
+</section>
+    
+
+
+
+
+</main>

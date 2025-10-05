@@ -1,56 +1,77 @@
 class Vendor < ApplicationRecord
   # === Devise Authentication ===
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
-         :lockable
+         :recoverable, :rememberable, :validatable, :lockable
 
   # === Associations ===
   has_many :foods, dependent: :destroy
   has_many :order_items, dependent: :destroy
+  has_many :orders, through: :order_items, dependent: :destroy
   has_many :vendor_earnings, dependent: :destroy
-   has_many :order_items
-  has_many :orders, through: :order_items
   has_many :vendor_reviews, dependent: :destroy
-
   has_many :conversation_participants, as: :participant
   has_many :conversations, through: :conversation_participants
   has_many :messages, as: :sender
+  has_many :reviews, through: :foods
+  has_many :promotions, dependent: :destroy
 
   # === Active Storage Attachments ===
   has_one_attached :profile_image
   has_one_attached :banner_image
   has_one_attached :id_card
-  
 
-  # === Enum for vendor status ===
-  enum(:status, { pending_approval: 0, active: 1, suspended: 2 , rejected: 3})
+  # === Enums ===
+  enum :status, { pending_approval: 0, active: 1, suspended: 2, rejected: 3 }
 
-  # Virtual attribute to track current validation step
+  # === Slugging ===
+  extend FriendlyId
+  friendly_id :name, use: :slugged
+
+  # === Virtual attribute for multi-step validation ===
   attr_accessor :validation_step
 
-  # === Step 1 Validations ===
+
+  # === Terms and Conditions ===
+validates :terms_accepted, acceptance: { message: "must be accepted before continuing" }, if: -> { validation_step == 1 }
+
+  # === Step 1: Basic Info ===
   validates :name, presence: true, length: { maximum: 255 }, if: -> { validation_step == 1 }
-  validates :phone, presence: true,
+  validates :email, presence: true, uniqueness: true,
+                    format: { with: URI::MailTo::EMAIL_REGEXP }, if: -> { validation_step == 1 }
+  validates :phone, presence: true, uniqueness: true,
                     format: { with: /\A[0-9+\-\s]+\z/, message: "only allows numbers and +, -" },
                     if: -> { validation_step == 1 }
+  validates :password, presence: true,
+                     length: { minimum: 6 },
+                     confirmation: true,
+                     if: -> { validation_step == 1 }
 
-  # === Step 2 Validations ===
-  validates :contact_person, :address, :city, :business_type, presence: true, if: -> { validation_step == 2 }
 
-  # === Step 3 Validations ===
-  validates :cac_number, presence: true, if: -> { validation_step == 3 }
-  validates :bio, length: { maximum: 500 }, if: -> { validation_step == 3 }
+  # === Step 2: Business Info ===
+  validates :contact_person, :address, :city, presence: true, if: -> { validation_step == 2 }
+  validates :business_type,
+            presence: true,
+            inclusion: { in: ["Restaurant", "Bakery", "Drinks", "Catering", "Others"] },
+            if: -> { validation_step == 2 }
+
+  # === Step 3: Legal & Profile Info ===
+  validates :cac_number, presence: true,
+                         uniqueness: true,
+                         format: { with: /\A[A-Z0-9]+\z/, message: "must contain only letters and numbers" },
+                         if: -> { validation_step == 3 }
+  validates :bio, length: { maximum: 500 }, allow_blank: true, if: -> { validation_step == 3 }
   validates :whatsapp,
             format: { with: /\A[0-9+\-\s]+\z/, message: "only allows numbers and +, -" },
             allow_blank: true,
             if: -> { validation_step == 3 }
   validate :id_card_presence_and_type, if: -> { validation_step == 3 }
 
-  # === Step 4 Validations ===
-  validates :payout_method, inclusion: { in: %w[bank transfer paypal] }, allow_blank: true, if: -> { validation_step == 4 }
-  validate :profile_and_banner_presence_and_type, if: -> { validation_step == 4 }
+  # === Step 4: Payment / Payout Info ===
+  validates :payout_method,
+            inclusion: { in: %w[bank_transfer paypal paystack flutterwave] },
+            allow_blank: true,
+            if: -> { validation_step == 4 }
 
-  # === Optional Bank Account Validations ===
   validates :account_number,
             length: { is: 10 },
             numericality: { only_integer: true },
@@ -59,23 +80,8 @@ class Vendor < ApplicationRecord
 
   validates :account_name, presence: true, if: -> { validation_step == 4 && account_number.present? }
   validates :bank_name, presence: true, if: -> { validation_step == 4 && account_number.present? }
-extend FriendlyId
-  friendly_id :name, use: :slugged   # use the vendor's name for the slug
+  validate :profile_and_banner_presence_and_type, if: -> { validation_step == 4 }
 
-  # Average rating, rounded to 1 decimal
-  def average_rating
-    reviews.average(:rating)&.round(1) || 0
-  end
-
-  # Count of reviews
-  def reviews_count
-    reviews.count
-  end
-
-  # Lowest menu price
-def starting_price
-  foods.minimum(:price) || 0
-end
   # === Custom validation methods ===
   def id_card_presence_and_type
     if !id_card.attached?
@@ -105,7 +111,19 @@ end
     end
   end
 
-  # === Earnings methods ===
+  def valid_profile_image?
+  profile_image.attached? && profile_image.blob&.service.exist?(profile_image.key)
+rescue ActiveStorage::FileNotFoundError, Errno::ENOENT
+  false
+end
+
+def valid_banner_image?
+  banner_image.attached? && banner_image.blob&.service.exist?(banner_image.key)
+rescue ActiveStorage::FileNotFoundError, Errno::ENOENT
+  false
+end
+
+  # === Earnings ===
   def total_balance
     vendor_earnings.sum(:amount)
   end
@@ -123,12 +141,24 @@ end
     order_items.select(:order_id).distinct.count
   end
 
-  # Only allow login if vendor is active
+  # === Reviews ===
+  def average_rating
+    reviews.average(:rating)&.round(1) || 0
+  end
+
+  def reviews_count
+    reviews.count
+  end
+
+  def starting_price
+    foods.minimum(:price) || 0
+  end
+
+  # === Authentication restrictions ===
   def active_for_authentication?
     super && active?
   end
 
-  # Custom message for rejected or pending vendors
   def inactive_message
     if rejected?
       :rejected_account
@@ -139,14 +169,9 @@ end
     end
   end
 
-  # Only show active vendors
+ 
+
+  # === Scopes ===
   scope :approved, -> { where(status: :active) }
-
-  # Only show foods that are active/available
   has_many :active_foods, -> { where(active: true) }, class_name: "Food"
-
-  # Reviews through foods (optional)
-  has_many :reviews, through: :foods
-
-  
 end

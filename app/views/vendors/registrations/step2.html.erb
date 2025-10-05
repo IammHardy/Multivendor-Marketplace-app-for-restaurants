@@ -1,53 +1,69 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-lg w-full bg-white shadow-lg rounded-lg p-8 space-y-6">
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-orange-100 to-yellow-50 px-6 py-12">
+  <div class="max-w-lg w-full bg-white shadow-xl rounded-3xl p-8 sm:p-10 space-y-8">
     
     <!-- Progress Bar -->
     <%= render "progress_bar", step: 2 %>
 
-    <h2 class="text-2xl font-bold text-gray-700 text-center mb-4">Step 2: Business Information</h2>
+    <!-- Heading -->
+    <h2 class="text-3xl font-extrabold text-gray-900 text-center">
+      Step 2: Business Information
+    </h2>
+    <p class="text-center text-gray-600 text-sm">
+      Tell us about your business so customers can know you better.
+    </p>
 
     <%= form_with(model: @vendor, url: update_step2_vendor_registration_path, method: :post, local: true, html: { class: "space-y-6" }) do |f| %>
       
       <!-- Contact Person -->
       <div>
-        <%= f.label :contact_person, class: "block text-sm font-medium text-gray-700" %>
-        <%= f.text_field :contact_person, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
+        <%= f.label :contact_person, class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.text_field :contact_person, placeholder: "Full name of contact person",
+              class: "w-full rounded-full border-gray-300 px-4 py-3 text-gray-800 shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 placeholder-gray-400" %>
       </div>
 
       <!-- Address -->
       <div>
-        <%= f.label :address, class: "block text-sm font-medium text-gray-700" %>
-        <%= f.text_field :address, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
+        <%= f.label :address, class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.text_field :address, placeholder: "Business address (street, area)",
+              class: "w-full rounded-full border-gray-300 px-4 py-3 text-gray-800 shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 placeholder-gray-400" %>
       </div>
 
       <!-- City -->
       <div>
-        <%= f.label :city, class: "block text-sm font-medium text-gray-700" %>
-        <%= f.text_field :city, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
+        <%= f.label :city, class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.text_field :city, placeholder: "City",
+              class: "w-full rounded-full border-gray-300 px-4 py-3 text-gray-800 shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 placeholder-gray-400" %>
       </div>
 
       <!-- State -->
       <div>
-        <%= f.label :state, class: "block text-sm font-medium text-gray-700" %>
-        <%= f.text_field :state, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
+        <%= f.label :state, class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.text_field :state, placeholder: "State / Region",
+              class: "w-full rounded-full border-gray-300 px-4 py-3 text-gray-800 shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 placeholder-gray-400" %>
       </div>
 
       <!-- Business Type -->
       <div>
-        <%= f.label :business_type, class: "block text-sm font-medium text-gray-700" %>
-        <%= f.text_field :business_type, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
+        <%= f.label :business_type, class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.text_field :business_type, placeholder: "E.g. Restaurant, Café, Grocery",
+              class: "w-full rounded-full border-gray-300 px-4 py-3 text-gray-800 shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 placeholder-gray-400" %>
       </div>
 
       <!-- Opening Hours -->
       <div>
-        <%= f.label :opening_hours, class: "block text-sm font-medium text-gray-700" %>
-        <%= f.text_field :opening_hours, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
+        <%= f.label :opening_hours, class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.text_field :opening_hours, placeholder: "E.g. Mon-Sat 9am - 9pm",
+              class: "w-full rounded-full border-gray-300 px-4 py-3 text-gray-800 shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 placeholder-gray-400" %>
       </div>
 
-      <!-- Next Button -->
-      <div class="flex justify-between items-center">
-        <%= link_to "Back", step1_vendor_registration_path, class: "px-4 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50" %>
-        <%= f.submit "Next", class: "px-6 py-2 rounded-md bg-red-600 text-white font-medium hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2" %>
+      <!-- Navigation Buttons -->
+      <div class="flex justify-between items-center pt-4">
+        <%= link_to "Back",
+              step1_vendor_registration_path,
+              class: "px-6 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100 transition font-medium" %>
+        
+        <%= f.submit "Next",
+              class: "px-6 py-2 rounded-full bg-[#F97316] hover:bg-orange-600 text-white font-semibold shadow-md transition duration-300" %>
       </div>
 
     <% end %>

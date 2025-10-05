@@ -1,0 +1,48 @@
+<div class="bg-white rounded-3xl shadow-md p-4 relative group hover:shadow-lg transition duration-300">
+
+  <!-- Vendor Badge -->
+  <%= link_to food.vendor.name, public_vendor_path(food.vendor),
+        class: "absolute top-2 right-2 bg-orange-500 text-white px-2 py-1 rounded-full text-xs font-semibold hover:bg-orange-600 transition" %>
+
+  <!-- Promo Badge -->
+  <% if food.promotions.active.any? %>
+    <div class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full z-10">
+      PROMO
+    </div>
+  <% end %>
+
+  <!-- Out of Stock Badge -->
+  <% if food.out_of_stock? %>
+    <span class="absolute top-2 left-2 bg-gray-600 text-white px-2 py-1 rounded-full text-xs font-semibold z-20">
+      Out of Stock
+    </span>
+  <% end %>
+
+  <!-- Food Image -->
+  <% if food.image.attached? %>
+    <%= link_to public_food_path(food), class: "block" do %>
+      <%= image_tag food.image, alt: food.name, class: "w-full h-40 object-cover rounded-2xl mb-2 transform group-hover:scale-105 transition duration-300" %>
+    <% end %>
+  <% else %>
+    <%= link_to public_food_path(food), class: "block" do %>
+      <img src="/images/default-food.jpg" alt="<%= food.name %>" class="w-full h-40 object-cover rounded-2xl mb-2 transform group-hover:scale-105 transition duration-300">
+    <% end %>
+  <% end %>
+
+  <!-- Food Name -->
+  <h3 class="font-semibold text-gray-800"><%= food.name %></h3>
+
+  <!-- Price -->
+  <p class="text-gray-600 mt-1">₦<%= number_to_currency(food.price, unit: "", precision: 0) %></p>
+
+  <!-- Add to Cart -->
+  <% if food.out_of_stock? %>
+    <button class="mt-2 w-full bg-gray-300 text-white py-2 rounded-xl cursor-not-allowed" disabled>
+      Out of Stock
+    </button>
+  <% else %>
+    <%= button_to "Add to Cart", cart_items_path(food_id: food.id), method: :post,
+        form: { data: { turbo_frame: "foods_frame" } },
+        class: "mt-2 w-full bg-orange-500 text-white py-2 rounded-xl hover:bg-orange-600 transition" %>
+  <% end %>
+</div>

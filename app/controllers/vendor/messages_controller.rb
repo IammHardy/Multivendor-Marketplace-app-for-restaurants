@@ -3,33 +3,33 @@ class Vendor::MessagesController < Vendor::BaseController
   before_action :set_conversation
 
   def create
-  @message = @conversation.messages.build(message_params)
-  @message.sender = current_vendor
-  @message.recipient = @conversation.user
+    @message = @conversation.messages.build(message_params)
+    @message.sender = current_vendor
+    @message.recipient = @conversation.user
 
-  if @message.save
-    respond_to do |format|
-      format.turbo_stream do
-        render turbo_stream: turbo_stream.append(
-          "messages", 
-          partial: "messages/message", 
-          locals: { message: @message }
-        )
+    if @message.save
+      # Optional: Notify customer via email
+      CustomerMailer.with(message: @message).new_message_notification.deliver_later
+
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.append(
+            "messages",
+            partial: "messages/message",
+            locals: { message: @message }
+          )
+        end
+        format.html { redirect_to vendor_conversation_path(@conversation), notice: "Message sent." }
       end
-      format.html { redirect_to vendor_conversation_path(@conversation) }
+    else
+      redirect_to vendor_conversation_path(@conversation), alert: "Failed to send message."
     end
-  else
-    head :unprocessable_entity
   end
-end
-
-
 
   private
 
   def set_conversation
-    @conversation = Conversation.find_by(id: params[:conversation_id], vendor_id: current_vendor.id)
-    redirect_to vendor_conversations_path, alert: "Conversation not found." unless @conversation
+    @conversation = Conversation.find(params[:conversation_id])
   end
 
   def message_params

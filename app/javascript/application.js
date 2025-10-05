@@ -11,7 +11,10 @@ import "chartkick/chart.js"
 // app/javascript/application.js
 
 
+import Chart from "chart.js/auto" // Ensure Chart.js is imported
+window.Chart = Chart // Make Chart.js globally available
 
+import "./controllers"
 import "./channels"
 
 

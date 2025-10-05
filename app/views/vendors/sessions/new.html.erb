@@ -1,44 +1,50 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full bg-white shadow-lg rounded-lg p-8 space-y-6">
-
+<main class="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-orange-100 to-yellow-50 px-6">
+  <div class="w-full max-w-md bg-white rounded-3xl shadow-lg p-8 sm:p-10 space-y-6">
+    
     <!-- Heading -->
-    <h2 class="text-2xl font-bold text-gray-700 text-center">Vendor Log in</h2>
+    <h2 class="text-3xl font-extrabold text-center text-gray-900">
+      Vendor Login
+    </h2>
+    <p class="text-center text-gray-600">
+      Welcome back! Please enter your details.
+    </p>
 
-    <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-4" }) do |f| %>
+    <!-- Form -->
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-6" }) do |f| %>
       
       <!-- Email -->
       <div>
-        <%= f.label :email, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.label :email, class: "block text-sm font-medium text-gray-700 mb-2" %>
         <%= f.email_field :email, autofocus: true, autocomplete: "email",
-              class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" %>
+              class: "w-full rounded-full border border-gray-300 px-4 py-3 text-gray-800 shadow-sm focus:ring-2 focus:ring-brand-orange focus:border-brand-orange placeholder-gray-400" %>
       </div>
 
       <!-- Password -->
       <div>
-        <%= f.label :password, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.label :password, class: "block text-sm font-medium text-gray-700 mb-2" %>
         <%= f.password_field :password, autocomplete: "current-password",
-              class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" %>
+              class: "w-full rounded-full border border-gray-300 px-4 py-3 text-gray-800 shadow-sm focus:ring-2 focus:ring-brand-orange focus:border-brand-orange placeholder-gray-400" %>
       </div>
 
       <!-- Remember Me -->
       <% if devise_mapping.rememberable? %>
         <div class="flex items-center">
-          <%= f.check_box :remember_me, class: "h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded" %>
-          <%= f.label :remember_me, class: "ml-2 block text-sm text-gray-900" %>
+          <%= f.check_box :remember_me, class: "h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded" %>
+          <%= f.label :remember_me, class: "ml-2 block text-sm text-gray-700" %>
         </div>
       <% end %>
 
       <!-- Submit -->
       <div>
-        <%= f.submit "Log in", class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 font-medium" %>
+        <%= f.submit "Log in", 
+              class: "w-full bg-[#F97316] hover:bg-orange-600 text-white font-semibold py-3 rounded-full shadow-md transition duration-300" %>
       </div>
-
     <% end %>
 
     <!-- Additional Links -->
-    <div class="text-center text-sm text-gray-500 space-x-2">
+    <div class="mt-6 text-center text-sm text-gray-600">
       <%= render "vendors/shared/links" %>
     </div>
 
   </div>
-</div>
+</main>

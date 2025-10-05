@@ -1,0 +1,34 @@
+<h1>Ticket: <%= @ticket.subject %></h1>
+
+<p>
+  <strong>Status:</strong> <%= @ticket.status %><br>
+  <strong>User:</strong> <%= @ticket.user.name %> (<%= @ticket.user.email %>)<br>
+  <strong>Order:</strong>
+  <% if @ticket.order %>
+    <%= link_to @ticket.order.order_number, order_path(@ticket.order) %>
+  <% else %>
+    N/A
+  <% end %>
+</p>
+
+<p>
+  <strong>Message:</strong><br>
+  <%= simple_format(@ticket.body) %>
+</p>
+
+<hr class="my-6">
+
+<!-- Admin Response Form -->
+<h2>Respond to Ticket</h2>
+<%= form_with model: @ticket, url: admin_support_ticket_path(@ticket), method: :patch, local: true do |f| %>
+  <div class="mb-4">
+    <%= f.label :body, "Your Response" %>
+    <%= f.text_area :body, rows: 4, class: "w-full rounded border p-2" %>
+  </div>
+
+  <div class="flex gap-2">
+    <%= f.submit "Send Response", class: "bg-orange-500 text-white px-4 py-2 rounded" %>
+    <%= f.submit "Close Ticket", name: "support_ticket[status]", value: "closed", class: "bg-red-500 text-white px-4 py-2 rounded" %>
+  </div>
+<% end %>
+

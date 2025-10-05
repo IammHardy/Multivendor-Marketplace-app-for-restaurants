@@ -3,40 +3,43 @@ class CheckoutsController < ApplicationController
 
   def show
     @cart = current_cart
+    @cart_items = @cart.cart_items.includes(:food)
     @order = current_user.orders.build
   end
 
   def create
-  @order = current_user.orders.new(order_params)
-  @order.status = "pending"
+    @cart = current_cart
+    @cart_items = @cart.cart_items.includes(:food)
 
-  if @order.save
-    current_cart.cart_items.each do |item|
-      @order.order_items.create(
-        food: item.food,
-        vendor: item.food.vendor,  # ✅ FIX: Copy vendor_id from food
-        quantity: item.quantity,
-        price: item.food.price || 0
-      )
+    @order = current_user.orders.new(order_params)
+    @order.status = "pending"
+
+    if @order.save
+      @cart_items.each do |item|
+        @order.order_items.create!(
+  food: item.food,
+  vendor: item.food.vendor,
+  quantity: item.quantity,
+  subtotal: item.food.price * item.quantity
+)
+
+      end
+
+      # 🔥 Save grand total
+      @order.update(total_price: @cart_items.sum(&:subtotal))
+
+      # Clear cart
+      @cart_items.destroy_all
+
+      redirect_to order_path(@order), notice: "Order placed successfully."
+    else
+      render :show
     end
-
-    # 🔥 Recalculate total AFTER order_items are created
-    total = @order.order_items.sum { |i| i.quantity * i.price }
-    @order.update(total_price: total)
-
-    current_cart.cart_items.destroy_all
-    redirect_to order_path(@order), notice: "Order placed successfully."
-  else
-    render :new
   end
-end
-
-
-
 
   private
 
   def order_params
-  params.require(:order).permit(:name, :address, :phone)
-end
+    params.require(:order).permit(:name, :address, :phone)
+  end
 end

@@ -1,24 +1,53 @@
-<h1 class="text-2xl font-bold text-red-600 mb-6">Conversations</h1>
+<main class="max-w-7xl mx-auto px-6 py-12 bg-orange-50 min-h-screen">
 
-<% if @conversations.any? %>
-  <ul class="space-y-2">
-    <% @conversations.each do |conv| %>
-      <% last_msg = conv.messages.order(created_at: :desc).first %>
-      <% unread_count = conv.messages.where(sender_type: "User", read: false).count %>
+  <!-- Page Title -->
+  <h1 class="text-3xl md:text-4xl font-extrabold text-brand-orange mb-8 text-center">
+    Conversations
+  </h1>
 
-      <li>
-        <%= link_to vendor_conversation_path(conv), class: "block p-4 bg-white rounded shadow hover:bg-gray-100 flex justify-between items-center" do %>
-          <div>
-            <p class="font-semibold"><%= conv.user.name || conv.user.email %></p>
-            <p class="text-gray-500 text-sm truncate max-w-md"><%= last_msg&.body || "No messages yet" %></p>
+  <% if @conversations.any? %>
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <% @conversations.each do |conv| %>
+        <% last_msg = conv.messages.order(created_at: :desc).first %>
+        <% unread_count = conv.messages.where(sender_type: "User", read: false).count %>
+
+        <%= link_to vendor_conversation_path(conv),
+            class: "block bg-white rounded-3xl shadow-md hover:shadow-xl transition p-6 flex flex-col justify-between hover:-translate-y-1 duration-300" do %>
+
+          <!-- User Info -->
+          <div class="flex items-center gap-4 mb-4">
+            <!-- Avatar -->
+            <div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-lg font-semibold">
+              <%= conv.user.name&.first || "U" %>
+            </div>
+
+            <div class="flex-1">
+              <p class="text-lg font-semibold text-gray-800"><%= conv.user.name || conv.user.email %></p>
+              <p class="text-gray-500 text-sm truncate max-w-full">
+                <%= last_msg&.body || "No messages yet" %>
+              </p>
+            </div>
+
+            <% if unread_count.positive? %>
+              <span class="ml-2 bg-red-600 text-white text-xs font-medium px-3 py-1 rounded-full">
+                <%= unread_count %>
+              </span>
+            <% end %>
           </div>
-          <% if unread_count.positive? %>
-            <span class="bg-red-600 text-white text-xs px-2 py-1 rounded-full"><%= unread_count %></span>
+
+          <!-- Last Message Time -->
+          <% if last_msg.present? %>
+            <p class="text-gray-400 text-xs mt-auto text-right">
+              <%= time_ago_in_words(last_msg.created_at) %> ago
+            </p>
           <% end %>
         <% end %>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p class="text-gray-500">No conversations yet.</p>
-<% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-center text-gray-500 mt-12 text-lg">
+      No conversations yet. Start a new conversation to connect with users!
+    </p>
+  <% end %>
+
+</main>

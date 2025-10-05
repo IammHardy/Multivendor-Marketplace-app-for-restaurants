@@ -1,0 +1,75 @@
+<main class="max-w-7xl mx-auto px-6 py-12">
+
+  <!-- Page Title -->
+  <h1 class="text-4xl font-extrabold text-[#F97316] mb-12 text-center">
+    🍴 Browse Restaurants & Vendors
+  </h1>
+
+  <% if @vendors.any? %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      <% @vendors.each do |vendor| %>
+        <div class="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition duration-300 overflow-hidden">
+          
+          <!-- Vendor Banner -->
+          <% if vendor.banner_image.attached? %>
+            <%= image_tag vendor.banner_image, class: "w-full h-40 object-cover group-hover:scale-105 transition duration-500" %>
+          <% else %>
+            <img src="/images/default-vendor.jpg" class="w-full h-40 object-cover group-hover:scale-105 transition duration-500">
+          <% end %>
+
+          <!-- Overlay Knife & Fork Icon -->
+          <div class="absolute top-3 left-3 bg-[#F97316] text-white p-2 rounded-full shadow-md">
+            <i class="fas fa-utensils"></i>
+          </div>
+
+          <!-- Vendor Info -->
+          <div class="p-5 text-center">
+            <% if vendor.profile_image.attached? %>
+              <%= image_tag vendor.profile_image, class: "w-20 h-20 rounded-full border-4 border-white shadow -mt-12 mx-auto bg-white" %>
+            <% else %>
+              <img src="/images/default-promo.jpg" class="w-20 h-20 rounded-full border-4 border-white shadow -mt-12 mx-auto bg-white">
+            <% end %>
+
+            <!-- Vendor Name -->
+            <h2 class="text-xl font-bold text-gray-800 mt-3">
+              <%= link_to vendor.name, public_vendor_path(vendor), class: "hover:text-[#F97316] transition" %>
+            </h2>
+
+            <!-- Vendor Rating -->
+            <% if vendor.vendor_reviews.any? %>
+              <% avg_rating = vendor.vendor_reviews.average(:rating).round(1) %>
+              <div class="flex justify-center items-center space-x-1 mt-2">
+                <% 5.times do |i| %>
+                  <% if avg_rating >= i+1 %>
+                    <i class="fas fa-star text-yellow-400"></i>
+                  <% elsif avg_rating > i %>
+                    <i class="fas fa-star-half-alt text-yellow-400"></i>
+                  <% else %>
+                    <i class="far fa-star text-gray-300"></i>
+                  <% end %>
+                <% end %>
+                <span class="ml-2 text-sm text-gray-600">
+                  (<%= vendor.vendor_reviews.count %> reviews)
+                </span>
+              </div>
+            <% else %>
+              <p class="text-gray-400 mt-2 text-sm italic">No reviews yet</p>
+            <% end %>
+
+            <!-- View Menu Button -->
+            <div class="mt-4">
+              <%= link_to "View Menu", public_vendor_path(vendor), 
+                class: "inline-block px-5 py-2 bg-[#F97316] text-white font-medium rounded-full shadow hover:bg-[#ea580c] transition" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-center text-gray-500 italic text-lg">
+      No vendors available at the moment.
+    </p>
+  <% end %>
+             
+
+</main>

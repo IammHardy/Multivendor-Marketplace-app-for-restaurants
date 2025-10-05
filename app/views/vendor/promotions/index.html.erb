@@ -1,0 +1,62 @@
+<h1 class="text-2xl font-bold mb-6">My Promotions</h1>
+
+<!-- New Promotion Button -->
+<%= link_to "New Promotion", new_vendor_promotion_path,
+    class: "bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md" %>
+
+<!-- Promotions Table -->
+<table class="min-w-full mt-6 bg-white rounded-lg shadow">
+  <thead>
+    <tr class="bg-gray-100 text-gray-700 text-left">
+      <th class="py-2 px-4">Title</th>
+      <th class="py-2 px-4">Food</th>
+      <th class="py-2 px-4">Status</th>
+      <th class="py-2 px-4">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @promotions.each do |promo| %>
+      <tr class="border-t">
+        <!-- Title links to Edit page -->
+        <td class="py-2 px-4">
+          <%= link_to promo.title, edit_vendor_promotion_path(promo),
+                      class: "text-orange-600 hover:underline" %>
+        </td>
+
+        <td class="py-2 px-4"><%= promo.food&.name || "N/A" %></td>
+
+        <!-- Active/Inactive Badge -->
+        <td class="py-2 px-4">
+          <% if promo.active? %>
+            <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Active</span>
+          <% else %>
+            <span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">Inactive</span>
+          <% end %>
+        </td>
+
+        <!-- Actions -->
+        <td class="py-2 px-4 flex gap-2 items-center">
+          <!-- Toggle Active/Inactive -->
+          <%= button_to (promo.active? ? "Disable" : "Enable"),
+                        toggle_status_vendor_promotion_path(promo),
+                        method: :patch,
+                        form: { class: "inline" },
+                        class: "text-blue-600 hover:underline bg-transparent border-0 p-0" %>
+
+          <!-- Edit -->
+          <%= link_to "Edit", edit_vendor_promotion_path(promo), class: "text-orange-600 hover:underline" %>
+
+          <!-- Delete -->
+          <%= button_to "Delete", vendor_promotion_path(promo),
+                        method: :delete,
+                        data: { confirm: "Are you sure?" },
+                        class: "text-red-600 hover:underline bg-transparent border-0 p-0" %>
+
+          <!-- Preview Public Vendor -->
+          <%= link_to "Preview", public_vendor_path(promo.vendor.slug),
+                      target: "_blank", class: "text-green-600 hover:underline" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

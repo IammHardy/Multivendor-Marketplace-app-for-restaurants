@@ -27,4 +27,15 @@ class VendorMailer < ApplicationMailer
     @vendor = params[:vendor]
     mail(to: @vendor.email, subject: "Your Vendor Account has been Rejected")
   end
+
+  def new_message_notification
+    @message = params[:message]
+    @vendor = @message.recipient
+    @customer = @message.sender
+
+    mail(
+      to: @vendor.email,
+      subject: "New message from #{@customer.name} regarding Order ##{@message.order&.id || 'N/A'}"
+    )
+  end
 end

@@ -1,80 +1,95 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-lg w-full bg-white shadow-lg rounded-lg p-8 space-y-6">
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-orange-100 to-yellow-50 px-6 py-12">
+  <div class="max-w-lg w-full bg-white shadow-xl rounded-3xl p-8 sm:p-10 space-y-8">
 
     <!-- Progress Bar -->
     <%= render "progress_bar", step: 4 %>
 
-    <h2 class="text-2xl font-bold text-gray-700 text-center mb-4">Step 4: Payment & Branding</h2>
+    <!-- Heading -->
+    <h2 class="text-3xl font-extrabold text-gray-900 text-center">
+      Step 4: Payment & Branding
+    </h2>
+    <p class="text-center text-gray-600 text-sm">
+      Enter your payout details and upload your brand assets to complete registration.
+    </p>
 
     <%= form_with(model: @vendor, url: update_step4_vendor_registration_path, method: :post, local: true, html: { multipart: true, class: "space-y-6" }) do |f| %>
 
       <!-- Bank Name -->
       <div>
-        <%= f.label :bank_name, class: "block text-sm font-medium text-gray-700" %>
-        <%= f.text_field :bank_name,
-              class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
+        <%= f.label :bank_name, class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.text_field :bank_name, placeholder: "Enter your bank name",
+              class: "w-full rounded-full border-gray-300 px-4 py-3 text-gray-800 shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 placeholder-gray-400" %>
       </div>
 
       <!-- Account Name -->
       <div>
-        <%= f.label :account_name, class: "block text-sm font-medium text-gray-700" %>
-        <%= f.text_field :account_name,
-              class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
+        <%= f.label :account_name, class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.text_field :account_name, placeholder: "Enter the account holder’s name",
+              class: "w-full rounded-full border-gray-300 px-4 py-3 text-gray-800 shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 placeholder-gray-400" %>
       </div>
 
       <!-- Account Number -->
       <div>
-        <%= f.label :account_number, class: "block text-sm font-medium text-gray-700" %>
-        <%= f.text_field :account_number,
-              class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
+        <%= f.label :account_number, class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.text_field :account_number, placeholder: "Enter your account number",
+              class: "w-full rounded-full border-gray-300 px-4 py-3 text-gray-800 shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 placeholder-gray-400" %>
       </div>
 
       <!-- Payout Method -->
       <div>
-        <%= f.label :payout_method, class: "block text-sm font-medium text-gray-700" %>
-        <%= f.select :payout_method, options_for_select([['Bank Transfer', 'bank'], ['PayPal', 'paypal']], @vendor.payout_method),
-              { include_blank: 'Select Payout Method' },
-              class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm p-2" %>
+        <%= f.label :payout_method, class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.select :payout_method,
+              options_for_select([['Bank Transfer', 'bank_transfer'], ['PayPal', 'paypal']], @vendor.payout_method),
+              { include_blank: 'Select payout method' },
+              class: "w-full rounded-full border-gray-300 px-4 py-3 text-gray-800 shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 placeholder-gray-400" %>
       </div>
 
       <!-- Profile Image -->
       <div>
-        <%= f.label :profile_image, "Upload Profile Image", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.label :profile_image, "Upload Profile Image", class: "block text-sm font-medium text-gray-700 mb-2" %>
         <%= f.file_field :profile_image, accept: 'image/png,image/jpg,image/jpeg',
-              class: "mt-1 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100" %>
+              class: "block w-full text-sm text-gray-700
+                      file:mr-4 file:py-2 file:px-4
+                      file:rounded-full file:border-0
+                      file:text-sm file:font-semibold
+                      file:bg-orange-50 file:text-orange-700
+                      hover:file:bg-orange-100 transition" %>
 
-        <% if @vendor.persisted? && @vendor.profile_image.attached? %>
-  <p class="mt-2 text-gray-500 text-sm">
-    Currently uploaded: <%= @vendor.profile_image.filename %>
-  </p>
-  <%= image_tag @vendor.profile_image.variant(resize_to_limit: [150, 150]),
-                class: "mt-2 rounded-md border" %>
-<% end %>
-
-
-
+        <% if @vendor.valid_profile_image? %>
+          <%= image_tag @vendor.profile_image.variant(resize_to_limit: [150, 150]),
+                class: "mt-3 rounded-full border shadow-md" %>
+        <% else %>
+          <p class="text-red-500 text-sm mt-2">The uploaded profile image is missing. Please upload a new one below.</p>
+        <% end %>
       </div>
 
       <!-- Banner Image -->
       <div>
-        <%= f.label :banner_image, "Upload Banner Image", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.label :banner_image, "Upload Banner Image", class: "block text-sm font-medium text-gray-700 mb-2" %>
         <%= f.file_field :banner_image, accept: 'image/png,image/jpg,image/jpeg',
-              class: "mt-1 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100" %>
-       <% if @vendor.persisted? && @vendor.banner_image.attached? %>
-  <p class="mt-2 text-gray-500 text-sm">
-    Currently uploaded: <%= @vendor.banner_image.filename %>
-  </p>
-  <%= image_tag @vendor.banner_image.variant(resize_to_limit: [300, 100]),
-                class: "mt-2 rounded-md border w-full object-cover" %>
-<% end %>
+              class: "block w-full text-sm text-gray-700
+                      file:mr-4 file:py-2 file:px-4
+                      file:rounded-full file:border-0
+                      file:text-sm file:font-semibold
+                      file:bg-orange-50 file:text-orange-700
+                      hover:file:bg-orange-100 transition" %>
 
-
+        <% if @vendor.valid_banner_image? %>
+          <%= image_tag @vendor.banner_image.variant(resize_to_limit: [300, 100]),
+                class: "mt-3 rounded-lg border w-full object-cover shadow-sm" %>
+        <% else %>
+          <p class="text-red-500 text-sm mt-2">The uploaded banner file is missing. Please upload a new one below.</p>
+        <% end %>
       </div>
 
       <!-- Navigation Buttons -->
-      <div class="flex justify-between items-center">
-        <%= link_to "Back", step3_vendor_registration_path, class: "px-4 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50" %>
-        <%= f.submit "Complete Registration", class: "px-6 py-2 rounded-md bg-red-600 text-white font-medium hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2" %>
+      <div class="flex justify-between items-center pt-4">
+        <%= link_to "Back",
+              step3_vendor_registration_path,
+              class: "px-6 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100 transition font-medium" %>
+        
+        <%= f.submit "Complete Registration",
+              class: "px-6 py-2 rounded-full bg-[#F97316] hover:bg-orange-600 text-white font-semibold shadow-md transition duration-300" %>
       </div>
 
     <% end %>

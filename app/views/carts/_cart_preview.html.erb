@@ -1,0 +1,24 @@
+<h2 class="font-bold text-lg mb-4">Your Cart</h2>
+
+<% if cart.cart_items.any? %>
+  <ul>
+  <% cart.cart_items.each do |item| %>
+    <li class="flex justify-between items-center">
+      <span><%= item.food.name %> x <%= item.quantity || 0 %></span>
+      <span>₦<%= (item.unit_price || 0) * (item.quantity || 0) %></span>
+    </li>
+  <% end %>
+</ul>
+
+
+  <div class="mt-4 font-semibold">
+    <div class="mt-4 font-semibold">
+  Total: ₦<%= cart.cart_items.sum { |i| (i.unit_price || 0) * (i.quantity || 0) } %>
+</div>
+
+  </div>
+
+  <%= link_to "Checkout", checkout_path, class: "mt-4 block bg-orange-500 text-white text-center py-2 rounded-xl hover:bg-orange-600" %>
+<% else %>
+  <p class="text-gray-500">Your cart is empty.</p>
+<% end %>

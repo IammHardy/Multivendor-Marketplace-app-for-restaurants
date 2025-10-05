@@ -1,16 +1,35 @@
-<h2>Forgot your password?</h2>
+<main class="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-orange-100 to-yellow-50 px-6">
+  <div class="w-full max-w-md bg-white rounded-3xl shadow-lg p-8 sm:p-10">
+    
+    <!-- Heading -->
+    <h2 class="text-3xl font-extrabold text-center text-gray-900 mb-2">
+      Forgot your password?
+    </h2>
+    <p class="text-center text-gray-600 mb-8">
+      Enter your email below and we’ll send you reset instructions.
+    </p>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= render "vendors/shared/error_messages", resource: resource %>
+    <!-- Form -->
+    <%= form_for(resource, as: :vendor, url: password_path(:vendor), html: { method: :post }, class: "space-y-6") do |f| %>
+      <%= render "vendors/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+      <!-- Email -->
+      <div>
+        <%= f.label :email, class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email",
+              class: "w-full rounded-full border border-gray-300 px-4 py-3 text-gray-800 focus:ring-2 focus:ring-[#F97316] focus:border-[#F97316] placeholder-gray-400" %>
+      </div>
+
+      <!-- Submit -->
+      <div>
+        <%= f.submit "Send Reset Instructions",
+              class: "w-full bg-[#F97316] hover:bg-orange-600 text-white font-semibold py-3 rounded-full shadow-md transition duration-300" %>
+      </div>
+    <% end %>
+
+    <!-- Links -->
+    <div class="mt-6 text-center text-sm text-gray-600">
+      <%= render "vendors/shared/links" %>
+    </div>
   </div>
-
-  <div class="actions">
-    <%= f.submit "Send me reset password instructions" %>
-  </div>
-<% end %>
-
-<%= render "vendors/shared/links" %>
+</main>

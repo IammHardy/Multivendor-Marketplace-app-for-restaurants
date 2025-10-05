@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_27_110923) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_05_053059) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -49,6 +49,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_27_110923) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "vendor_id"
+    t.decimal "unit_price", precision: 10, scale: 2
     t.index ["cart_id"], name: "index_cart_items_on_cart_id"
     t.index ["food_id"], name: "index_cart_items_on_food_id"
   end
@@ -124,6 +125,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_27_110923) do
     t.boolean "featured"
     t.string "slug"
     t.bigint "vendor_id"
+    t.boolean "active"
+    t.integer "stock"
+    t.boolean "in_stock", default: true, null: false
     t.index ["slug"], name: "index_foods_on_slug", unique: true
     t.index ["vendor_id"], name: "index_foods_on_vendor_id"
   end
@@ -170,12 +174,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_27_110923) do
     t.bigint "order_id", null: false
     t.bigint "food_id", null: false
     t.integer "quantity"
-    t.decimal "price"
+    t.decimal "price", precision: 10, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "vendor_id", null: false
     t.decimal "platform_commission", precision: 10, scale: 2, default: "0.0"
     t.decimal "vendor_earnings", precision: 10, scale: 2, default: "0.0"
+    t.decimal "subtotal", precision: 10, scale: 2
     t.index ["food_id"], name: "index_order_items_on_food_id"
     t.index ["order_id"], name: "index_order_items_on_order_id"
     t.index ["vendor_id"], name: "index_order_items_on_vendor_id"
@@ -312,10 +317,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_27_110923) do
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.string "profile_image"
     t.text "bio"
     t.string "whatsapp"
-    t.string "banner_image"
     t.string "bank_name"
     t.string "account_name"
     t.string "account_number"
@@ -326,7 +329,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_27_110923) do
     t.string "city"
     t.string "opening_hours"
     t.string "cac_number"
-    t.string "id_card"
     t.string "state"
     t.integer "status", default: 0, null: false
     t.integer "failed_attempts", default: 0, null: false
@@ -335,6 +337,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_27_110923) do
     t.datetime "last_seen_at"
     t.text "description"
     t.string "slug"
+    t.boolean "seed_data", default: false, null: false
+    t.boolean "terms_accepted"
     t.index ["email"], name: "index_vendors_on_email", unique: true
     t.index ["reset_password_token"], name: "index_vendors_on_reset_password_token", unique: true
     t.index ["slug"], name: "index_vendors_on_slug", unique: true

@@ -1,19 +1,31 @@
-<h1><%= @ticket.subject %></h1>
+<div class="max-w-3xl mx-auto bg-gradient-to-b from-orange-50 to-yellow-50 p-8 rounded-3xl shadow-lg">
 
-<p>
-  <strong>Status:</strong> <%= @ticket.status %><br>
-  <strong>Priority:</strong> <%= @ticket.priority %><br>
-  <strong>Order:</strong>
-  <% if @ticket.order %>
-    <%= link_to @ticket.order.order_number, order_path(@ticket.order) %>
-  <% else %>
-    N/A
-  <% end %>
-</p>
+  <!-- Ticket Subject -->
+  <h1 class="text-3xl font-extrabold text-[#F97316] mb-6 text-center"><%= @ticket.subject %></h1>
 
-<p>
-  <strong>Description:</strong><br>
-  <%= simple_format(@ticket.description) %>
-</p>
+  <!-- Ticket Details -->
+  <div class="mb-6 space-y-3 text-gray-800">
+    <p><strong>Status:</strong> <span class="font-semibold"><%= @ticket.status %></span></p>
+    <p>
+      <strong>Order:</strong>
+      <% if @ticket.order %>
+        <%= link_to @ticket.order.order_number, order_path(@ticket.order), class: "text-orange-500 font-semibold hover:underline" %>
+      <% else %>
+        N/A
+      <% end %>
+    </p>
+  </div>
 
-<%= link_to "Back to Tickets", support_tickets_path, class: "btn btn-link mt-3" %>
+  <!-- Description -->
+  <div class="mb-6 p-4 bg-white rounded-2xl shadow-sm">
+    <h2 class="font-semibold text-gray-700 mb-2">Description</h2>
+    <p class="text-gray-800 leading-relaxed"><%= simple_format(@ticket.body) %></p>
+  </div>
+
+  <!-- Back Link -->
+  <div class="text-center mt-4">
+    <%= link_to "← Back to Tickets", support_tickets_path,
+                class: "text-[#F97316] font-semibold hover:underline" %>
+  </div>
+
+</div>

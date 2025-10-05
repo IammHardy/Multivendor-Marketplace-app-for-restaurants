@@ -1,55 +1,79 @@
 class CartItemsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_cart
 
-  def create
-    food = Food.find(params[:food_id])
-    quantity = params[:quantity].to_i
-    cart_item = @cart.cart_items.find_by(food_id: food.id)
+ def create
+  food = Food.friendly.find(params[:food_id])
 
+  if food.out_of_stock?
+    redirect_back fallback_location: public_foods_path, alert: "Sorry, this food is currently out of stock." and return
+  end
+
+  quantity = params[:quantity].to_i
+  quantity = 1 if quantity <= 0
+
+  cart_item = @cart.cart_items.find_or_initialize_by(food: food)
+  cart_item.quantity = (cart_item.quantity || 0) + quantity
+  cart_item.vendor_id ||= food.vendor_id
+
+  if cart_item.save
     if params[:commit_type] == "Checkout"
-      # Proceed to Checkout logic
-      if cart_item
-        # Item already in cart — don't increase quantity
-        redirect_to checkout_path, notice: "Item already in cart. You can adjust quantity in your cart before checkout."
-      else
-        # Item not in cart — add it and redirect to checkout
-        cart_item = @cart.cart_items.build(food: food, quantity: quantity)
-        if cart_item.save
-          redirect_to checkout_path, notice: "Item added to cart. Proceed to checkout."
-        else
-          redirect_back fallback_location: foods_path, alert: "Could not add item to cart."
+      redirect_to checkout_path
+    else
+      respond_to do |format|
+        format.html { redirect_back fallback_location: public_foods_path, notice: "#{food.name} added to cart." }
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            "floating_cart",
+            partial: "shared/floating_cart",
+            locals: { cart: @cart }
+          )
         end
       end
-    else
-      # Regular Add to Cart logic
-      if cart_item
-        cart_item.quantity += quantity
-      else
-        cart_item = @cart.cart_items.build(food: food, quantity: quantity)
-      end
-
-      if cart_item.save
-        redirect_back fallback_location: foods_path, notice: "Item added to cart."
-      else
-        redirect_back fallback_location: foods_path, alert: "Could not add item to cart."
-      end
     end
+  else
+    redirect_back fallback_location: public_foods_path, alert: cart_item.errors.full_messages.join(", ")
   end
+end
+
+
 
   def update
-    cart_item = CartItem.find(params[:id])
-    if cart_item.update(quantity: params[:quantity])
-      redirect_to cart_path, notice: "Item updated."
-    else
-      redirect_to cart_path, alert: "Could not update item."
+  cart_item = @cart.cart_items.find(params[:id])
+  quantity = params[:cart_item][:quantity].to_i
+  quantity = 1 if quantity <= 0
+
+  if cart_item.update(quantity: quantity)
+    respond_to do |format|
+      format.html { redirect_back fallback_location: checkout_path, notice: "Item updated." }
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          "checkout_cart_items",
+          partial: "shared/checkout_cart_items",
+          locals: { cart: @cart }
+        )
+      end
+    end
+  else
+    redirect_back fallback_location: checkout_path, alert: "Could not update item."
+  end
+end
+
+def destroy
+  cart_item = @cart.cart_items.find(params[:id])
+  cart_item.destroy
+  respond_to do |format|
+    format.html { redirect_back fallback_location: checkout_path, notice: "Item removed." }
+    format.turbo_stream do
+      render turbo_stream: turbo_stream.replace(
+        "checkout_cart_items",
+        partial: "shared/checkout_cart_items",
+        locals: { cart: @cart }
+      )
     end
   end
+end
 
-  def destroy
-    cart_item = CartItem.find(params[:id])
-    cart_item.destroy
-    redirect_to cart_path, notice: "Item removed."
-  end
 
   private
 

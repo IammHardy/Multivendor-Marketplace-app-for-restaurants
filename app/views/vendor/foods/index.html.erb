@@ -1,59 +1,85 @@
-<!-- app/views/vendor/foods/index.html.erb -->
+<div class="p-6 bg-gray-50 min-h-screen">
+  <h1 class="text-3xl font-bold text-red-600 mb-6 text-center">Your Foods</h1>
 
-<div class="min-h-screen bg-gray-100 p-6">
-
-  <!-- Back Button -->
-  <div class="mb-6">
-    <%= link_to "← Back to Dashboard", vendor_dashboard_path, class: "text-red-600 hover:underline font-medium" %>
+  <div class="flex justify-end mb-6">
+    <%= link_to new_vendor_food_path,
+                class: "inline-flex items-center gap-2 px-6 py-3 rounded-full bg-orange-500 hover:bg-orange-600 text-white font-semibold shadow-md transition" do %>
+      <i class="fas fa-plus"></i> Add Food
+    <% end %>
   </div>
 
-  <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold text-red-600">Your Foods</h1>
-    <%= link_to "Add New Food", new_vendor_food_path, class: "bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500 transition font-medium" %>
-  </div>
+  <% if @foods.any? %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @foods.each do |food| %>
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition relative">
+          <% if food.image.attached? %>
+            <%= image_tag food.image.variant(resize_to_fill: [400, 250]), class: "w-full h-48 object-cover" %>
+          <% else %>
+            <%= image_tag "default-promo.jpg", class: "w-full h-48 object-cover" %>
+          <% end %>
 
-  <!-- Foods Table -->
-  <div class="bg-white shadow rounded-lg overflow-hidden">
-    <table class="min-w-full divide-y divide-gray-200">
-      <thead class="bg-gray-50">
-        <tr>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created At</th>
-          <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Actions</th>
-        </tr>
-      </thead>
-      <tbody class="bg-white divide-y divide-gray-200">
-        <% @foods.each do |food| %>
-          <tr id="<%= dom_id(food) %>">
-            <td class="px-6 py-4 whitespace-nowrap"><%= food.name %></td>
-            <td class="px-6 py-4 whitespace-nowrap">₦<%= number_to_currency(food.price, unit: "", precision: 0) %></td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <%= food.categories.map(&:name).join(", ") if food.respond_to?(:categories) %>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap"><%= food.created_at.strftime("%b %d, %Y") %></td>
-            <td class="px-6 py-4 whitespace-nowrap text-center space-x-2">
-              <%= link_to "Edit", edit_vendor_food_path(food.vendor, food), class: "text-green-600 hover:underline" %>
+          <div class="p-4 space-y-2">
+            <h2 class="text-lg font-bold text-gray-800"><%= food.name %></h2>
+            <p class="text-gray-600 text-sm">
+              <%= food.categories.pluck(:name).join(", ").presence || "—" %>
+            </p>
+            <p class="text-red-600 font-semibold">₦<%= food.price %></p>
 
-<%= button_to "Delete", vendor_food_path(food.vendor, food),
-      method: :delete,
-      data: { confirm: "Are you sure?" },
-      class: "text-red-600 hover:underline bg-transparent border-0 p-0" %>
+            <div class="flex items-center justify-between mt-2">
+              <!-- Status -->
+              <% if food.active? %>
+                <span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Active</span>
+              <% else %>
+                <span class="px-2 py-1 text-xs font-semibold text-gray-700 bg-gray-200 rounded-full">Inactive</span>
+              <% end %>
 
+              <%= button_to toggle_status_vendor_food_path(food),
+                            method: :patch,
+                            class: "ml-2 text-xs px-2 py-1 bg-orange-500 text-white rounded hover:bg-orange-600" do %>
+                Toggle
+              <% end %>
+            </div>
 
+            <!-- Stock -->
+            <div class="flex items-center justify-between mt-2">
+              <% if food.out_of_stock? %>
+                <span class="px-2 py-1 text-xs font-semibold text-red-700 bg-red-100 rounded-full">Out of Stock</span>
+              <% else %>
+                <span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">In Stock</span>
+              <% end %>
 
+              <%= button_to (food.out_of_stock? ? "Mark In Stock" : "Mark Out of Stock"),
+                            toggle_stock_vendor_food_path(food),
+                            method: :patch,
+                            class: "ml-2 px-3 py-1 text-xs text-white rounded #{food.out_of_stock? ? 'bg-green-600 hover:bg-green-700' : 'bg-yellow-600 hover:bg-yellow-700'}" %>
+            </div>
 
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
+            <!-- Actions -->
+            <div class="flex justify-end gap-2 mt-4">
+              <%= link_to "Edit", edit_vendor_food_path(food),
+                          class: "px-3 py-1 text-sm text-white bg-blue-600 rounded hover:bg-blue-700" %>
+              <%= button_to vendor_food_path(food),
+                            method: :delete,
+                            data: { turbo_confirm: "Are you sure?" },
+                            class: "px-3 py-1 text-sm text-white bg-red-600 rounded hover:bg-red-700" do %>
+                Delete
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
 
-  <!-- Pagination -->
-  <div class="mt-4">
-    <%= paginate @foods %>
-  </div>
-
+    <div class="mt-6">
+      <%= paginate @foods %>
+    </div>
+  <% else %>
+    <div class="bg-white rounded-2xl shadow p-6 text-center">
+      <p class="text-gray-500 text-lg mb-4">You haven’t added any foods yet.</p>
+      <%= link_to new_vendor_food_path,
+                  class: "inline-flex items-center gap-2 px-6 py-3 rounded-full bg-orange-500 hover:bg-orange-600 text-white font-semibold shadow-md transition" do %>
+        <i class="fas fa-plus"></i> Add Your First Food
+      <% end %>
+    </div>
+  <% end %>
 </div>

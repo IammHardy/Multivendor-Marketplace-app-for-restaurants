@@ -1,29 +1,30 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
-  # Make code changes take effect immediately without server restart.
+  # Reload code without server restart
   config.enable_reloading = true
-
-  # Do not eager load code on boot.
   config.eager_load = false
 
-
-
-# development.rb
-config.active_storage.service = :local
-  # Show full error reports.
+  # Full error reports
   config.consider_all_requests_local = true
-
-  # Enable server timing.
   config.server_timing = true
 
-  # Email settings (✅ using Gmail SMTP)
+  # Emails (Gmail SMTP)
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
- config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
+  config.action_mailer.perform_caching = false
 
+  # Use Ngrok URL if set, otherwise localhost
+  ngrok_host = ENV.fetch("NGROK_URL", "localhost")
+  Rails.application.routes.default_url_options[:host] = ngrok_host
+  Rails.application.routes.default_url_options[:protocol] = "https"
+  config.action_mailer.default_url_options = {
+    host: ngrok_host,
+    protocol: "https"
+  }
 
+  # Gmail SMTP settings
   config.action_mailer.smtp_settings = {
     address:              "smtp.gmail.com",
     port:                 587,
@@ -44,35 +45,29 @@ config.active_storage.service = :local
   else
     config.action_controller.perform_caching = false
   end
-
   config.cache_store = :memory_store
 
-  # Store uploaded files on local disk
+  # Local storage for uploads
   config.active_storage.service = :local
 
-  # Don't cache mailer views
-  config.action_mailer.perform_caching = false
-
-  # Print deprecation warnings to logs
+  # Deprecation warnings
   config.active_support.deprecation = :log
 
-  # Raise an error if there are pending migrations
+  # Migrations
   config.active_record.migration_error = :page_load
-
-  # Show queries in logs
   config.active_record.verbose_query_logs = true
   config.active_record.query_log_tags_enabled = true
 
-  # Show background job enqueuing info
+  # Background jobs
+  config.active_job.queue_adapter = :async
   config.active_job.verbose_enqueue_logs = true
 
-  # Annotate view templates with filenames
+  # Views
   config.action_view.annotate_rendered_view_with_filenames = true
 
-  # Raise on undefined before_action
+  # Controllers
   config.action_controller.raise_on_missing_callback_actions = true
 
-  config.active_job.queue_adapter = :async
-
+  # Allow Ngrok hosts
   config.hosts << /[a-z0-9\-]+\.ngrok-free\.app/
 end

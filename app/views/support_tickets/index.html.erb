@@ -1,17 +1,36 @@
-<h1>Your Support Tickets</h1>
+<h1 class="text-4xl font-extrabold text-[#F97316] mb-8 text-center">Your Support Tickets</h1>
 
-<%= link_to "Create New Ticket", new_support_ticket_path, class: "btn btn-primary mb-3" %>
+<div class="text-center mb-8">
+  <%= link_to "Create New Ticket", new_support_ticket_path,
+              class: "bg-[#FACC15] text-gray-900 font-semibold px-6 py-3 rounded-2xl shadow-md hover:bg-yellow-400 transition" %>
+</div>
 
 <% if @tickets.any? %>
-  <ul>
+  <ul class="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
     <% @tickets.each do |ticket| %>
-      <li>
-        <%= link_to ticket.subject, support_ticket_path(ticket) %>
-        - Status: <%= ticket.status %>
-        - Created at: <%= ticket.created_at.strftime("%b %d, %Y") %>
+      <li class="bg-gradient-to-r from-orange-50 to-yellow-50 p-6 rounded-3xl shadow-lg hover:shadow-xl transition flex flex-col justify-between h-full">
+        
+        <div>
+          <%= link_to ticket.subject, support_ticket_path(ticket),
+                      class: "text-xl font-bold text-[#F97316] hover:text-orange-600 transition" %>
+          
+          <p class="mt-2 text-gray-700 text-sm">
+            Created at: <%= ticket.created_at.strftime("%b %d, %Y") %>
+          </p>
+        </div>
+
+        <!-- Status Badge -->
+        <span class="mt-4 inline-block px-4 py-1 rounded-full font-semibold
+                     <%= ticket.status == 'new' ? 'bg-yellow-400 text-gray-900' : 'bg-green-200 text-green-800' %>">
+          <%= ticket.status.capitalize %>
+        </span>
       </li>
     <% end %>
   </ul>
 <% else %>
-  <p>You have no support tickets yet.</p>
+  <p class="text-center text-gray-500 italic mt-12">You have no support tickets yet.</p>
+  <div class="text-center mt-4">
+    <%= link_to "Browse Foods", public_foods_path,
+                class: "bg-[#F97316] text-white px-6 py-3 rounded-2xl font-semibold hover:bg-orange-500 transition" %>
+  </div>
 <% end %>

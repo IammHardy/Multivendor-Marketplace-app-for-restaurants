@@ -7,6 +7,7 @@
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-papyaYvZ4+sV4Jd+eEwKj6H0b5Xr+kT9Y+h0s6cFZKhX++M9PssD2f7a/vw1RLP9VwD8u8vT1Ce0HiXQ9S3Xw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
   </head>
  
   <body class="bg-gray-100 font-sans">
@@ -34,10 +35,19 @@
               <% end %>
             </li>
             <li>
-              <%= link_to vendor_foods_path, class: "flex items-center gap-3 px-3 py-2 rounded hover:bg-red-50 font-medium" do %>
-                <i class="fas fa-utensils text-red-600"></i> Foods
-              <% end %>
+               <%= link_to vendor_foods_path, class: "flex items-center gap-3 px-3 py-2 rounded hover:bg-red-50 font-medium" do %>
+  <i class="fas fa-utensils text-red-600"></i> Foods
+<% end %>
+
+
+
             </li>
+                <li>
+  <%= link_to vendor_promotions_path,
+    class: "flex items-center gap-3 px-3 py-2 rounded hover:bg-red-50 font-medium" do %>
+      <i class="fas fa-tag text-red-600"></i> Promotions
+<% end %>
+
             <li>
               <%= link_to vendor_orders_path, class: "flex items-center gap-3 px-3 py-2 rounded hover:bg-red-50 font-medium" do %>
                 <i class="fas fa-receipt text-red-600"></i> Orders

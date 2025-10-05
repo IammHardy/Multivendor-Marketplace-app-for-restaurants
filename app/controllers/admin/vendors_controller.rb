@@ -8,7 +8,7 @@ class Admin::VendorsController < Admin::BaseController
 
 # app/controllers/admin/vendors_controller.rb
 def approve
-  @vendor = Vendor.find(params[:id])
+  @vendor = Vendor.friendly.find(params[:id])
   if @vendor.update(status: "active")  # or whatever attribute you use
     # Send the approval email
     VendorMailer.with(vendor: @vendor).approved_email.deliver_later
@@ -62,14 +62,15 @@ end
   end
 
   def destroy
-    @vendor.destroy
-    redirect_to admin_vendors_path, notice: "Vendor deleted successfully."
-  end
+  @vendor = Vendor.friendly.find(params[:id])
+  @vendor.destroy
+  redirect_to admin_vendors_path, notice: "Vendor deleted successfully."
+end
 
   private
 
   def set_vendor
-    @vendor = Vendor.find(params[:id])
+    @vendor = Vendor.friendly.find(params[:id])
   end
 
   def vendor_params
