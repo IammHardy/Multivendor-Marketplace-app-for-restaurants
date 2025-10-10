@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_include_tag "application", type: "module", "data-turbo-track": "reload" %>
+
     <link rel="icon" href="/icon.png" type="image/png">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -21,7 +22,7 @@
 
         <!-- Logo -->
         <%= link_to admin_dashboard_path, class: "text-3xl font-extrabold tracking-wide text-white" do %>
-          Sajuma Admin
+          FoodApp Admin
         <% end %>
 
         <!-- Desktop Menu -->
@@ -30,6 +31,7 @@
           <%= link_to "Orders", admin_orders_path, class: "hover:text-[#FACC15] transition" %>
           <%= link_to "Users", admin_users_path, class: "hover:text-[#FACC15] transition" %>
           <%= link_to "Vendors", admin_vendors_path, class: "hover:text-[#FACC15] transition" %>
+          <%= link_to "Riders", admin_riders_path, class: "hover:text-orange-600" %> <!-- 👈 New link -->
           <%= link_to "Reports", admin_reports_path, class: "hover:text-[#FACC15] transition" %>
           <%= link_to "Support Tickets", admin_support_tickets_path, class: "hover:text-[#FACC15] transition" %>
           <%= button_to "Logout", destroy_user_session_path, method: :delete, form_class: "inline", class: "hover:text-[#FACC15] transition" %>
@@ -50,6 +52,7 @@
           <%= link_to "Orders", admin_orders_path, class: "block px-4 py-2 text-[#F97316] hover:bg-[#FFF4E6] rounded font-medium transition" %>
           <%= link_to "Users", admin_users_path, class: "block px-4 py-2 text-[#F97316] hover:bg-[#FFF4E6] rounded font-medium transition" %>
           <%= link_to "Vendors", admin_vendors_path, class: "block px-4 py-2 text-[#F97316] hover:bg-[#FFF4E6] rounded font-medium transition" %>
+          <%= link_to "Riders", admin_riders_path, class: "block px-4 py-2 text-[#F97316] hover:bg-[#FFF4E6] rounded font-medium transition" %>
           <%= link_to "Reports", admin_reports_path, class: "block px-4 py-2 text-[#F97316] hover:bg-[#FFF4E6] rounded font-medium transition" %>
           <%= link_to "Support Tickets", admin_support_tickets_path, class: "block px-4 py-2 text-[#F97316] hover:bg-[#FFF4E6] rounded font-medium transition" %>
           <%= button_to "Logout", destroy_user_session_path, method: :delete, form_class: "inline", class: "block px-4 py-2 text-[#F97316] hover:bg-[#FFF4E6] rounded font-medium transition" %>

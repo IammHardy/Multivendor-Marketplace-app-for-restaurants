@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_05_053059) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_09_195829) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -58,6 +58,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_05_053059) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "vendor_id"
     t.index ["user_id"], name: "index_carts_on_user_id"
   end
 
@@ -201,8 +202,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_05_053059) do
     t.bigint "cart_id"
     t.string "order_number"
     t.datetime "estimated_delivery_time"
+    t.bigint "rider_id"
+    t.decimal "delivery_fee"
+    t.string "delivery_address"
+    t.integer "delivery_status", default: 0
+    t.float "latitude"
+    t.float "longitude"
     t.index ["cart_id"], name: "index_orders_on_cart_id"
     t.index ["order_number"], name: "index_orders_on_order_number", unique: true
+    t.index ["rider_id"], name: "index_orders_on_rider_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
@@ -233,6 +241,51 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_05_053059) do
     t.text "comment"
     t.index ["food_id"], name: "index_reviews_on_food_id"
     t.index ["user_id"], name: "index_reviews_on_user_id"
+  end
+
+  create_table "rider_locations", force: :cascade do |t|
+    t.bigint "rider_id", null: false
+    t.bigint "order_id", null: false
+    t.float "latitude"
+    t.float "longitude"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_rider_locations_on_order_id"
+    t.index ["rider_id"], name: "index_rider_locations_on_rider_id"
+  end
+
+  create_table "riders", force: :cascade do |t|
+    t.string "name"
+    t.string "phone"
+    t.string "vehicle_type"
+    t.boolean "verified"
+    t.float "latitude"
+    t.float "longitude"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.string "address"
+    t.string "city"
+    t.string "state"
+    t.string "license_plate"
+    t.string "national_id"
+    t.integer "validation_step", default: 1
+    t.boolean "terms_accepted", default: false
+    t.integer "status_enum", default: 0
+    t.string "bank_name"
+    t.string "account_name"
+    t.string "account_number"
+    t.string "delivery_status"
+    t.integer "status", default: 0, null: false
+    t.integer "failed_attempts"
+    t.string "unlock_token"
+    t.datetime "locked_at"
+    t.index ["email"], name: "index_riders_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_riders_on_reset_password_token", unique: true
   end
 
   create_table "support_tickets", force: :cascade do |t|
@@ -274,6 +327,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_05_053059) do
     t.datetime "deleted_at"
     t.integer "role", default: 0, null: false
     t.datetime "last_seen_at"
+    t.float "latitude"
+    t.float "longitude"
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -339,6 +394,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_05_053059) do
     t.string "slug"
     t.boolean "seed_data", default: false, null: false
     t.boolean "terms_accepted"
+    t.float "latitude"
+    t.float "longitude"
     t.index ["email"], name: "index_vendors_on_email", unique: true
     t.index ["reset_password_token"], name: "index_vendors_on_reset_password_token", unique: true
     t.index ["slug"], name: "index_vendors_on_slug", unique: true
@@ -367,11 +424,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_05_053059) do
   add_foreign_key "order_items", "orders", on_delete: :cascade
   add_foreign_key "order_items", "vendors"
   add_foreign_key "orders", "carts"
+  add_foreign_key "orders", "riders"
   add_foreign_key "orders", "users", on_delete: :cascade
   add_foreign_key "promotions", "foods"
   add_foreign_key "promotions", "vendors"
   add_foreign_key "reviews", "foods"
   add_foreign_key "reviews", "users"
+  add_foreign_key "rider_locations", "orders"
+  add_foreign_key "rider_locations", "riders"
   add_foreign_key "support_tickets", "orders"
   add_foreign_key "support_tickets", "users"
   add_foreign_key "vendor_earnings", "order_items"

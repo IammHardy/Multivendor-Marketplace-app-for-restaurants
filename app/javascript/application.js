@@ -1,28 +1,26 @@
+
 import "@hotwired/turbo-rails"
-import { Application } from "@hotwired/stimulus"
-import { definitionsFromContext } from "@hotwired/stimulus-loading"
+import "./controllers" // ✅ loads all Stimulus controllers
 
-const application = Application.start()
-const context = require.context("./controllers", true, /\.js$/)
-application.load(definitionsFromContext(context))
-import "../vendor_image_preview"
+// --- Charts ---
 import "chartkick"
-import "chartkick/chart.js"
-// app/javascript/application.js
+import "chart.js/auto"
+import Chart from "chart.js/auto"
+window.Chart = Chart
 
+// --- Leaflet (Maps) ---
+import L from "leaflet"
+window.L = L
 
-import Chart from "chart.js/auto" // Ensure Chart.js is imported
-window.Chart = Chart // Make Chart.js globally available
-
-import "./controllers"
+// --- Other scripts ---
 import "./channels"
+import "./order_tracking"
 
-
-  document.addEventListener("turbo:submit-end", (event) => {
-    if (event.target.closest("#new_message_form")) {
-      event.target.reset()
-      const messages = document.getElementById("messages")
-      messages.scrollTop = messages.scrollHeight
-    }
-  })
-
+// --- Chat form auto-reset ---
+document.addEventListener("turbo:submit-end", (event) => {
+  if (event.target.closest("#new_message_form")) {
+    event.target.reset()
+    const messages = document.getElementById("messages")
+    if (messages) messages.scrollTop = messages.scrollHeight
+  }
+})

@@ -104,17 +104,23 @@ class ApplicationController < ActionController::Base
   # ----------------------------
   # DEVISE REDIRECTION AFTER SIGN IN
   # ----------------------------
-  def after_sign_in_path_for(resource)
-    merge_guest_cart_with(resource) if session[:cart_id] && resource.is_a?(User)
+def after_sign_in_path_for(resource)
+  merge_guest_cart_with(resource) if session[:cart_id] && resource.is_a?(User)
 
-    if resource.is_a?(User) && resource.admin?
-      admin_dashboard_path
-    elsif resource.is_a?(Vendor)
-      vendor_dashboard_path
-    else
-      stored_location_for(resource) || root_path
-    end
+  if resource.is_a?(User) && resource.admin?
+    admin_dashboard_path
+  elsif resource.is_a?(Vendor)
+    vendor_dashboard_path
+  elsif resource.is_a?(Rider)
+    rider_dashboard_path
+  else
+    stored_location_for(resource) || root_path
   end
+end
+
+
+
+
 
   # ----------------------------
   # STORE USER LOCATION (FOR DEVlSE)

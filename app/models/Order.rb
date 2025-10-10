@@ -4,11 +4,34 @@ class Order < ApplicationRecord
   has_many :order_items, dependent: :destroy
   has_many :vendor_earnings, dependent: :destroy
    has_many :foods, through: :order_items  # ✅ Add this line
+    has_many :rider_locations, dependent: :destroy
+
+  # Geocode using the 'address' field from the checkout form
+  geocoded_by :address
+after_validation :geocode, if: :will_save_change_to_address?
+
 
   # Enum for status with prefix methods like status_pending?
   enum(:status, { pending: 0, processing: 1, paid: 2, completed: 3, cancelled: 4 }, prefix: true)
+   belongs_to :vendor, optional: true 
+  belongs_to :rider, optional: true
 
 
+ enum :delivery_status, { pending: 0, assigned: 1, picked_up: 2, delivered: 3 }, prefix: true
+
+
+  after_create :assign_rider
+
+  def assign_rider
+    # Example: pick the first available rider
+    rider = Rider.available.first
+    if rider
+      self.update(rider: rider, delivery_status: "assigned")
+
+      # Notify rider using ActionCable (we'll set this up next)
+      OrdersChannel.broadcast_to(rider, { order_id: self.id, message: "New Order Assigned!" })
+    end
+  end
   # Returns the first vendor associated with this order's foods
   def vendor
     foods.first&.vendor
@@ -21,6 +44,25 @@ class Order < ApplicationRecord
     name: "Order ##{id}"
   ) if vendor
 end
+
+# in Order model
+after_create :broadcast_to_riders
+
+
+def broadcast_to_riders
+  return unless vendor.present?
+
+  Rider.available.each do |rider|
+    OrdersChannel.broadcast_to(rider, {
+      order_id: id,
+      address: address,
+      vendor: vendor.name,
+      total: total_price,
+      message: "🚨 New order available!"
+    })
+  end
+end
+
 
   # Callbacks
   before_save :calculate_total_price

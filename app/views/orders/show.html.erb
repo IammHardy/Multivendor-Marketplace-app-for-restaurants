@@ -16,6 +16,7 @@
     <p><span class="font-semibold text-gray-900">Name:</span> <%= @order.name.presence || @order.user&.email || "Name not provided" %></p>
     <p><span class="font-semibold text-gray-900">Address:</span> <%= @order.address %></p>
     <p><span class="font-semibold text-gray-900">Phone:</span> <%= @order.phone %></p>
+    <p><strong>Rider:</strong> <%= @order.rider&.name || "Not yet assigned" %></p>
   </div>
 
   <!-- Items -->
@@ -25,7 +26,9 @@
       <% @order.order_items.each do |item| %>
         <li class="flex justify-between items-center bg-red-50 px-4 py-2 rounded-lg">
           <span><%= item.food.name %> × <%= item.quantity %></span>
-          <span class="font-semibold text-red-600">₦<%= number_with_precision(item.food.price * item.quantity, precision: 2) %></span>
+          <span class="font-semibold text-red-600">
+            ₦<%= number_with_precision(item.food.price * item.quantity, precision: 2) %>
+          </span>
         </li>
       <% end %>
     </ul>
@@ -35,14 +38,16 @@
 
   <!-- Actions -->
   <div class="flex flex-col sm:flex-row sm:justify-center sm:space-x-3 space-y-3 sm:space-y-0 mb-6">
-
     <% if @order.status_pending? %>
-      <%= button_to "Proceed to Payment", paystack_checkout_path(order_id: @order.id), method: :post, data: { turbo: false }, 
+      <%= button_to "Proceed to Payment", paystack_checkout_path(order_id: @order.id),
+          method: :post, data: { turbo: false },
           class: "bg-[#F97316] hover:bg-orange-500 text-white px-5 py-2 rounded-lg font-semibold shadow transition" %>
     <% elsif @order.status_paid? %>
       <div class="text-center sm:text-left">
-        <p class="text-green-600 font-semibold mb-2">✅ Payment Verified! Your order is now being processed.</p>
-        <%= link_to "WhatsApp Admin", "https://wa.me/234XXXXXXXXXX", target: "_blank", 
+        <p class="text-green-600 font-semibold mb-2">
+          ✅ Payment Verified! Your order is now being processed.
+        </p>
+        <%= link_to "WhatsApp Admin", "https://wa.me/234XXXXXXXXXX", target: "_blank",
             class: "inline-block bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-lg font-semibold shadow transition" %>
       </div>
     <% end %>
@@ -57,13 +62,9 @@
     <% end %>
 
     <!-- Download Summary -->
-    <%= link_to 'Download Summary', download_summary_order_path(@order, reference: @order.payment_reference), 
+    <%= link_to 'Download Summary', download_summary_order_path(@order, reference: @order.payment_reference),
         class: 'bg-[#FACC15] hover:bg-yellow-400 text-gray-900 px-5 py-2 rounded-lg font-semibold shadow transition text-center text-sm' %>
   </div>
 
-  <!-- Back -->
-  <div class="text-center">
-    <%= link_to '← Back to Orders', orders_path, class: 'text-red-600 hover:text-red-800 font-medium underline' %>
-  </div>
+  <%= link_to "Track This Order", track_order_path(@order), class: "text-blue-600 hover:underline" %>
 
-</div>

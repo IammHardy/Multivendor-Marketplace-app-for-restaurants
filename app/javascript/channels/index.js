@@ -12,3 +12,6 @@ document.querySelectorAll('[data-turbo-stream-from]').forEach(element => {
     }
   )
 })
+import "./orders_channel"
+import "./rider_location_channel"
+import "./order_status_channel"

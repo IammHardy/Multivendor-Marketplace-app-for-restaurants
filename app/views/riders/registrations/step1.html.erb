@@ -1,0 +1,49 @@
+<div class="max-w-lg mx-auto mt-12 bg-white shadow-md rounded-2xl p-8">
+  <!-- Progress Bar -->
+  <div class="mb-6">
+    <div class="w-full bg-gray-200 rounded-full h-2">
+      <div class="bg-orange-500 h-2 rounded-full w-1/4"></div>
+    </div>
+    <p class="text-sm text-gray-600 mt-2 text-center">Step 1 of 4 — Account Info</p>
+  </div>
+
+  <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Create Your Account</h2>
+
+  <%= form_with model: @rider, url: step1_rider_registration_path, local: true do |f| %>
+    <div class="space-y-4">
+      <div>
+        <%= f.label :name, "Full Name", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.text_field :name, class: "w-full border-gray-300 rounded-lg p-2 focus:ring-orange-500 focus:border-orange-500" %>
+      </div>
+
+      <div>
+        <%= f.label :email, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.email_field :email, class: "w-full border-gray-300 rounded-lg p-2 focus:ring-orange-500 focus:border-orange-500" %>
+      </div>
+
+      <div>
+        <%= f.label :phone, "Phone Number", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.telephone_field :phone, class: "w-full border-gray-300 rounded-lg p-2 focus:ring-orange-500 focus:border-orange-500" %>
+      </div>
+
+      <div>
+        <%= f.label :password, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.password_field :password, class: "w-full border-gray-300 rounded-lg p-2 focus:ring-orange-500 focus:border-orange-500" %>
+      </div>
+
+      <div>
+        <%= f.label :password_confirmation, "Confirm Password", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.password_field :password_confirmation, class: "w-full border-gray-300 rounded-lg p-2 focus:ring-orange-500 focus:border-orange-500" %>
+      </div>
+    </div>
+    <div class="flex items-center space-x-2">
+  <%= f.check_box :terms_accepted, class: "h-4 w-4 text-orange-500 border-gray-300 rounded" %>
+  <%= f.label :terms_accepted, "I accept the Terms and Conditions", class: "text-gray-700" %>
+</div>
+
+
+    <div class="mt-6">
+      <%= f.submit "Next Step →", class: "w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-lg" %>
+    </div>
+  <% end %>
+</div>

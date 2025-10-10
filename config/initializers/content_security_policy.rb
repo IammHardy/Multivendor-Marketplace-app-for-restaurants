@@ -26,4 +26,5 @@
 Rails.application.config.content_security_policy do |policy|
   policy.style_src :self, :https, "https://cdnjs.cloudflare.com" # allow cdnjs
   policy.font_src  :self, :https, "https://cdnjs.cloudflare.com"
+  policy.style_src :self, :https, :unsafe_inline
 end

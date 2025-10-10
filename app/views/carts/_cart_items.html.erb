@@ -1,0 +1,32 @@
+<%= turbo_frame_tag "checkout_cart_items" do %>
+  <% if @cart.present? && @cart.cart_items.any? %>
+    <ul class="space-y-4 mb-6">
+      <% @cart.cart_items.each do |cart_item| %>
+        <li id="cart_item_<%= cart_item.id %>" class="flex items-center justify-between border-b py-4">
+          <div>
+            <p class="font-semibold"><%= cart_item.food.name %></p>
+            <p class="text-gray-600">₦<%= cart_item.food.price %></p>
+          </div>
+
+          <div class="flex items-center space-x-3">
+            <span class="text-gray-700">Qty: <%= cart_item.quantity %></span>
+            <%= link_to "Remove",
+                        cart_item_path(cart_item),
+                        data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
+                        class: "text-red-600 hover:underline" %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+
+    <div class="text-right text-2xl font-bold text-gray-800 mb-6">
+      Grand Total: ₦<%= number_to_currency(@cart.total_price, unit: "", precision: 0) %>
+    </div>
+  <% else %>
+    <p class="text-center text-gray-500 mb-4">Your cart is empty.</p>
+    <div class="text-center">
+      <%= link_to "Browse Foods", public_foods_path,
+                  class: "bg-[#F97316] text-white px-4 py-2 rounded-full font-semibold hover:bg-orange-500 transition" %>
+    </div>
+  <% end %>
+<% end %>

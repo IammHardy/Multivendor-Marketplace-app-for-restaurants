@@ -11,6 +11,8 @@ class CartItem < ApplicationRecord
     food.price * quantity
   end
 
+ 
+
   
   def subtotal
     quantity * food.price

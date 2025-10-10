@@ -72,4 +72,24 @@
   <div class="flex justify-start">
     <%= link_to "Back to Orders", admin_orders_path, class: "px-6 py-3 bg-[#F97316] rounded-full hover:bg-[#E65C00] font-medium text-white shadow transition" %>
   </div>
+
+  <div id="map" style="height: 400px;"></div>
+
+<script>
+  const orderId = <%= @order.id %>;
+  const map = L.map('map').setView([0, 0], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+  const riderMarker = L.marker([0,0]).addTo(map);
+
+  App.cable.subscriptions.create({ channel: "OrderStatusChannel", order_id: orderId }, {
+    received(data) {
+      if (data.rider_latitude && data.rider_longitude) {
+        const latLng = [data.rider_latitude, data.rider_longitude];
+        riderMarker.setLatLng(latLng);
+        map.setView(latLng);
+      }
+      console.log("Rider status update:", data);
+    }
+  });
+</script>
 </div>

@@ -1,14 +1,41 @@
 # app/controllers/orders_controller.rb
 class OrdersController < ApplicationController
   include ERB::Util
-  before_action :authenticate_user!, only: [ :new, :create, :payment, :mark_as_paid ]
+  before_action :authenticate_user!, only: [ :new, :show, :create, :payment, :mark_as_paid, :message_admin, :download_summary, :track ]
+    before_action :set_order, only: [:show, :download_summary, :message_admin, :track]
 
   require "prawn"
   require "prawn/table"
 
   def index
-    @orders = current_user.orders.order(created_at: :desc)
+  @orders = current_user.orders.order(created_at: :desc)
+
+  respond_to do |format|
+    format.html # renders index.html.erb
+    format.json do
+      render json: @orders.map { |order|
+        rider = order.rider
+        latest_location = rider&.rider_locations&.order(created_at: :desc)&.first
+
+        {
+          id: order.id,
+          status: order.status,
+          delivery_status: order.delivery_status,
+          total_price: order.total_price,
+          name: order.name,
+          created_at: order.created_at,
+          rider: rider ? {
+            name: rider.name,
+            phone: rider.phone,
+            lat: latest_location&.latitude,
+            lng: latest_location&.longitude
+          } : nil
+        }
+      }
+    end
   end
+end
+
 
   def new
     @order = Order.new
@@ -41,8 +68,51 @@ end
 
 
   def show
-    @order = Order.includes(order_items: :food).find(params[:id])
+  @order = Order.find(params[:id])
+
+  respond_to do |format|
+    format.html # renders show.html.erb
+    format.json { render json: { lat: @order.latitude, lng: @order.longitude, status: @order.status } }
   end
+end
+
+
+def track
+  return render json: { error: "Order not found" }, status: :not_found unless @order
+
+  vendor = @order.foods.first&.vendor
+  rider_location = @order.rider&.rider_locations&.order(created_at: :desc)&.first
+
+  response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+
+  respond_to do |format|
+    format.html # 👈 this will render app/views/orders/track.html.erb
+    format.json do # 👈 only return JSON when explicitly requested
+      render json: {
+        lat: rider_location&.latitude,
+        lng: rider_location&.longitude,
+        pickup_lat: vendor&.latitude || 9.0765,
+        pickup_lng: vendor&.longitude || 7.3986,
+        destination_lat: @order.latitude,
+        destination_lng: @order.longitude,
+        status: @order.status
+      }
+    end
+  end
+end
+
+def accept_order
+  order = Order.find(params[:order_id])
+
+  if order.delivery_status_pending?
+    order.update(rider: current_rider, delivery_status: :assigned)
+    render json: { success: true, message: "Order accepted!" }
+  else
+    render json: { error: "Order already taken" }, status: :unprocessable_entity
+  end
+end
+
+
 
   def payment
     @order = current_user.orders.find(params[:id])
@@ -118,4 +188,13 @@ end
   def order_params
     params.require(:order).permit(:name, :address, :phone)
   end
+
+
+   # ✅ Only fetch orders for the current user
+  def set_order
+    @order = current_user.orders.find_by(id: params[:id])
+    redirect_to orders_path, alert: "Order not found." unless @order
+  end
 end
+
+

@@ -33,9 +33,11 @@
         </p>
 
 
-        
+        <%= render "carts/cart_count" %>
+
         <!-- Add to Cart -->
-        <%= form_with url: cart_items_path, method: :post, local: true, class: "flex items-center gap-3 mt-4" do |f| %>
+       <%= form_with url: cart_items_path, method: :post, class: "flex items-center gap-3 mt-4" do |f| %>
+
           <%= hidden_field_tag :food_id, @food.id %>
           <%= number_field_tag :quantity, 1, min: 1, class: "w-20 text-center border rounded-full px-3 py-2" %>
           <%= f.submit "Add to Cart", class: "bg-orange-500 text-white px-5 py-2 rounded-full hover:bg-orange-600 transition" %>

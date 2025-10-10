@@ -1,0 +1,23 @@
+<div class="max-w-4xl mx-auto py-10 px-6">
+  <h1 class="text-2xl font-semibold mb-4">Order Tracking</h1>
+
+  <div class="bg-white shadow rounded-lg p-6 mb-6">
+    <p><strong>Order ID:</strong> <%= @order.id %></p>
+    <p><strong>Status:</strong> <span id="status"><%= @order.delivery_status.humanize %></span></p>
+    <p><strong>Total:</strong> ₦<%= @order.total_price %></p>
+    <p><strong>Customer:</strong> <%= @order.name %></p>
+
+    <% if @order.rider.present? %>
+      <hr class="my-4">
+      <h2 class="text-lg font-semibold">Rider Details</h2>
+      <p><strong>Name:</strong> <%= @order.rider.name %></p>
+      <p><strong>Phone:</strong> <%= @order.rider.phone %></p>
+    <% else %>
+      <p class="text-gray-500 mt-4">No rider assigned yet.</p>
+    <% end %>
+  </div>
+
+  <div class="bg-gray-100 rounded-lg overflow-hidden" style="height: 400px;">
+    <div id="map" style="height: 100%;"></div>
+  </div>
+</div>

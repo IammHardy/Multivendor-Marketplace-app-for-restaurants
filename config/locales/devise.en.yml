@@ -18,6 +18,7 @@ en:
       unconfirmed: "You have to confirm your email address before continuing."
       not_approved: "Your account is pending approval by the admin."
       rejected_account: "Your account has been rejected. Please contact support."
+      suspended_account: "Your account has been suspended."
     mailer:
       confirmation_instructions:
         subject: "Confirmation instructions"

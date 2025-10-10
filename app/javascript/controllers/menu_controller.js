@@ -1,28 +1,23 @@
+// app/javascript/controllers/menu_controller.js
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["nav", "button"]
-
-  connect() {
-    console.log("Menu controller connected!")
-  }
+  static targets = ["menu", "button"]
 
   toggle() {
-    const nav = this.navTarget
+    const menu = this.menuTarget
     const icon = this.buttonTarget.querySelector("i")
 
-    nav.classList.toggle("hidden")
+    menu.classList.toggle("hidden")
 
-    if (!nav.classList.contains("hidden")) {
-      nav.classList.remove("-translate-y-5", "opacity-0")
-      nav.classList.add("translate-y-0", "opacity-100")
-      icon.classList.remove("fa-bars")
-      icon.classList.add("fa-times")
+    if (!menu.classList.contains("hidden")) {
+      menu.classList.remove("-translate-y-5", "opacity-0")
+      menu.classList.add("translate-y-0", "opacity-100")
+      icon.classList.replace("fa-bars", "fa-times")
     } else {
-      nav.classList.add("-translate-y-5", "opacity-0")
-      nav.classList.remove("translate-y-0", "opacity-100")
-      icon.classList.remove("fa-times")
-      icon.classList.add("fa-bars")
+      menu.classList.add("-translate-y-5", "opacity-0")
+      menu.classList.remove("translate-y-0", "opacity-100")
+      icon.classList.replace("fa-times", "fa-bars")
     }
   }
 }

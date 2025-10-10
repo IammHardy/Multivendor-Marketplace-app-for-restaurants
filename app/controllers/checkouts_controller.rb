@@ -13,22 +13,22 @@ class CheckoutsController < ApplicationController
 
     @order = current_user.orders.new(order_params)
     @order.status = "pending"
+    @order.vendor = @cart_items.first.food.vendor if @cart_items.any? # ✅ Assign vendor
 
     if @order.save
       @cart_items.each do |item|
         @order.order_items.create!(
-  food: item.food,
-  vendor: item.food.vendor,
-  quantity: item.quantity,
-  subtotal: item.food.price * item.quantity
-)
-
+          food: item.food,
+          vendor: item.food.vendor,
+          quantity: item.quantity,
+          subtotal: item.food.price * item.quantity
+        )
       end
 
-      # 🔥 Save grand total
-      @order.update(total_price: @cart_items.sum(&:subtotal))
+      # ✅ Save grand total correctly
+      @order.update(total_price: @cart_items.sum { |item| item.subtotal })
 
-      # Clear cart
+      # ✅ Clear cart
       @cart_items.destroy_all
 
       redirect_to order_path(@order), notice: "Order placed successfully."

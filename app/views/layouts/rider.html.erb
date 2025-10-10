@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Rider Dashboard</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+<%= javascript_include_tag "application", type: "module", "data-turbo-track": "reload" %>
+
+  </head>
+
+  <body class="bg-gray-100 text-gray-900">
+    <nav class="bg-white shadow p-4 mb-6">
+      <div class="max-w-7xl mx-auto flex justify-between">
+        <h1 class="font-bold text-xl">Rider Portal</h1>
+      <%= link_to "Sign out", destroy_rider_session_path, data: { turbo_method: :delete } %>
+
+    </nav>
+
+    <main class="max-w-4xl mx-auto p-6 bg-white rounded shadow">
+      <%= yield %>
+    </main>
+  </body>
+</html>

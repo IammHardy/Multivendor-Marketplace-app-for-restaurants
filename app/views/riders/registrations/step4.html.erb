@@ -1,0 +1,34 @@
+<div class="max-w-lg mx-auto mt-12 bg-white shadow-md rounded-2xl p-8">
+  <div class="mb-6">
+    <div class="w-full bg-gray-200 rounded-full h-2">
+      <div class="bg-orange-500 h-2 rounded-full w-full"></div>
+    </div>
+    <p class="text-sm text-gray-600 mt-2 text-center">Step 4 of 4 — Upload Verification</p>
+  </div>
+
+  <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Verification Documents</h2>
+
+  <%= form_with model: @rider, url: step4_rider_registration_path, method: :patch, local: true, html: { multipart: true } do |f| %>
+    <div class="space-y-6">
+      <div>
+        <%= f.label :photo, "Upload Profile Photo", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.file_field :photo, accept: "image/png,image/jpg,image/jpeg", class: "mt-1 block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:ring-orange-500 focus:border-orange-500" %>
+      </div>
+
+      <div>
+        <%= f.label :id_card, "Upload ID Card", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.file_field :id_card, accept: "image/png,image/jpg,image/jpeg", class: "mt-1 block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:ring-orange-500 focus:border-orange-500" %>
+      </div>
+    </div>
+    <!-- License Plate Image -->
+  <div>
+    <%= f.label :license_plate_image, "Upload License Plate Image" %>
+    <%= f.file_field :license_plate_image %>
+  </div>
+
+    <div class="mt-6 flex justify-between">
+      <%= link_to "← Back", step3_rider_registration_path, class: "text-gray-600 hover:text-gray-800 font-semibold" %>
+      <%= f.submit "Complete Registration →", class: "bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-lg" %>
+    </div>
+  <% end %>
+</div>

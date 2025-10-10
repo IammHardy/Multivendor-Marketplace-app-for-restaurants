@@ -1,0 +1,69 @@
+<div class="p-8 bg-gray-50 min-h-screen">
+  <div class="bg-white shadow-md rounded-xl p-8 max-w-3xl mx-auto">
+    <h1 class="text-3xl font-extrabold text-orange-600 mb-6">Rider Details</h1>
+
+    <div class="space-y-4 text-gray-700">
+      <p><strong>Name:</strong> <%= @rider.name %></p>
+      <p><strong>Email:</strong> <%= @rider.email %></p>
+      <p><strong>Phone:</strong> <%= @rider.phone %></p>
+      <p><strong>Vehicle Type:</strong> <%= @rider.vehicle_type %></p>
+      <p><strong>License Plate:</strong> <%= @rider.license_plate %></p>
+      <p><strong>Address:</strong> <%= @rider.address %>, <%= @rider.city %>, <%= @rider.state %></p>
+      <p><strong>Bank Name:</strong> <%= @rider.bank_name %></p>
+      <p><strong>Account Name:</strong> <%= @rider.account_name %></p>
+      <p><strong>Account Number:</strong> <%= @rider.account_number %></p>
+
+      <!-- Display uploaded files -->
+      <% if @rider.photo.attached? %>
+        <p>
+          <strong>Photo:</strong>
+          <%= image_tag url_for(@rider.photo), class: "h-32 w-32 object-cover rounded-lg border" %>
+        </p>
+      <% end %>
+
+      <% if @rider.id_card.attached? %>
+        <p>
+          <strong>ID Card:</strong>
+          <%= link_to "View ID Card", url_for(@rider.id_card), target: "_blank", class: "text-blue-600 hover:underline" %>
+        </p>
+      <% end %>
+
+      <p><strong>License Plate Image:</strong></p>
+<% if @rider.license_plate_image.attached? %>
+  <%= image_tag @rider.license_plate_image.variant(resize_to_limit: [300, 200]) %>
+<% else %>
+  <span>No image uploaded</span>
+<% end %>
+
+      <div class="border-t pt-4 mt-4">
+        <p class="flex items-center justify-between">
+          <span><strong>Status:</strong> 
+            <% if @rider.status == "approved" %>
+              <span class="text-green-600 font-semibold">Approved</span>
+            <% elsif @rider.status == "rejected" %>
+              <span class="text-red-600 font-semibold">Rejected</span>
+            <% else %>
+              <span class="text-yellow-600 font-semibold">Pending Approval</span>
+            <% end %>
+          </span>
+        </p>
+
+        <p class="flex items-center justify-between mt-2">
+          <span><strong>Verification:</strong> 
+            <%= @rider.verified ? "✅ Verified" : "❌ Not Verified" %>
+          </span>
+
+          <% unless @rider.verified %>
+            <%= button_to "Mark as Verified", verify_admin_rider_path(@rider),
+                method: :patch,
+                class: "bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-all" %>
+          <% end %>
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <%= link_to "← Back to Riders List", admin_riders_path, class: "text-orange-600 font-medium hover:underline" %>
+    </div>
+  </div>
+</div>

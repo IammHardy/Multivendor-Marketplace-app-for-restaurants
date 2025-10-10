@@ -14,6 +14,8 @@ class Vendor < ApplicationRecord
   has_many :messages, as: :sender
   has_many :reviews, through: :foods
   has_many :promotions, dependent: :destroy
+  has_many :carts
+
 
   # === Active Storage Attachments ===
   has_one_attached :profile_image

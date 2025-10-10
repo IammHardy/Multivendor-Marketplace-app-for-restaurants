@@ -1,0 +1,10 @@
+<% if cart.present? && cart.cart_items.any? %>
+  <%= link_to cart_path, class: "relative hover:text-[#FACC15] transition-colors" do %>
+    <i class="fas fa-shopping-cart text-lg"></i>
+    <span class="absolute -top-2 -right-3 bg-white text-[#F97316] text-xs font-bold rounded-full px-2 py-0.5">
+      <%= cart.cart_items.sum(:quantity) %>
+    </span>
+  <% end %>
+<% else %>
+  <i class="fas fa-shopping-cart text-lg text-gray-400"></i>
+<% end %>

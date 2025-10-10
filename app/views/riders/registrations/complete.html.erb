@@ -1,0 +1,12 @@
+<section class="text-center py-12">
+  <h2 class="text-2xl font-bold text-green-600 mb-4">Registration Complete 🎉</h2>
+  <p class="text-gray-600">
+    Thank you, <%= @rider.name %>! Your registration has been submitted successfully.
+    <br>
+    Our team will review your details and notify you once your account is approved.
+  </p>
+
+  <div class="mt-6">
+    <%= link_to "Return to Login", new_rider_session_path, class: "btn btn-primary" %>
+  </div>
+</section>

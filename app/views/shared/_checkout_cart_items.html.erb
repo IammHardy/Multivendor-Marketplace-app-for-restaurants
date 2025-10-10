@@ -1,0 +1,35 @@
+<turbo-frame id="checkout_cart_items">
+  <ul class="space-y-3">
+    <% cart.cart_items.each do |item| %>
+      <li id="cart_item_<%= item.id %>" class="flex justify-between items-center bg-[#FFF1E0] p-4 rounded-xl shadow-sm hover:shadow-md transition">
+        <span class="font-medium text-[#F97316]"><%= item.food.name %></span>
+
+        <!-- Quantity Update Form -->
+        <div class="flex items-center gap-2">
+          <%= form_with model: item, url: cart_item_path(item), method: :patch, data: { turbo_frame: "checkout_cart_items" }, class: "flex items-center gap-2" do |f| %>
+            <%= f.number_field :quantity, value: item.quantity, min: 1, class: "w-16 text-center border rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-[#F97316]" %>
+            <%= f.submit "Update", class: "bg-[#F97316] text-white px-3 py-1 rounded-full hover:bg-orange-500 transition" %>
+          <% end %>
+
+          <%= link_to "Remove",
+                cart_item_path(item),
+                data: { turbo_method: :delete, turbo_confirm: "Remove this item?" },
+                class: "bg-red-500 text-white px-3 py-1 rounded-full hover:bg-red-600 transition" %>
+        </div>
+
+        <span class="font-semibold text-[#F97316]">
+          ₦<%= number_to_currency(item.food.price * item.quantity, unit: "", precision: 0) %>
+        </span>
+      </li>
+    <% end %>
+  </ul>
+
+  <p class="text-right mt-4 text-xl font-bold text-gray-800">
+    Total: ₦<%= number_to_currency(cart.cart_items.sum { |item| item.food.price * item.quantity }, unit: "", precision: 0) %>
+  </p>
+</turbo-frame>
+
+
+<p class="text-right mt-4 text-xl font-bold text-gray-800">
+  Total: ₦<%= number_to_currency(cart.cart_items.sum { |item| item.food.price * item.quantity }, unit: "", precision: 0) %>
+</p>
