@@ -17,6 +17,7 @@ class Vendor::DashboardController < Vendor::BaseController
     @commission = paid_orders.joins(:order_items).sum("order_items.platform_commission")
     # Recent orders (latest 5)
     @recent_orders = current_vendor.orders.includes(:order_items, :user).order(created_at: :desc).limit(5)
+     render layout: layout_for_turbo
   end
 
   private

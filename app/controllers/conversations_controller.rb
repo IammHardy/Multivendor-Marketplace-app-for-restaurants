@@ -5,6 +5,7 @@ class ConversationsController < ApplicationController
     # Show all conversations for the current user
     # Show all conversations for this user
     @conversations = current_user.conversations.includes(:messages, :vendor)
+     render layout: layout_for_turbo
   end
 
   def show

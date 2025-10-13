@@ -1,4 +1,4 @@
-<main class="bg-brand-white">
+<main class="bg-brand-white" data-controller="landing">
 
 <!-- Hero Section -->
 <section id="hero-section" class="relative bg-gradient-to-br from-orange-50 via-orange-100 to-yellow-50">
@@ -97,57 +97,6 @@
   <% end %>
 </div>
 
-
-
-
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const counters = [
-    { id: "happy-customers", target: 2000 },
-    { id: "vendors-count", target: 5 },
-    { id: "orders-delivered", target: 1000 }
-  ];
-
-  let started = false;
-
-  function animateCounter(el, target) {
-    let current = 0;
-    const duration = 2000; // ms
-    const increment = target / (duration / 16);
-
-    const timer = setInterval(() => {
-      current += increment;
-      if (current >= target) {
-        current = target;
-        clearInterval(timer);
-      }
-      el.textContent = Math.floor(current).toLocaleString() + "+";
-    }, 16);
-  }
-
-  const observer = new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting && !started) {
-      started = true;
-      counters.forEach(c => {
-        const el = document.getElementById(c.id);
-        if (el) animateCounter(el, c.target);
-      });
-    }
-  }, { threshold: 0.5 });
-
-  const heroSection = document.getElementById("hero-section");
-  if (heroSection) observer.observe(heroSection);
-});
-</script>
-
-
-
-
-
-
-
-
 <section class="py-20 bg-gradient-to-b from-orange-50 to-yellow-50" id="top-vendors">
   <div class="max-w-7xl mx-auto px-6 text-center">
 
@@ -205,45 +154,10 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
 
     <!-- View All Vendors Button -->
-    <%= link_to "View All Vendors", public_vendors_path,
+    <%= link_to "View All Vendors", public_vendors_path, data: { turbo: false },
         class: "inline-block mt-6 bg-[#F97316] text-white font-semibold px-6 py-3 rounded-full shadow-md hover:bg-orange-600 transition" %>
   </div>
 </section>
-
-<!-- Animation Script -->
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const vendorSection = document.getElementById("top-vendors");
-  const vendorTitle = document.getElementById("vendors-title");
-  const vendorCards = document.querySelectorAll(".vendor-card");
-
-  function animateVendors() {
-    vendorTitle.classList.remove("opacity-0", "translate-y-4");
-    vendorCards.forEach((card, i) => {
-      setTimeout(() => {
-        card.classList.remove("opacity-0", "translate-y-6");
-      }, i * 100); // small stagger
-    });
-  }
-
-  // Mobile: show immediately, Desktop: animate on scroll
-  if (window.innerWidth < 640) {
-    animateVendors();
-  } else {
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        animateVendors();
-        observer.disconnect();
-      }
-    }, { threshold: 0.2 });
-
-    observer.observe(vendorSection);
-  }
-});
-</script>
-
-
-
 
 <% icon_map = {
   "Meals" => "🍛",
@@ -324,31 +238,6 @@ document.addEventListener("DOMContentLoaded", () => {
   </div>
 </section>
 
-<!-- Animation Script -->
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const section = document.getElementById("how-it-works");
-  const title   = document.getElementById("how-title");
-  const steps   = document.querySelectorAll(".how-step");
-
-  const observer = new IntersectionObserver(entries => {
-    if (entries[0].isIntersecting) {
-      title.classList.remove("opacity-0", "translate-y-4");
-      steps.forEach((s, i) => {
-        setTimeout(() => {
-          s.classList.remove("opacity-0", "translate-y-6");
-        }, i * 150);
-      });
-      observer.disconnect();
-    }
-  }, { threshold: 0.2 });
-
-  observer.observe(section);
-});
-</script>
-
-
-
 <!-- Testimonials Section -->
 <section class="py-20 bg-gradient-to-b from-orange-50 to-yellow-50" id="testimonials">
   <div class="max-w-7xl mx-auto px-6 text-center">
@@ -403,32 +292,6 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
   </div>
 </section>
-
-<!-- Animation Script -->
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const title = document.querySelector('#testimonials h2');
-  const testimonialCards = document.querySelectorAll(".testimonial-card");
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        if (entry.target === title) {
-          entry.target.classList.remove("opacity-0", "translate-y-4");
-        } else {
-          entry.target.classList.remove("opacity-0", "translate-y-6");
-        }
-        entry.target.classList.add("opacity-100", "translate-y-0");
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.2 });
-
-  observer.observe(title);
-  testimonialCards.forEach(card => observer.observe(card));
-});
-</script>
-
 <!-- Promotions Section -->
 <section class="py-20 bg-gradient-to-b from-orange-50 to-yellow-50" id="promotions">
   <div class="max-w-7xl mx-auto px-6 text-center">
@@ -490,34 +353,6 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
   </div>
 </section>
-
-<!-- Animation Script -->
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const title = document.querySelector('#promotions h2');
-  const promoCards = document.querySelectorAll(".promo-card");
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        if (entry.target === title) {
-          entry.target.classList.remove("opacity-0", "translate-y-4");
-        } else {
-          entry.target.classList.remove("opacity-0", "translate-y-6");
-        }
-        entry.target.classList.add("opacity-100", "translate-y-0");
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.2 });
-
-  observer.observe(title);
-  promoCards.forEach(card => observer.observe(card));
-});
-</script>
-
-
-
 <!-- FAQ Section -->
 <section class="py-20 bg-gradient-to-b from-orange-50 to-yellow-50 border-t" id="faq">
   <div class="max-w-4xl mx-auto px-4">
@@ -558,34 +393,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   </div>
 </section>
-
-<!-- Animation Script -->
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const faqSection = document.getElementById("faq");
-  const faqItems = faqSection.querySelectorAll("details");
-
-  const observer = new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting) {
-      faqItems.forEach((item, i) => {
-        item.classList.add("opacity-100", "translate-y-0");
-        item.classList.remove("opacity-0", "translate-y-4");
-      });
-      observer.disconnect();
-    }
-  }, { threshold: 0.2 });
-
-  // Initial hidden state
-  faqItems.forEach(item => {
-    item.classList.add("opacity-0", "translate-y-4");
-  });
-
-  observer.observe(faqSection);
-});
-</script>
-
-
-
 <!-- Why Customers Trust Us -->
 <section class="py-20 bg-white" id="trust">
   <div class="max-w-6xl mx-auto px-4">
@@ -645,30 +452,6 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
   </div>
 </section>
-
-<!-- Fade-in Animation -->
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const cards = document.querySelectorAll(".trust-card");
-
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => {
-          entry.target.classList.add("opacity-100", "translate-y-0");
-          entry.target.classList.remove("opacity-0", "translate-y-4");
-        }, i * 150); // staggered animation
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.2 });
-
-  cards.forEach(card => observer.observe(card));
-});
-</script>
-
-
-
 <!-- Call-to-Action -->
 <section class="w-full bg-[#F97316] py-20 text-center text-white">
   <div class="max-w-4xl mx-auto px-4">
@@ -700,10 +483,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   </div>
 </section>
-
-
-
-
  <!-- Footer -->
 <footer class="bg-black text-white pt-16 pb-8">
   <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">

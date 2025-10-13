@@ -13,7 +13,7 @@
     </p>
 
     <!-- Form -->
-    <%= form_with(model: @vendor, url: create_step1_vendor_registration_path, local: true, html: { class: "space-y-6" }) do |f| %>
+    <%= form_with(model: @vendor, url: create_step1_vendor_registration_path,data: { turbo: false }, local: true, html: { class: "space-y-6" }) do |f| %>
 
       <!-- Name -->
       <div>

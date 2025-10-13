@@ -34,6 +34,7 @@ class OrdersController < ApplicationController
       }
     end
   end
+  render layout: layout_for_turbo
 end
 
 

@@ -3,6 +3,9 @@ class SupportTicketsController < ApplicationController
 
   def index
     @tickets = current_user.support_tickets.order(created_at: :desc)
+    respond_to do |format|
+        format.html { render layout: !turbo_frame_request? }
+      end
   end
 
   def show

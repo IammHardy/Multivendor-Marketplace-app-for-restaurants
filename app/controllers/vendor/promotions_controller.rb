@@ -3,6 +3,7 @@ class Vendor::PromotionsController < Vendor::BaseController
 
   def index
     @promotions = current_vendor.promotions.order(created_at: :desc)
+     render layout: layout_for_turbo
   end
 
 #  def new

@@ -1,0 +1,16 @@
+<%= turbo_stream.update "cart-count-desktop" do %>
+  <%= render "carts/cart_count", cart: current_cart %>
+<% end %>
+
+<%= turbo_stream.update "cart-count-mobile" do %>
+  <%= render "carts/cart_count", cart: current_cart %>
+<% end %>
+
+<%= turbo_stream.replace "floating-cart-items" do %>
+  <%= render "carts/cart_frame", cart: current_cart %>
+<% end %>
+
+<%# Optional: instruct client controller to do something after update %>
+<%= javascript_tag do %>
+  document.dispatchEvent(new Event("floating-cart:updated"))
+<% end %>

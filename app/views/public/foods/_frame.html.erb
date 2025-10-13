@@ -1,0 +1,9 @@
+<div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+  <% foods.each do |food| %>
+    <%= render "public/foods/food_card", food: food %>
+  <% end %>
+
+  <% if foods.blank? %>
+    <p class="text-gray-500 col-span-full">No foods available in this subcategory.</p>
+  <% end %>
+</div>

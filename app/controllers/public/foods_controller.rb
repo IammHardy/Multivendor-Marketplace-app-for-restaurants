@@ -1,44 +1,40 @@
 module Public
   class FoodsController < ApplicationController
-    before_action :set_vendor, only: [:index] # ❌ set_vendor is defined outside class
+    before_action :set_vendor, only: [:index]
     before_action :set_food, only: [:show]
-    before_action :set_category, only: [:index] # missing in your previous version
+    before_action :set_category, only: [:index]
 
-  def index
-  @subcategories = @selected_category&.subcategories || []
+    def index
+      @subcategories = @selected_category&.subcategories || []
 
-  if params[:subcategory_id].present?
-    @selected_subcategory = Category.friendly.find(params[:subcategory_id])
-    @foods = @selected_subcategory.foods.where(active: true)
-                                       .includes(:vendor, :reviews, :promotions)
-                                       .order(created_at: :desc)
-  elsif @selected_category.present?
-    @selected_subcategory = @subcategories.first
-    @foods = if @selected_subcategory
-               @selected_subcategory.foods.where(active: true)
-                                          .includes(:vendor, :reviews, :promotions)
-                                          .order(created_at: :desc)
-             else
-               @selected_category.foods.where(active: true)
-                                       .includes(:vendor, :reviews, :promotions)
-                                       .order(created_at: :desc)
-             end
-  else
-    @foods = Food.where(active: true)
-                 .includes(:vendor, :reviews, :promotions)
-                 .order(created_at: :desc)
-  end
+      if params[:subcategory_id].present?
+        @selected_subcategory = Category.friendly.find(params[:subcategory_id])
+        @foods = @selected_subcategory.foods.active
+      elsif @selected_category.present?
+        @selected_subcategory = @subcategories.first
+        @foods = (@selected_subcategory || @selected_category).foods.active
+      else
+        @foods = Food.active
+      end
 
-  @foods = @foods.page(params[:page]).per(12)
-end
+      @foods = @foods.includes(:vendor, :reviews, :promotions)
+                     .order(created_at: :desc)
+                     .page(params[:page])
+                     .per(12)
 
-
+      # Turbo frame requests only return the partial
+      render layout: false if turbo_frame_request?
+    end
 
     def show
       @vendor = @food.vendor
       @reviews = @food.reviews.includes(:user).order(created_at: :desc).page(params[:page]).per(5)
       @review = @food.reviews.new
       @other_foods_from_vendor = @vendor.foods.where.not(id: @food.id).limit(4)
+
+      respond_to do |format|
+        format.html { render layout: !turbo_frame_request? }
+      end
     end
 
     private

@@ -24,6 +24,8 @@ Rails.application.configure do
     protocol: "https"
   }
 
+
+
   # Gmail SMTP settings
   config.action_mailer.smtp_settings = {
     address:              "smtp.gmail.com",
@@ -68,6 +70,8 @@ Rails.application.configure do
   # Controllers
   config.action_controller.raise_on_missing_callback_actions = true
 
-  # Allow Ngrok hosts
-  config.hosts << /[a-z0-9\-]+\.ngrok-free\.app/
+
+    # Allow your ngrok host
+config.hosts << "dilettanteish-unbooted-yvonne.ngrok-free.dev"
+
 end

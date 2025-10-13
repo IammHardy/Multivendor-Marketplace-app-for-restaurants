@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   helper_method :current_cart
-
+  layout "application"
   # ----------------------------
   # BEFORE ACTIONS
   # ----------------------------
@@ -13,6 +13,9 @@ class ApplicationController < ActionController::Base
   # ----------------------------
   # CURRENT CART HELPER
   # ----------------------------
+   def layout_for_turbo
+    turbo_frame_request? ? false : "application"
+  end
   def current_cart
     return @current_cart if defined?(@current_cart) && @current_cart.present?
 

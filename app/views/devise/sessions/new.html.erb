@@ -10,7 +10,7 @@
     </p>
 
     <!-- Login Form -->
-    <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-6" }) do |f| %>
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name), data: { turbo: false }, html: { class: "space-y-6" }) do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
 
       <!-- Email -->
@@ -53,9 +53,18 @@
     <div class="flex flex-col gap-3">
       <% if devise_mapping.omniauthable? %>
         <% resource_class.omniauth_providers.each do |provider| %>
+          <% button_class =
+              case provider
+              when :google_oauth2 then 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
+              when :facebook then 'bg-blue-600 text-white hover:bg-blue-700'
+              when :tiktok then 'bg-black text-white hover:bg-gray-900'
+              else 'bg-gray-100 text-gray-700'
+              end %>
+
           <%= link_to omniauth_authorize_path(resource_name, provider),
-                class: "flex items-center justify-center gap-2 px-4 py-3 rounded-full font-semibold shadow-sm border hover:shadow-md transition #{provider == :google_oauth2 ? 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50' : ''} #{provider == :facebook ? 'bg-blue-600 text-white hover:bg-blue-700' : ''} #{provider == :tiktok ? 'bg-black text-white hover:bg-gray-900' : ''}" do %>
-            
+                data: { turbo: false },
+                class: "flex items-center justify-center gap-2 px-4 py-3 rounded-full font-semibold shadow-sm border hover:shadow-md transition #{button_class}" do %>
+
             <% case provider %>
             <% when :google_oauth2 %>
               <i class="fab fa-google"></i> Sign in with Google
@@ -64,9 +73,9 @@
             <% when :tiktok %>
               <i class="fab fa-tiktok"></i> Sign in with TikTok
             <% end %>
-          <% end %>
-        <% end %>
-      <% end %>
+          <% end %> <!-- closes link_to -->
+        <% end %> <!-- closes each loop -->
+      <% end %> <!-- closes omniauthable -->
     </div>
 
     <!-- Other Devise Links -->

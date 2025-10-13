@@ -3,7 +3,7 @@
   <div class="bg-white shadow-xl rounded-2xl w-full max-w-lg p-8">
     <h2 class="text-3xl font-extrabold text-center text-orange-600 mb-6">Step 3: Banking Information</h2>
 
-    <%= form_for @rider, url: step3_rider_registration_path, method: :patch, html: { class: "space-y-5" } do |f| %>
+    <%= form_for @rider, url: step3_rider_registration_path, method: :patch,  local: true, data: { turbo: false }, html: { class: "space-y-5" } do |f| %>
 
       <div>
         <%= f.label :address, "Residential Address", class: "block text-gray-700 font-medium mb-1" %>

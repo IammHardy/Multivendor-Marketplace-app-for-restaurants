@@ -8,6 +8,7 @@ class DashboardController < ApplicationController
     @orders = current_rider.orders
                             .where(delivery_status: [:pending, :assigned, :picked_up])
                             .order(created_at: :desc)
+                             render layout: layout_for_turbo
 
   end
 

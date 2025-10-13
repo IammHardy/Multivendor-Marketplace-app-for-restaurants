@@ -1,8 +1,8 @@
+<turbo-frame id="main">
 <div class="bg-white rounded-3xl shadow-md p-4 relative group hover:shadow-lg transition duration-300">
-
   <!-- Vendor Badge -->
   <%= link_to food.vendor.name, public_vendor_path(food.vendor),
-        class: "absolute top-2 right-2 bg-orange-500 text-white px-2 py-1 rounded-full text-xs font-semibold hover:bg-orange-600 transition" %>
+      class: "absolute top-2 right-2 bg-orange-500 text-white px-2 py-1 rounded-full text-xs font-semibold hover:bg-orange-600 transition" %>
 
   <!-- Promo Badge -->
   <% if food.promotions.active.any? %>
@@ -25,7 +25,7 @@
     <% end %>
   <% else %>
     <%= link_to public_food_path(food), class: "block" do %>
-      <img src="/images/default-food.jpg" alt="<%= food.name %>" class="w-full h-40 object-cover rounded-2xl mb-2 transform group-hover:scale-105 transition duration-300">
+      <%= image_tag "default-food.jpg", alt: food.name, class: "w-full h-40 object-cover rounded-2xl mb-2 transform group-hover:scale-105 transition duration-300" %>
     <% end %>
   <% end %>
 
@@ -41,8 +41,12 @@
       Out of Stock
     </button>
   <% else %>
-    <%= button_to "Add to Cart", cart_items_path(food_id: food.id), method: :post,
-        form: { data: { turbo_frame: "foods_frame" } },
-        class: "mt-2 w-full bg-orange-500 text-white py-2 rounded-xl hover:bg-orange-600 transition" %>
+    <%= button_to cart_items_path(food_id: food.id),
+        params: { quantity: 1 },
+        class: "mt-2 w-full bg-[#F97316] text-white py-2 rounded-xl hover:bg-orange-600 transition",
+        form: { "data-turbo-frame": "cart-count-desktop" } do %>
+      Add to Cart
+    <% end %>
   <% end %>
 </div>
+</turbo-frame>

@@ -23,6 +23,17 @@ module ApplicationHelper
     end
   end
 
+  # Turbo-friendly nav link helper
+  def nav_link(name, path, turbo_frame: nil, block_class: nil)
+    options = {}
+    options[:data] = { turbo_frame: turbo_frame } if turbo_frame
+    if block_class
+      link_to name, path, options.merge(class: block_class)
+    else
+      link_to name, path, options.merge(class: "hover:text-[#FACC15] font-bold transition-colors")
+    end
+  end
+
   private
 
   def prev_page_classes(collection)

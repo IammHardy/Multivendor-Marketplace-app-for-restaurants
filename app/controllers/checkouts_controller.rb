@@ -5,6 +5,7 @@ class CheckoutsController < ApplicationController
     @cart = current_cart
     @cart_items = @cart.cart_items.includes(:food)
     @order = current_user.orders.build
+     render layout: layout_for_turbo
   end
 
   def create

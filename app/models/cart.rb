@@ -14,6 +14,10 @@ class Cart < ApplicationRecord
     cart_items
   end
 
+  def total_items
+  cart_items.sum(:quantity)
+end
+
   # ✅ Add food to cart safely (only one vendor at a time)
   def add_food(food)
     if vendor.present? && vendor != food.vendor

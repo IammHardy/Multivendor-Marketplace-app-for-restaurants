@@ -1,18 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html data-turbo="true">
   <head>
     <title><%= content_for(:title) || "Food App" %></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <!-- CSS -->
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-
-    <!-- JS -->
     <%= javascript_include_tag "application", type: "module", "data-turbo-track": "reload" %>
+    <%= turbo_include_tags %>
 
-    <!-- Icons + Fonts -->
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="apple-touch-icon" href="/icon.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
@@ -21,84 +19,130 @@
 
   <body class="bg-gray-50 text-gray-800 font-sans">
 
-    <!-- ✅ Make header persistent across Turbo page loads -->
+    <!-- ✅ Navbar -->
     <turbo-frame id="navbar" data-turbo-permanent>
-      <header  data-controller="menu" class="bg-[#F97316] text-white shadow sticky top-0 z-50" data-controller="menu">
-        <div class="max-w-6xl mx-auto flex items-center justify-between px-4 h-20 relative">
+      <header data-controller="menu" class="bg-[#F97316] text-white shadow sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto flex items-center justify-between px-4 lg:px-6 h-16 lg:h-20 relative">
 
           <!-- Logo -->
-          <%= link_to root_path, class: "text-3xl font-extrabold tracking-wide text-white" do %>
+          <%= link_to root_path, class: "text-2xl lg:text-3xl font-extrabold tracking-wide text-white" do %>
             FoodApp
           <% end %>
 
           <!-- Desktop Navigation -->
-          <nav  class="hidden lg:flex gap-6 items-center">
+          <nav class="hidden lg:flex gap-6 items-center">
             <%= link_to "Home", root_path, class: "hover:text-[#FACC15] font-medium transition-colors" %>
-            <%= link_to "Browse Menu", public_foods_path, class: "hover:text-[#FACC15] font-bold transition-colors" %>
+            <%= link_to "Browse Menu", public_foods_path, data: { turbo_frame: "main" }, class: "hover:text-[#FACC15] font-bold transition-colors" %>
+            <%= link_to "Browse Vendors", public_vendors_path, data: { turbo_frame: "main" }, class: "hover:text-[#FACC15] font-bold transition-colors" %>
 
-            <% if rider_signed_in? %>
-              <%= link_to "Rider Dashboard", rider_dashboard_path, class: "hover:text-[#FACC15]" %>
-              <%= button_to "Logout", destroy_rider_session_path, method: :delete, form_class: "inline", class: "hover:text-[#FACC15]" %>
-            <% elsif user_signed_in? %>
+            <% if user_signed_in? %>
               <%= link_to "My Orders", orders_path, class: "hover:text-[#FACC15]" %>
               <%= link_to "Conversations", users_conversations_path, class: "hover:text-[#FACC15]" %>
-              <%= button_to "Logout", destroy_user_session_path, method: :delete, form_class: "inline", class: "hover:text-[#FACC15]" %>
+              <%= button_to "Logout", destroy_user_session_path, method: :delete, data: { turbo: false }, form_class: "inline", class: "hover:text-[#FACC15]" %>
+
             <% elsif vendor_signed_in? %>
-              <%= link_to "Vendor Dashboard", vendor_dashboard_path, class: "hover:text-[#FACC15]" %>
-              <%= button_to "Logout", destroy_vendor_session_path, method: :delete, form_class: "inline", class: "hover:text-[#FACC15]" %>
+              <%= link_to "Vendor Dashboard", vendor_dashboard_path, data: { turbo: false }, class: "hover:text-[#FACC15]" %>
+              <%= button_to "Logout", destroy_vendor_session_path, method: :delete, data: { turbo: false }, form_class: "inline", class: "hover:text-[#FACC15]" %>
+
+            <% elsif rider_signed_in? %>
+              <%= link_to "Rider Dashboard", rider_dashboard_path, data: { turbo: false }, class: "hover:text-[#FACC15]" %>
+              <%= button_to "Logout", destroy_rider_session_path, method: :delete, data: { turbo: false }, form_class: "inline", class: "hover:text-[#FACC15]" %>
+
             <% else %>
-              <%= link_to "Login", new_user_session_path, class: "hover:text-[#FACC15]" %>
-              <%= link_to "Sign Up", new_user_registration_path, class: "hover:text-[#FACC15]" %>
+              <!-- Users / Admins -->
+              <%= link_to "Login", new_user_session_path, data: { turbo: false }, class: "hover:text-[#FACC15]" %>
+              <%= link_to "Sign Up", new_user_registration_path, data: { turbo: false }, class: "hover:text-[#FACC15]" %>
+
+              <!-- Vendor Dropdown -->
+<div data-controller="dropdown"
+     data-action="mouseenter->dropdown#show mouseleave->dropdown#hide"
+     class="relative">
+  <button data-action="click->dropdown#toggle" class="hover:text-[#FACC15] flex items-center gap-1">
+    Vendors <i class="fas fa-chevron-down text-xs"></i>
+  </button>
+  <div data-dropdown-target="menu"
+       class="hidden absolute right-0 mt-2 bg-white text-gray-800 shadow-lg rounded-md w-44">
+    <%= link_to "Login as Vendor", new_vendor_session_path, data: { turbo: false }, class: "block px-4 py-2 hover:bg-orange-100" %>
+    <%= link_to "Become a Vendor", new_vendor_registration_path, data: { turbo: false }, class: "block px-4 py-2 hover:bg-orange-100" %>
+  </div>
+</div>
+
+              <!-- Rider Dropdown -->
+<div data-controller="dropdown"
+     data-action="mouseenter->dropdown#show mouseleave->dropdown#hide"
+     class="relative">
+  <button data-action="click->dropdown#toggle" class="hover:text-[#FACC15] flex items-center gap-1">
+    Riders <i class="fas fa-chevron-down text-xs"></i>
+  </button>
+  <div data-dropdown-target="menu"
+       class="hidden absolute right-0 mt-2 bg-white text-gray-800 shadow-lg rounded-md w-44">
+    <%= link_to "Login as Rider", new_rider_session_path, data: { turbo: false }, class: "block px-4 py-2 hover:bg-orange-100" %>
+    <%= link_to "Become a Rider", new_rider_registration_path, data: { turbo: false }, class: "block px-4 py-2 hover:bg-orange-100" %>
+  </div>
+</div>
             <% end %>
 
-            <!-- Cart -->
-            <div id="cart-count">
-              <% if current_cart.present? && current_cart.cart_items.any? %>
-                <%= link_to cart_path, class: "relative hover:text-[#FACC15]" do %>
-                  <i class="fas fa-shopping-cart text-lg"></i>
-                  <%= render "carts/cart_count", cart: current_cart %>
-                <% end %>
-              <% else %>
-                <%= link_to cart_path, class: "relative hover:text-[#FACC15]" do %>
-                  <i class="fas fa-shopping-cart text-lg"></i>
-                <% end %>
-              <% end %>
-            </div>
+            <!-- Cart (Desktop) -->
+            <%= turbo_frame_tag "cart-count-desktop" do %>
+              <%= render "carts/cart_count", cart: current_cart %>
+            <% end %>
           </nav>
 
-          <!-- Mobile toggle -->
+          <!-- Mobile Menu Button -->
           <button
             data-menu-target="button"
             data-action="click->menu#toggle"
-            class="lg:hidden p-2 focus:outline-none">
-            <i class="fas fa-bars"></i>
+            class="lg:hidden p-2 text-white focus:outline-none focus:ring-2 focus:ring-white rounded-md transition">
+            <i class="fas fa-bars text-xl"></i>
           </button>
 
-          <!-- Mobile menu -->
+          <!-- Mobile Menu -->
           <nav
-             data-menu-target="menu"
-            class="hidden absolute top-full right-0 left-0 bg-white shadow-lg z-50 flex flex-col gap-1 p-4 rounded-b-md transition-all duration-300 transform -translate-y-5 opacity-0">
+            data-menu-target="menu"
+            class="hidden absolute top-full left-0 w-full bg-white shadow-lg z-50 flex flex-col rounded-b-xl p-3
+                   transform -translate-y-3 opacity-0 transition-all duration-300 ease-out text-gray-800">
             
-            <%= link_to "Home", root_path, class: "block px-4 py-2 text-[#F97316]" %>
-            <%= link_to "Browse Menu", public_foods_path, class: "block px-4 py-2 text-[#F97316]" %>
+            <%= link_to "Home", root_path, class: "block py-2 px-4 rounded hover:bg-orange-100" %>
+            <%= link_to "Browse Menu", public_foods_path, data: { turbo_frame: "main" }, class: "block py-2 px-4 rounded hover:bg-orange-100" %>
+            <%= link_to "Browse Vendors", public_vendors_path, data: { turbo_frame: "main" }, class: "block py-2 px-4 rounded hover:bg-orange-100" %>
 
             <% if user_signed_in? %>
-              <%= link_to "My Orders", orders_path, class: "block px-4 py-2 text-[#F97316]" %>
-              <%= link_to "Conversations", users_conversations_path, class: "block px-4 py-2 text-[#F97316]" %>
-              <%= button_to "Logout", destroy_user_session_path, method: :delete, form_class: "block w-full text-left", class: "block px-4 py-2 text-[#F97316]" %>
+              <%= link_to "My Orders", orders_path, class: "block py-2 px-4 rounded hover:bg-orange-100" %>
+              <%= link_to "Conversations", users_conversations_path, class: "block py-2 px-4 rounded hover:bg-orange-100" %>
+              <%= button_to "Logout", destroy_user_session_path, method: :delete, data: { turbo: false }, form_class: "block", class: "w-full text-left block py-2 px-4 rounded hover:bg-orange-100" %>
+
+            <% elsif vendor_signed_in? %>
+              <%= link_to "Vendor Dashboard", vendor_dashboard_path, data: { turbo: false }, class: "block py-2 px-4 rounded hover:bg-orange-100" %>
+              <%= button_to "Logout", destroy_vendor_session_path, method: :delete, data: { turbo: false }, form_class: "block", class: "w-full text-left block py-2 px-4 rounded hover:bg-orange-100" %>
+
+            <% elsif rider_signed_in? %>
+              <%= link_to "Rider Dashboard", rider_dashboard_path, data: { turbo: false }, class: "block py-2 px-4 rounded hover:bg-orange-100" %>
+              <%= button_to "Logout", destroy_rider_session_path, method: :delete, data: { turbo: false }, form_class: "block", class: "w-full text-left block py-2 px-4 rounded hover:bg-orange-100" %>
+
+            <% else %>
+              <!-- User -->
+              <%= link_to "Login", new_user_session_path, data: { turbo: false }, class: "block py-2 px-4 rounded hover:bg-orange-100 font-medium" %>
+              <%= link_to "Sign Up", new_user_registration_path, data: { turbo: false }, class: "block py-2 px-4 rounded hover:bg-orange-100 font-medium" %>
+
+              <!-- Vendor -->
+              <div class="mt-1 border-t pt-2">
+                <p class="px-4 font-semibold text-sm text-gray-600">Vendors</p>
+                <%= link_to "Login as Vendor", new_vendor_session_path, data: { turbo: false }, class: "block py-2 px-4 rounded hover:bg-orange-100" %>
+                <%= link_to "Become a Vendor", new_vendor_registration_path, data: { turbo: false }, class: "block py-2 px-4 rounded hover:bg-orange-100" %>
+              </div>
+
+              <!-- Rider -->
+              <div class="mt-1 border-t pt-2">
+                <p class="px-4 font-semibold text-sm text-gray-600">Riders</p>
+                <%= link_to "Login as Rider", new_rider_session_path, data: { turbo: false }, class: "block py-2 px-4 rounded hover:bg-orange-100" %>
+                <%= link_to "Become a Rider", new_rider_registration_path, data: { turbo: false }, class: "block py-2 px-4 rounded hover:bg-orange-100" %>
+              </div>
             <% end %>
 
-            <!-- Cart -->
-            <div id="cart-count" class="px-4 py-2">
-              <% if current_cart.present? && current_cart.cart_items.any? %>
-                <%= link_to cart_path, class: "relative text-[#F97316]" do %>
-                  <i class="fas fa-shopping-cart text-lg"></i>
-                  <%= render "carts/cart_count", cart: current_cart %>
-                <% end %>
-              <% else %>
-                <%= link_to cart_path, class: "relative text-[#F97316]" do %>
-                  <i class="fas fa-shopping-cart text-lg"></i>
-                <% end %>
+            <!-- Cart (Mobile) -->
+            <div class="border-t mt-2 pt-2">
+              <%= turbo_frame_tag "cart-count-mobile" do %>
+                <%= render "carts/cart_count", cart: current_cart %>
               <% end %>
             </div>
           </nav>
@@ -106,9 +150,17 @@
       </header>
     </turbo-frame>
 
-    <!-- ✅ Page Content -->
-    <main class="min-h-screen">
-      <%= yield %>
+                <%= render "shared/floating_cart" %>
+
+
+    <!-- ✅ Main Content -->
+    <main class="min-h-screen pt-4 pb-16 lg:pb-0">
+      <turbo-frame id="main">
+        <%= yield %>
+      </turbo-frame>
     </main>
+
+    <turbo-frame id="modal"></turbo-frame>
+
   </body>
 </html>

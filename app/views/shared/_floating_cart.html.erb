@@ -1,9 +1,36 @@
-<div id="floating_cart">
-  <!-- Your cart icon + item count -->
-  <%= link_to cart_path do %>
-    <i class="fa fa-shopping-cart"></i>
-    <% if cart.cart_items.any? %>
-      <span class="cart-badge"><%= cart.cart_items.sum(:quantity) %></span>
-    <% end %>
+<!-- shared/_floating_cart.html.erb -->
+<div data-controller="floating-cart" class="relative">
+  <!-- Floating Cart Frame -->
+  <div id="floating-cart" data-floating-cart-target="cartFrame" class="fixed bottom-6 right-6 transform translate-x-full transition-transform duration-300 w-96 z-[9998] bg-white rounded-l-xl shadow-xl overflow-y-auto max-h-[80vh]">
+    <div class="p-4 flex justify-between items-center border-b">
+      <h2 class="font-bold text-lg">Your Cart</h2>
+      <button data-action="floating-cart#hideCart" class="text-gray-500 hover:text-gray-800">&times;</button>
+    </div>
+
+    <turbo-frame id="floating-cart-items"
+                 data-floating-cart-target="items"
+                 data-total-items="<%= current_cart.total_items %>">
+      <%= render "carts/cart_frame", cart: current_cart %>
+    </turbo-frame>
+  </div>
+
+  <!-- Floating Cart Button -->
+  <%= link_to "#",
+      id: "floating-cart-button",
+      data: { action: "click->floating-cart#toggleCart" },
+      class: "fixed bottom-6 right-6 z-[9999] bg-[#F97316] hover:bg-orange-600 text-white h-14 w-14 flex items-center justify-center rounded-full shadow-lg transition-all duration-300" do %>
+    <i class="fas fa-shopping-cart text-xl"></i>
+
+    <% total_items = current_cart.total_items %>
+    <span data-floating-cart-target="badge"
+          class="<%= total_items.zero? ? 'hidden' : '' %> cart-count absolute -top-2 -right-2 bg-white text-[#F97316] text-xs font-bold rounded-full px-2 py-0.5"
+          data-count="<%= total_items %>">
+      <%= total_items %>
+    </span>
   <% end %>
+
+  
 </div>
+<%= turbo_frame_tag "floating-cart-total" do %>
+  <%= render "carts/cart_total", cart: current_cart %>
+<% end %>

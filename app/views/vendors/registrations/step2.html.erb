@@ -12,7 +12,7 @@
       Tell us about your business so customers can know you better.
     </p>
 
-    <%= form_with(model: @vendor, url: update_step2_vendor_registration_path, method: :post, local: true, html: { class: "space-y-6" }) do |f| %>
+    <%= form_with(model: @vendor, url: update_step2_vendor_registration_path,data: { turbo: false }, method: :post, local: true, html: { class: "space-y-6" }) do |f| %>
       
       <!-- Contact Person -->
       <div>

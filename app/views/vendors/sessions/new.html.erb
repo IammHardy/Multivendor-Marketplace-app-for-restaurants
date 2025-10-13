@@ -10,7 +10,7 @@
     </p>
 
     <!-- Form -->
-    <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-6" }) do |f| %>
+   <%= form_for(resource, as: resource_name, url: session_path(resource_name), data: { turbo: false }, html: { class: "space-y-6" }) do |f| %>
       
       <!-- Email -->
       <div>

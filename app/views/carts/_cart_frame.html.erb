@@ -1,0 +1,29 @@
+<turbo-frame id="floating-cart-items">
+  <% if cart.cart_items.any? %>
+    <% cart.cart_items.each do |item| %>
+      <div class="flex items-center justify-between border-b py-3" id="<%= dom_id(item) %>">
+        <div>
+          <p class="font-semibold"><%= item.food.name %></p>
+          <p class="text-sm text-gray-600">₦<%= item.food.price %></p>
+        </div>
+
+        <div class="flex items-center space-x-2">
+          <%= form_with model: item, url: cart_item_path(item), method: :patch, data: { turbo_frame: "floating-cart-items" } do |f| %>
+            <%= f.number_field :quantity, value: item.quantity, min: 1, class: "w-14 border rounded text-center" %>
+            <%= f.submit "↻", class: "text-sm bg-[#F97316] text-white px-2 py-1 rounded" %>
+          <% end %>
+
+          <%= button_to "✕", cart_item_path(item), method: :delete, data: { turbo_frame: "floating-cart-items" }, class: "text-red-500 text-sm" %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="p-4 border-t mt-4">
+      <p class="font-bold text-right">
+        Total: ₦<%= cart.total_price %>
+      </p>
+    </div>
+  <% else %>
+    <p class="p-4 text-gray-500 text-center">Your cart is empty.</p>
+  <% end %>
+</turbo-frame>

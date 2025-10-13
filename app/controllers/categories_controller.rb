@@ -12,6 +12,7 @@ class CategoriesController < ApplicationController
     else
       @categories = Category.all
     end
+     render layout: layout_for_turbo
   end
 
   # GET /categories/:id
@@ -22,6 +23,7 @@ class CategoriesController < ApplicationController
     else
       redirect_to categories_path, alert: "Sorry, this category does not exist."
     end
+     render layout: layout_for_turbo
   end
 
   # GET /categories/new

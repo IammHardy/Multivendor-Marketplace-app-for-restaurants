@@ -6,6 +6,7 @@ class Vendor::FoodsController < Vendor::BaseController
   def index
     @foods = current_vendor.foods.includes(:categories)
     @foods = current_vendor.foods.page(params[:page]).per(8)
+     render layout: layout_for_turbo
   end
 
     def change

@@ -1,0 +1,16 @@
+<%= link_to "#",
+    id: "floating-cart-button",
+    data: { action: "click->floating-cart#toggleCart" },
+    class: "fixed bottom-6 right-6 z-[9999] bg-[#F97316] hover:bg-orange-600 text-white 
+              h-14 w-14 flex items-center justify-center rounded-full shadow-lg transition-all duration-300" do %>
+  
+  <i class="fas fa-shopping-cart text-xl"></i>
+
+  <% total_items = cart.total_items %>
+  <span
+    class="<%= total_items.zero? ? 'hidden' : '' %> cart-count absolute -top-2 -right-2 bg-white text-[#F97316] text-xs font-bold rounded-full px-2 py-0.5"
+    data-count="<%= total_items %>"
+  >
+    <%= total_items %>
+  </span>
+<% end %>

@@ -13,6 +13,8 @@ class Food < ApplicationRecord
 
   before_save :round_price
 
+   scope :active, -> { where(active: true) }
+
   def active_promotions
   promotions.where(active: true).where("starts_at <= ? AND ends_at >= ?", Time.current, Time.current)
 end

@@ -3,6 +3,7 @@ class Users::ConversationsController < ApplicationController
 
   def index
     @conversations = ConversationService.for_user(current_user).order(updated_at: :desc)
+     render layout: layout_for_turbo
   end
 
   def show
@@ -14,6 +15,7 @@ class Users::ConversationsController < ApplicationController
 
     # Mark vendor messages as read
     @messages.where(sender_type: "Vendor").update_all(read: true)
+     render layout: layout_for_turbo
   end
 
   def start

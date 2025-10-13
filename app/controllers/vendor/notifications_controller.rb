@@ -1,5 +1,6 @@
 class Vendor::NotificationsController < Vendor::BaseController
   def index
-    @notifications = [] # placeholder until you connect real notifications
+    @notifications = []
+     render layout: layout_for_turbo # placeholder until you connect real notifications
   end
 end

@@ -16,6 +16,7 @@ window.L = L
 import "./channels"
 import "./order_tracking"
 
+
 // --- Chat form auto-reset ---
 document.addEventListener("turbo:submit-end", (event) => {
   if (event.target.closest("#new_message_form")) {

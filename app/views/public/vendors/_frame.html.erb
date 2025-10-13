@@ -1,0 +1,11 @@
+<turbo-frame id="main">
+  <div class="max-w-6xl mx-auto py-8">
+    <h1 class="text-3xl font-bold mb-4">Browse Vendors</h1>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% vendors.each do |vendor| %>
+        <%= render "public/vendors/card", vendor: vendor %>
+      <% end %>
+    </div>
+  </div>
+</turbo-frame>

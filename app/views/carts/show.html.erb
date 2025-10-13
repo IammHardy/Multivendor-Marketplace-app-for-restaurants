@@ -1,9 +1,10 @@
+<turbo-frame id="main">
 <main class="bg-gray-50 min-h-screen px-6 py-12">
   <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-8">
     <%= link_to "← Back", request.referer || root_path, class: "text-orange-500 font-semibold mb-4 inline-block" %>
     <h2 class="text-3xl font-extrabold text-[#F97316] mb-6 text-center">Your Cart</h2>
 
-    <%= render "carts/cart_items", cart_items: @cart_items, grand_total: @grand_total %>
+   <%= render "carts/cart_items", cart: current_cart %>
 
 
     <div class="flex justify-between gap-4 flex-wrap">
@@ -12,3 +13,4 @@
     </div>
   </div>
 </main>
+</turbo-frame>

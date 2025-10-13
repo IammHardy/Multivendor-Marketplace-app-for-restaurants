@@ -12,6 +12,7 @@ class Vendor::ConversationsController < Vendor::BaseController
 
     # Mark user messages as read
     @messages.where(sender_type: "User").update_all(read: true)
+     render layout: layout_for_turbo
   end
 
   private

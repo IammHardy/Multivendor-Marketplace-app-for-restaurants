@@ -10,11 +10,13 @@ class Vendor::OrdersController < Vendor::BaseController
                    .distinct
                    .order(created_at: :desc)
                    .page(params[:page])
+                    render layout: layout_for_turbo
   end
 
   def show
     # Only vendor's items in this order
     @vendor_items = @order.order_items.where(vendor: current_vendor)
+     render layout: layout_for_turbo
 
     # Vendor should only earn from PAID orders
     if @order.status_paid?
