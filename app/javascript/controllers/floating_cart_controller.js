@@ -11,6 +11,9 @@ export default class extends Controller {
 
     document.addEventListener("turbo:frame-load", this._onFrameLoad)
     document.addEventListener("turbo:render", this._reconnect)
+
+    // Hide cart on load
+    this.hideCartInstant()
   }
 
   disconnect() {
@@ -18,12 +21,19 @@ export default class extends Controller {
     document.removeEventListener("turbo:render", this._reconnect)
   }
 
-  toggleCart(event) {
-    if (event) event.preventDefault()
-    const frame = this.cartFrameElement
-    frame.classList.toggle("translate-x-full")
-    frame.classList.toggle("translate-x-0")
-  }
+toggleCart(event) {
+  if (event) event.preventDefault()
+  const frame = this.cartFrameElement
+
+  frame.classList.toggle("translate-x-full")
+  frame.classList.toggle("translate-x-0")
+  frame.classList.toggle("opacity-0")
+  frame.classList.toggle("opacity-100")
+  frame.style.pointerEvents = frame.classList.contains("translate-x-0") ? "auto" : "none"
+}
+
+
+
 
   showCart() {
     const frame = this.cartFrameElement
@@ -32,6 +42,13 @@ export default class extends Controller {
   }
 
   hideCart() {
+    const frame = this.cartFrameElement
+    frame.classList.add("translate-x-full")
+    frame.classList.remove("translate-x-0")
+  }
+
+  hideCartInstant() {
+    // Immediately hide cart without animation
     const frame = this.cartFrameElement
     frame.classList.add("translate-x-full")
     frame.classList.remove("translate-x-0")
