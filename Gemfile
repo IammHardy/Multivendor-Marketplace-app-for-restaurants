@@ -97,7 +97,7 @@ gem "httparty"
 gem "tailwindcss-rails"
 gem "image_processing", "~> 1.12"
 gem "mini_magick"
-gem "friendly_id", "~> 5.4.0"
+gem "friendly_id", "~> 5.5.1"
 
 gem "omniauth-google-oauth2"
 gem "omniauth-tiktok"
